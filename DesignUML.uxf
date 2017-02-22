@@ -4,12 +4,132 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
+      <x>930</x>
+      <y>290</y>
+      <w>250</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Driver
+--
+
+--
+_+ main(args : String[]) : void_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
       <x>870</x>
-      <y>450</y>
-      <w>100</w>
+      <y>460</y>
+      <w>330</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>MainMenu extends Application
+--
+
+--
+_+ start(stage : Stage) : void &lt;&lt;override&gt;&gt;_
+_+ loadScene() : Scene_
+_+ showScene(scene : Scene) : void_
+_+ exit() : void_
+_+ startPong() : void_
+_+ startSimon() : void_
+_+ startSnake() : void_
+_+ startShooter() : void_
+_+ startJumper() : void_
+_+ startSpaceInvaders() : void_
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>610</y>
+      <w>280</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>ArcadeView
+--
+_-primaryStage : Stage_
+--
+_+setScene(scene : Scene) : void_
+_+showStage() : void_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>900</x>
+      <y>750</y>
+      <w>290</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>/Game/
+&lt;&lt;abstract&gt;&gt;
+--
+/+play() : void/
+/-createTitleScene() : Scene/
+-showScene(scene : Scene) : void
+/-gameOver() : void/
+/pause() : void/ &lt;&lt;override&gt;&gt;
+/resume() : void/ &lt;&lt;override&gt;&gt;
+exit() : void &lt;&lt;override&gt;&gt;
+/mainMenu() : void/ &lt;&lt;override&gt;&gt;
+/titleScreen() : void/ &lt;&lt;override&gt;&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1370</x>
+      <y>780</y>
+      <w>260</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>/Pausable/
+&lt;&lt;Interface&gt;&gt;
+--
+/pause() : void/
+/resume() : void/
+/exit() : void/
+/mainMenu() : void/
+/titleScreen() : void/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>800</y>
+      <w>210</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>MainMenu</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>190.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>720</x>
+      <y>480</y>
+      <w>170</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;160.0;150.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>720</x>
+      <y>660</y>
+      <w>200</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;170.0</additional_attributes>
   </element>
 </diagram>
