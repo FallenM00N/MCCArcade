@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="309.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainMenu">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainMenu">
    <top>
       <Label text="MCC Arcade" BorderPane.alignment="CENTER">
          <font>
@@ -16,67 +16,66 @@
          </font>
       </Label>
    </top>
-   <bottom>
-      <Button fx:id="quitApplication" depthTest="DISABLE" mnemonicParsing="false" onAction="#exitApplication" text="Quit Application" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets bottom="5.0" />
-         </BorderPane.margin>
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-   </bottom>
    <center>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <VBox alignment="TOP_CENTER" prefHeight="318.0" prefWidth="178.0" spacing="10.0">
-               <children>
-                  <Button fx:id="pong" mnemonicParsing="false" onAction="#startPong" prefHeight="44.0" prefWidth="175.0" text="Pong">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="simon" mnemonicParsing="false" onAction="#startSimon" prefHeight="44.0" prefWidth="175.0" text="Simon">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="snake" mnemonicParsing="false" onAction="#startSnake" prefHeight="44.0" prefWidth="175.0" text="Snake">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-               </children>
-               <HBox.margin>
-                  <Insets right="5.0" />
-               </HBox.margin>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="318.0" prefWidth="177.0" spacing="10.0">
-               <children>
-                  <Button fx:id="jumper" mnemonicParsing="false" onAction="#startJumper" prefHeight="44.0" prefWidth="175.0" text="Jumper">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="shooter" mnemonicParsing="false" onAction="#startShooter" prefHeight="44.0" prefWidth="175.0" text="Shooter">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="spaceInvaders" mnemonicParsing="false" onAction="#startSpaceInvaders" prefHeight="44.0" prefWidth="175.0" text="Space Invaders">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-               </children>
-               <HBox.margin>
-                  <Insets left="5.0" />
-               </HBox.margin>
-            </VBox>
-         </children>
+      <VBox alignment="TOP_CENTER" prefHeight="210.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets top="10.0" />
          </BorderPane.margin>
-      </HBox>
+         <children>
+            <HBox alignment="CENTER" prefHeight="165.0" prefWidth="600.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="189.0" prefWidth="178.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="pong" mnemonicParsing="false" onAction="#startPong" prefHeight="44.0" prefWidth="175.0" text="Pong">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="simon" mnemonicParsing="false" onAction="#startSimon" prefHeight="44.0" prefWidth="175.0" text="Simon">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="snake" mnemonicParsing="false" onAction="#startSnake" prefHeight="44.0" prefWidth="175.0" text="Snake">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="170.0" prefWidth="177.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="jumper" mnemonicParsing="false" onAction="#startJumper" prefHeight="44.0" prefWidth="175.0" text="Jumper">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="shooter" mnemonicParsing="false" onAction="#startShooter" prefHeight="44.0" prefWidth="175.0" text="Shooter">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="spaceInvaders" mnemonicParsing="false" onAction="#startSpaceInvaders" prefHeight="44.0" prefWidth="175.0" text="Space Invaders">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            <Button alignment="TOP_CENTER" contentDisplay="TOP" depthTest="DISABLE" mnemonicParsing="false" onAction="#exitApplication" text="Quit Application">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
    </center>
 </BorderPane>

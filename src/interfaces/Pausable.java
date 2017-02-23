@@ -1,4 +1,4 @@
-package application;
+package interfaces;
 
 public interface Pausable {
 	void pause();
