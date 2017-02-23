@@ -1,24 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-  <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" stylesheets="@application.css" VBox.vgrow="ALWAYS">
-      <children>
-        <Label alignment="CENTER" layoutX="155.0" layoutY="177.0" style="&#10;" text="Drag components from Library here…" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
-          <font>
-            <Font name="Arial" size="18.0" />
-          </font>
-        </Label>
-      </children>
-    </AnchorPane>
-  </children>
-  <stylesheets>
-    <URL value="@../../../../../../PersonalProjects/Java/Test/src/application/BasicApplication_css/BasicApplication.css" />
-  </stylesheets>
-</VBox>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="309.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainMenu">
+   <top>
+      <Label text="MCC Arcade" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Century Gothic" size="41.0" />
+         </font>
+      </Label>
+   </top>
+   <bottom>
+      <Button fx:id="quitApplication" depthTest="DISABLE" mnemonicParsing="false" onAction="#exitApplication" text="Quit Application" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="5.0" />
+         </BorderPane.margin>
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+   </bottom>
+   <center>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="318.0" prefWidth="178.0" spacing="10.0">
+               <children>
+                  <Button fx:id="pong" mnemonicParsing="false" onAction="#startPong" prefHeight="44.0" prefWidth="175.0" text="Pong">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="simon" mnemonicParsing="false" onAction="#startSimon" prefHeight="44.0" prefWidth="175.0" text="Simon">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="snake" mnemonicParsing="false" onAction="#startSnake" prefHeight="44.0" prefWidth="175.0" text="Snake">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="318.0" prefWidth="177.0" spacing="10.0">
+               <children>
+                  <Button fx:id="jumper" mnemonicParsing="false" onAction="#startJumper" prefHeight="44.0" prefWidth="175.0" text="Jumper">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="shooter" mnemonicParsing="false" onAction="#startShooter" prefHeight="44.0" prefWidth="175.0" text="Shooter">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="spaceInvaders" mnemonicParsing="false" onAction="#startSpaceInvaders" prefHeight="44.0" prefWidth="175.0" text="Space Invaders">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets top="10.0" />
+         </BorderPane.margin>
+      </HBox>
+   </center>
+</BorderPane>
