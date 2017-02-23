@@ -3,7 +3,6 @@ package game;
 import java.util.ArrayList;
 import java.util.Random;
 
-import application.Main;
 import application.MainMenu;
 import enums.CommandType;
 import enums.Difficulty;
@@ -15,7 +14,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -26,7 +24,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import models.Game;
 
@@ -46,7 +43,6 @@ public class Simon extends Game {
 	private static Scene difficultyScene;
 	private static Scene gameScene;
 	private static Scene infoScene;
-	private static Scene overScene;
 	private static Rectangle top = new Rectangle(50, 50, Paint.valueOf("rgba(255,0,60,.5)"));
 	private static Rectangle right = new Rectangle(50, 50, Paint.valueOf("rgba(0,100,255,.5)"));
 	private static Rectangle bottom = new Rectangle(50, 50, Paint.valueOf("rgba(0,200,40,.5)"));
@@ -189,15 +185,39 @@ public class Simon extends Game {
 		
 		Text t = new Text("Description");
 		t.setStyle("-fx-font: 20 Arial;");
-		Text simonTurn = new Text("\"Simon's Turn\" :");
-		Text yourTurn = new Text("\"Simon's Turn\" :");
-		Text over = new Text("\"Game Over\" :");
-		Text info1 = new Text("Pay attention to pattern");
-		Text info2 = new Text("Repeat the pattern");
-		Text info3 = new Text("You lost, return to title screen");
+		Text simonTurn = new Text("\"Simon's Turn\"");
+		Text yourTurn = new Text("\"Your Turn\"");
+		Text over = new Text("\"Game Over\"");
+		Text info1 = new Text(": Pay attention to pattern");
+		Text info2 = new Text(": Repeat the pattern");
+		Text info3 = new Text(": You lost, return to title screen");
+		
+		Button tScreen = new Button("Return to Title Screen");
+		tScreen.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				titleScreen();
+			}
+			
+		});
+		
+		vbox1.setSpacing(10);
+		vbox2.setSpacing(10);
+		vbox1.getChildren().addAll(simonTurn, yourTurn, over);
+		vbox2.getChildren().addAll(info1, info2, info3);
+		
+		hbox.getChildren().addAll(vbox1, vbox2);
+		HBox.setMargin(vbox1, new Insets(10,0,0,30));
+		HBox.setMargin(vbox2, new Insets(10,0,0,10));
 		
 		bp.setTop(t);
+		bp.setCenter(hbox);
+		bp.setBottom(tScreen);
 		BorderPane.setAlignment(t, Pos.CENTER);
+		BorderPane.setAlignment(hbox, Pos.CENTER);
+		BorderPane.setAlignment(tScreen, Pos.CENTER);
+		BorderPane.setMargin(tScreen, new Insets(0,0,10,0));
 		
 		infoScene = new Scene(bp, 300, 300);
 	}
@@ -305,6 +325,7 @@ public class Simon extends Game {
 		commands.clear();
 		score = 0;
 		currentIndex = 0;
+		title.setText("Simon's Turn");
 		roundVal.setText("Round: " + round);
 		scoreVal.setText("Points: " + score);
 		top.setFill(Paint.valueOf("rgba(255,0,60,.3)"));
