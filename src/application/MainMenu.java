@@ -11,6 +11,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class MainMenu extends Application {
+	private static Scene mainMenu;
+	
 	@FXML
 	private Button quitApplication;
 	@FXML
@@ -37,12 +39,17 @@ public class MainMenu extends Application {
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			String title = "MCC Arcade";
+			mainMenu = scene;
 			ArcadeView.setScene(scene, title);
 			ArcadeView.showStage();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Scene getMenuScene() {
+		return mainMenu;
 	}
 
 	// Event Listener on Button[#quitApplication].onAction

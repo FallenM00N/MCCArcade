@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import application.Main;
+import application.MainMenu;
 import enums.CommandType;
 import enums.Difficulty;
 import javafx.animation.Animation;
@@ -153,7 +154,7 @@ public class Simon extends Game {
 		vbox.setSpacing(10);
 		vbox.getChildren().addAll(scoreVal, roundVal, pause);
 		
-		Button menu = new Button("Return to Main Menu");
+		Button menu = new Button("Return to Title Screen");
 		menu.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -192,8 +193,8 @@ public class Simon extends Game {
 		Text yourTurn = new Text("\"Simon's Turn\" :");
 		Text over = new Text("\"Game Over\" :");
 		Text info1 = new Text("Pay attention to pattern");
-		Text info2 = new Text("Pay attention to pattern");
-		Text info3 = new Text("Pay attention to pattern");
+		Text info2 = new Text("Repeat the pattern");
+		Text info3 = new Text("You lost, return to title screen");
 		
 		bp.setTop(t);
 		BorderPane.setAlignment(t, Pos.CENTER);
@@ -388,7 +389,7 @@ public class Simon extends Game {
 	}
 	@Override
 	public void mainMenu() {
-		showScene(Main.mainMenu);
+		showScene(MainMenu.getMenuScene());
 	}
 	@Override
 	public void titleScreen() {
