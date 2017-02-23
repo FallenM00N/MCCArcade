@@ -1,6 +1,6 @@
 package models;
 
-import application.Pausable;
+import interfaces.Pausable;
 import javafx.scene.Scene;
 
 public abstract class Game implements Pausable{
