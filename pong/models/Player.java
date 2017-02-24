@@ -1,7 +1,5 @@
 package models;
 
-import com.sun.prism.paint.Color;
-
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 

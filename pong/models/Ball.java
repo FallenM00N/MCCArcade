@@ -1,5 +1,6 @@
 package models;
 
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 public class Ball {
@@ -10,6 +11,12 @@ public class Ball {
 	double height;
 	double dX;
 	double dY;
+	
+	public Ball(double x, double y, double width) {
+		ball = new Rectangle(x, y, width, width);
+		ball.setFill(Paint.valueOf("#fff"));
+	}
+	
 	public Rectangle getBall() {
 		return ball;
 	}

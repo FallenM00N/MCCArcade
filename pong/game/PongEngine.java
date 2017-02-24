@@ -19,7 +19,7 @@ public class PongEngine {
 	private static Player rightPlayer;
 	private static Ball ball;
 	public static Scene gameScene;
-	public static ScoreBoard scoreBoard;
+	public static ScoreBoard scoreBoard = new ScoreBoard();
 	public static Group components;
 	public static Pane background;
 
@@ -33,7 +33,7 @@ public class PongEngine {
 	}
 
 	private static void createBall() {
-		
+		ball = new Ball(390, 275, 20);
 	}
 
 	private static void createBackround() {
@@ -59,6 +59,8 @@ public class PongEngine {
 		components = new Group();
 		components.getChildren().add(leftPlayer.getPaddle());
 		components.getChildren().add(rightPlayer.getPaddle());
+		components.getChildren().add(ball.getBall());
+		components.getChildren().add(scoreBoard.getScoreBoard());
 		background.getChildren().add(components);
 	}
 
