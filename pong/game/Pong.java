@@ -2,6 +2,7 @@ package game;
 
 import java.io.IOException;
 
+import application.MainMenu;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +12,11 @@ import javafx.scene.layout.BorderPane;
 import models.Game;
 
 public class Pong extends Game{
+	
+	public static Scene titleScene;
+	public static Scene playerSelection;
+	public static Scene infoScene;
+	public static Scene overScene;
 	
 	@Override
 	public void pause() {
@@ -33,19 +39,19 @@ public class Pong extends Game{
 	@FXML
 	@Override
 	public void mainMenu() {
-		
+		showScene(MainMenu.getMenuScene());
 	}
 
 	@FXML
 	@Override
 	public void titleScreen() {
-		// TODO Auto-generated method stub
-		Scene title = createTitleScene();
-		showScene(title);
+		showScene(titleScene);
 	}
 
 	@Override
 	public void play() {
+		titleScene = createTitleScene();
+		infoScene = createInfoScene();
 		titleScreen();
 	}
 
@@ -68,15 +74,32 @@ public class Pong extends Game{
 		
 	}
 	
-	@FXML
-	public void playerSelection() {
-		Scene playerSelect = new Scene(null);
-		showScene(playerSelect);
+	public void startGame(ActionEvent e) {
+		PongEngine.run(2);
 	}
 	
+
+	@FXML
+	public void playerSelection(ActionEvent e) {
+		startGame(e);
+//		Scene playerSelect = new Scene(null);
+//		showScene(playerSelect);
+	}
+	
+	@FXML
 	public void infoScreen() {
-		Scene infoScreen = new Scene(null);
-		showScene(infoScreen);
+		showScene(infoScene);
+	}
+	
+	public Scene createInfoScene() {
+		try {
+			BorderPane root = FXMLLoader.load(getClass().getResource("Help.fxml"));
+			Scene scene = new Scene(root);
+			return scene;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	@FXML
