@@ -22,6 +22,16 @@ public class PongEngine {
 	public static ScoreBoard scoreBoard = new ScoreBoard();
 	public static Group components;
 	public static Pane background;
+	public static final double HEIGHT = 800;
+	public static double getHeight() {
+		return HEIGHT;
+	}
+
+	public static double getWidth() {
+		return WIDTH;
+	}
+
+	public static final double WIDTH = 1000;
 
 	public static void run(int players) {
 		createPlayers();
@@ -51,8 +61,8 @@ public class PongEngine {
 	}
 
 	private static void createPlayers() {
-		leftPlayer = new Player(10, 250, 20, 100);
-		rightPlayer = new Player(770, 250, 20, 100);
+		leftPlayer = new Player(20, HEIGHT / 2, 20, 100);
+		rightPlayer = new Player(WIDTH - 40, HEIGHT / 2, 20, 100);
 	}
 
 	private static void createGroup() {
@@ -65,6 +75,6 @@ public class PongEngine {
 	}
 
 	private static void buildScene() {
-		gameScene = new Scene(background, 800, 600);
+		gameScene = new Scene(background, WIDTH, HEIGHT);
 	}
 }

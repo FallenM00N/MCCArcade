@@ -39,13 +39,13 @@ public class Pong extends Game{
 	@FXML
 	@Override
 	public void mainMenu() {
-		showScene(MainMenu.getMenuScene());
+		showScene(MainMenu.getMenuScene(), "MCC Arcade");
 	}
 
 	@FXML
 	@Override
 	public void titleScreen() {
-		showScene(titleScene);
+		showScene(titleScene, "Pong");
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class Pong extends Game{
 	
 	@FXML
 	public void infoScreen() {
-		showScene(infoScene);
+		showScene(infoScene, "Help");
 	}
 	
 	public Scene createInfoScene() {
