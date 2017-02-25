@@ -107,7 +107,7 @@ public class Simon extends Game {
 		top.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				if (playerTurn) {
+				if (playerTurn && !paused) {
 					checkCorrect(CommandType.RED);
 				}
 			}
@@ -116,7 +116,7 @@ public class Simon extends Game {
 		right.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				if (playerTurn) {
+				if (playerTurn && !paused) {
 					checkCorrect(CommandType.BLUE);
 				}
 			}
@@ -125,7 +125,7 @@ public class Simon extends Game {
 		bottom.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				if (playerTurn) {
+				if (playerTurn && !paused) {
 					checkCorrect(CommandType.GREEN);
 				}
 			}
@@ -134,7 +134,7 @@ public class Simon extends Game {
 		left.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				if (playerTurn) {
+				if (playerTurn && !paused) {
 					checkCorrect(CommandType.YELLOW);
 				}
 			}
@@ -361,7 +361,9 @@ public class Simon extends Game {
 			CommandType d = CommandType.values()[rand.nextInt(CommandType.values().length)];
 			
 			commands.add(d);
-			timeLimit -= .1;
+			if (timeLimit > .5) {
+				timeLimit -= .1;
+			}
 		}
 		else {
 			CommandType d = CommandType.values()[rand.nextInt(CommandType.values().length)];

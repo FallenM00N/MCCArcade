@@ -18,6 +18,7 @@ public class ArcadeView {
 	}
 	
 	public static void showStage(){
+		primaryStage.setResizable(false);
 		primaryStage.show();
 	}
 }
