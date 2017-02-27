@@ -46,9 +46,21 @@ public class Snake extends Game{
 	@Override
 	public void play() {
 		titleScene = createTitleScene();
+		infoScene = createInfoScene();
 		titleScreen();
 	}
 
+
+	private Scene createInfoScene() {
+		try {
+			BorderPane root = FXMLLoader.load(getClass().getResource("SnakeHelp.fxml"));
+			Scene scene = new Scene(root);
+			return scene;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	@Override
 	public Scene createTitleScene() {
@@ -74,7 +86,7 @@ public class Snake extends Game{
 	
 	@FXML
 	public void infoScreen(){
-		
+		showScene(infoScene, "Snake - Help");
 	}
 	
 	@FXML
@@ -98,5 +110,7 @@ public class Snake extends Game{
 	private Button menuButton;
 	@FXML
 	private Button quitButton;
+	@FXML
+	private Button returnToTitleButton;
 
 }
