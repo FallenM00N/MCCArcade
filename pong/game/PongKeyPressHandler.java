@@ -16,6 +16,7 @@ public class PongKeyPressHandler implements Runnable {
 	private Thread thread;
 	private Timeline timeline;
 	private ArrayList<String> pressedKeys = new ArrayList<>();
+	private double speed = 0.5;
 
 	public PongKeyPressHandler() {
 		timeline = new Timeline(new KeyFrame(
@@ -32,19 +33,17 @@ public class PongKeyPressHandler implements Runnable {
 			@Override
 			public void handle(KeyEvent event) {
 				KeyCode kc = event.getCode();
-				switch (kc) {
-				case W:
+				if(kc.equals(KeyCode.W) && !pressedKeys.contains("p1up")) {
 					pressedKeys.add("p1up");
-					break;
-				case S:
+				}
+				if(kc.equals(KeyCode.S) && !pressedKeys.contains("p1down")) {
 					pressedKeys.add("p1down");
-					break;
-				case UP:
+				}
+				if(kc.equals(KeyCode.UP) && !pressedKeys.contains("p2up")) {
 					pressedKeys.add("p2up");
-					break;
-				case DOWN:
+				}
+				if(kc.equals(KeyCode.DOWN) && !pressedKeys.contains("p2down")) {
 					pressedKeys.add("p2down");
-					break;
 				}
 			}
 		});
@@ -89,18 +88,24 @@ public class PongKeyPressHandler implements Runnable {
 		if(pressedKeys.contains("p2down") && !pressedKeys.contains("p2up")) {
 			movePaddle2("down");
 		}
-		
 	}
 	
 	private void movePaddle1(String dir) {
 		Player leftPlayer = PongEngine.leftPlayer;
-		if(dir.equals("up")) {
-			leftPlayer.setY(leftPlayer.getY() - 1);
+		if(dir.equals("up") && !leftPlayer.isTouchingTop()) {
+			leftPlayer.setY(leftPlayer.getY() - speed);
+		}else if(dir.equals("down") && !leftPlayer.isTouchingBottom()) {
+			leftPlayer.setY(leftPlayer.getY() + speed);
 		}
 	}
 	
 	private void movePaddle2(String dir) {
-		
+		Player rightPlayer = PongEngine.rightPlayer;
+		if(dir.equals("up") && !rightPlayer.isTouchingTop()) {
+			rightPlayer.setY(rightPlayer.getY() - speed);
+		}else if(dir.equals("down") && !rightPlayer.isTouchingBottom()) {
+			rightPlayer.setY(rightPlayer.getY() + speed);
+		}
 	}
 
 	private void pauseGame() {

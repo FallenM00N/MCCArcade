@@ -9,7 +9,12 @@ public class ScoreBoard {
 	
 	private int small = 15;
 	private int big = 50;
+	private static final int HEIGHT = 160;
 
+	public static int getHeight() {
+		return HEIGHT;
+	}
+	
 	public Group getScoreBoard() {
 		Group scoreBoard = new Group();
 		scoreBoard.getChildren().add(getPlayer1Score(2));
@@ -112,7 +117,7 @@ public class ScoreBoard {
 	}
 
 	private Rectangle getHR() {
-		Rectangle line = new Rectangle(0, 160, PongEngine.getWidth(), 10);
+		Rectangle line = new Rectangle(0, HEIGHT, PongEngine.getWidth(), 10);
 		line.setFill(Paint.valueOf("#fff"));
 		return line;
 	}
