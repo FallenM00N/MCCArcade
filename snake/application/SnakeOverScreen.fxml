@@ -13,7 +13,7 @@
    <center>
       <VBox alignment="TOP_CENTER" prefHeight="330.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="playButton" mnemonicParsing="false" onAction="#startGame" prefHeight="50.0" prefWidth="160.0" text="Play Again">
+            <Button fx:id="restartButton" mnemonicParsing="false" onAction="#restartSnake" prefHeight="50.0" prefWidth="160.0" text="Play Again">
                <VBox.margin>
                   <Insets bottom="30.0" top="30.0" />
                </VBox.margin>

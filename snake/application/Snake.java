@@ -111,6 +111,14 @@ public class Snake extends Game{
 		startGame(e);
 	}
 	
+	public void restartGame(ActionEvent e) throws Exception{
+		SnakeEngine.restartGame();
+	}
+	@FXML
+	public void restartSnake(ActionEvent e) throws Exception{
+		restartGame(e);
+	}
+	
 	@FXML
 	public void infoScreen(){
 		showScene(infoScene, "Snake - Help");
@@ -119,6 +127,7 @@ public class Snake extends Game{
 	@FXML
 	@Override
 	public void gameOver() {
+		SnakeEngine.stopGame();
 		showScene(overScene, "Snake - Game Over!");
 		
 	}
@@ -142,5 +151,7 @@ public class Snake extends Game{
 	private Button pauseButton;
 	@FXML
 	private Button resumeButton;
+	@FXML
+	private Button restartButton;
 
 }
