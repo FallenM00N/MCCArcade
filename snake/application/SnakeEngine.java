@@ -5,10 +5,13 @@ import java.io.File;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -42,12 +45,14 @@ public class SnakeEngine extends Snake{
 	private static double tailY;
 	private static Text t = new Text();
 	private static Score s = new Score();
-	
-
+	private static Snake sn = new Snake();
+	private static AudioClip sound;
+	private static Scene gameScene;
 
 	public static void run() throws Exception {
 		initializeGame();
 		startGame();
+		showScene();
 
 	}
 
@@ -82,7 +87,7 @@ public class SnakeEngine extends Snake{
 		root.getChildren().add(t);
 		
 		String musicFile = "snake\\application\\snake8bit.mp3";
-		AudioClip sound = new AudioClip(new File(musicFile).toURI().toString());
+		sound = new AudioClip(new File(musicFile).toURI().toString());
 		sound.play();
 	}
 
@@ -136,14 +141,18 @@ public class SnakeEngine extends Snake{
 		for (Node rect : snake) {
 			if (rect != tail && tail.getTranslateX() == rect.getTranslateX()
 					&& tail.getTranslateY() == rect.getTranslateY()) {
-				restartGame();
+				stopGame();
+				sound.stop();
+				sn.gameOver();
 				break;
 			}
 		}
 
 		if (tail.getTranslateX() < 0 || tail.getTranslateX() >= WIDTH || tail.getTranslateY() < 0
 				|| tail.getTranslateY() >= HEIGHT) {
-			restartGame();
+			stopGame();
+			sound.stop();
+			sn.gameOver();
 		}
 
 	}
@@ -173,15 +182,14 @@ public class SnakeEngine extends Snake{
 		}
 	}
 
-	private static void restartGame() {
-		stopGame();
-		startGame();
-	}
+	
 
 	private static void stopGame() {
 		running = false;
 		timeline.stop();
 		snake.clear();
+		s.setScore(0);
+
 	}
 
 	private static void startGame() {
@@ -196,9 +204,9 @@ public class SnakeEngine extends Snake{
 	}
 
 	public static void initializeGame() throws Exception {
-		Scene scene = new Scene(createSnakeContent());
+		gameScene = new Scene(createSnakeContent());
 
-		scene.setOnKeyPressed(event -> {
+		gameScene.setOnKeyPressed(event -> {
 			if (!moved)
 				return;
 
@@ -225,7 +233,39 @@ public class SnakeEngine extends Snake{
 			moved = false;
 		});
 
-		ArcadeView.setScene(scene, "Snake");
+	}
+	
+	public static void showScene(){
+		if(running){
+			ArcadeView.setScene(gameScene, "Snake");			
+		}
+		else{
+			ArcadeView.setScene(overScene);
+		}
+		
+	}
+	
+	private void createPauseListener() {
+		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				KeyCode kc = event.getCode();
+				
+				if (kc.equals(KeyCode.ESCAPE) && running) {
+					pauseSnake();
+					sn.pause();
+					ArcadeView.setScene(pauseScene);
+				}
+			}
+		});
+	}
+	
+	public static void pauseSnake(){
+		timeline.pause();
+	}
+	
+	public void resumeSnake(){
+		timeline.play();
 	}
 
 }

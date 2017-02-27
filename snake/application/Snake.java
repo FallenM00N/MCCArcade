@@ -17,6 +17,7 @@ public class Snake extends Game{
 	public static Scene playerSelection;
 	public static Scene infoScene;
 	public static Scene overScene;
+	public static Scene pauseScene;
 	
 	@Override
 	public void resume() {
@@ -47,6 +48,8 @@ public class Snake extends Game{
 	public void play() {
 		titleScene = createTitleScene();
 		infoScene = createInfoScene();
+		overScene = createOverScene();
+		pauseScene = createPauseScene();
 		titleScreen();
 	}
 
@@ -75,6 +78,30 @@ public class Snake extends Game{
 		return null;
 	}
 	
+	public Scene createOverScene(){
+		try {
+			BorderPane root = FXMLLoader.load(getClass().getResource("SnakeOverScreen.fxml"));
+			Scene scene = new Scene(root);
+			return scene;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Scene createPauseScene(){
+		try {
+			BorderPane root = FXMLLoader.load(getClass().getResource("SnakePauseScreen.fxml"));
+			Scene scene = new Scene(root);
+			return scene;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public void startGame(ActionEvent e) throws Exception {
 		SnakeEngine.run();
 	}
@@ -92,14 +119,13 @@ public class Snake extends Game{
 	@FXML
 	@Override
 	public void gameOver() {
-		// TODO Auto-generated method stub
+		showScene(overScene, "Snake - Game Over!");
 		
 	}
 	@FXML
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
+		showScene(pauseScene, "Snake - Paused");
 	}
 	
 	@FXML
@@ -112,5 +138,9 @@ public class Snake extends Game{
 	private Button quitButton;
 	@FXML
 	private Button returnToTitleButton;
+	@FXML
+	private Button pauseButton;
+	@FXML
+	private Button resumeButton;
 
 }
