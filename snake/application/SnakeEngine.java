@@ -163,7 +163,7 @@ public class SnakeEngine extends Snake{
 			
 			
 			Rectangle rect = new Rectangle(SQUARE_SIZE, SQUARE_SIZE);
-			rect.setFill(Color.DARKSEAGREEN);
+			rect.setFill(Color.MEDIUMSEAGREEN);
 			rect.setArcWidth(30);
 			rect.setArcHeight(30);
 			rect.setTranslateX(tailX);
@@ -187,7 +187,7 @@ public class SnakeEngine extends Snake{
 	private static void startGame() {
 		direction = Direction.RIGHT;
 		Rectangle head = new Rectangle(SQUARE_SIZE, SQUARE_SIZE);
-		head.setFill(Color.DARKSEAGREEN);
+		head.setFill(Color.MEDIUMSEAGREEN);
 		head.setArcWidth(30);
 		head.setArcHeight(30);
 		snake.add(head);
