@@ -1,5 +1,6 @@
 package application;
 
+import java.awt.Label;
 import java.io.File;
 
 import javafx.animation.KeyFrame;
@@ -61,8 +62,9 @@ public class SnakeEngine extends Snake{
 		createSnake();
 		createFood();
 		KeyFrame frame = new KeyFrame(Duration.seconds(0.15), event -> {
-			if (!running)
-				return;
+			if (!running){
+				return;				
+			}
 			snakeMovement();
 			detectCollision();
 			eatFood();
@@ -72,7 +74,7 @@ public class SnakeEngine extends Snake{
 		timeline.setCycleCount(Timeline.INDEFINITE);
 
 		root.getChildren().addAll(food, snakeBody);
-
+		root.getChildren().add(t);
 		return root;
 	}
 
@@ -80,11 +82,11 @@ public class SnakeEngine extends Snake{
 		root = new Pane();
 		root.setPrefSize(WIDTH, HEIGHT);
 		root.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE.darker().darker().darker().darker(), null, null)));
-		
-		t = new Text(10,20, "Score: ");
-		t.setFill(Color.BLACK);
+		t = new Text(10,20, "Score: 1");
+//		t = new Text(10,20, "Score: ");
+		t.setFill(Color.WHITE);
 		t.setFont(Font.font(java.awt.Font.SANS_SERIF, 15));
-		root.getChildren().add(t);
+//		root.getChildren().add(t);
 		
 		String musicFile = "snake\\application\\snake8bit.mp3";
 		sound = new AudioClip(new File(musicFile).toURI().toString());
@@ -162,12 +164,13 @@ public class SnakeEngine extends Snake{
 			food.setTranslateX((int) (Math.random() * (WIDTH - SQUARE_SIZE)) / SQUARE_SIZE * SQUARE_SIZE);
 			food.setTranslateY((int) (Math.random() * (HEIGHT - SQUARE_SIZE)) / SQUARE_SIZE * SQUARE_SIZE);
 
+			root.getChildren().remove(t);
 			s.setScore(s.getScore() + 1);
-			t = new Text(10,20, "Score: " + s.getScore());
+//			t = new Text(10,20, "Score: ");
 			t.setFill(Color.WHITE);
 			t.setFont(Font.font(java.awt.Font.SANS_SERIF, 15));
-			
-			
+			String score = Integer.toString(s.getScore());
+			t.setText("Score: " + score);
 			root.getChildren().add(t);
 			
 			
@@ -193,6 +196,7 @@ public class SnakeEngine extends Snake{
 	}
 
 	private static void startGame() {
+		running = true;
 		direction = Direction.RIGHT;
 		Rectangle head = new Rectangle(SQUARE_SIZE, SQUARE_SIZE);
 		head.setFill(Color.MEDIUMSEAGREEN);
@@ -200,7 +204,6 @@ public class SnakeEngine extends Snake{
 		head.setArcHeight(30);
 		snake.add(head);
 		timeline.play();
-		running = true;
 	}
 
 	public static void initializeGame() throws Exception {
