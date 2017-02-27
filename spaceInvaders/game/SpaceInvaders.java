@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+
 import application.MainMenu;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -7,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -14,15 +17,22 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import models.Barrier;
+import models.Bullet;
 import models.Enemy;
 import models.Game;
 import models.Character;
 
 public class SpaceInvaders extends Game {
 
-	private int score = 0;
+	public static String scoreString = "0000000000";
+	public static ArrayList<Bullet> bullets = new ArrayList<>();
+	public static ArrayList<Enemy> enemies = new ArrayList<>();
+	public static ArrayList<Barrier> barriers = new ArrayList<>();
+	public static int score = 0;
 	private Scene titleScene;
 	private Scene difficultyScene;
 	public static Scene gameScene;
@@ -30,7 +40,10 @@ public class SpaceInvaders extends Game {
 	public static Character player;
 	private Scene infoScene;
 	private Scene overScene;
-	private KeyPressHandler kp;
+	public KeyPressHandler kp;
+	public MovementHandler mh;
+	public static Label scorel;
+	public static Label livesl;
 	
 	private Scene createInfoScene() {
 		BorderPane bp = new BorderPane();
@@ -108,11 +121,16 @@ public class SpaceInvaders extends Game {
 	private Scene createGameScene() {
 		Pane bp = new Pane();
 		entities = new Group();
+		scorel = new Label("SCORE: " + scoreString);
+		scorel.setTextFill(Color.web("#FFF"));
+		scorel.setTextAlignment(TextAlignment.RIGHT);
+		scorel.setPrefWidth(150);
 		
 		int x = 50;
 		int y = 50;
 		for (int i = 1; i < 51; i++) {
 			Enemy e = new Enemy(x, y);
+			enemies.add(e);
 			entities.getChildren().add(e.getImg());
 			x += e.getWidth() + 5;
 			if (i % 10 == 0 && i != 0) {
@@ -125,6 +143,7 @@ public class SpaceInvaders extends Game {
 		y = 350;
 		for (int i = 0; i < 3; i++) {
 			Barrier b = new Barrier(x, y);
+			barriers.add(b);
 			entities.getChildren().add(b.getImg());
 			x += b.getWidth() + 40;
 		}
@@ -134,8 +153,16 @@ public class SpaceInvaders extends Game {
 		player.setY(player.getY() - player.getHeight() - 2);
 		entities.getChildren().add(player.getImg());
 		
-		bp.getChildren().add(entities);
+		livesl = new Label("LIVES: " + player.getLives());
+		livesl.setTextFill(Color.web("#FFF"));
+		
+		bp.getChildren().addAll(entities, scorel, livesl);
 		bp.setStyle("-fx-background-color: #000;");
+		
+		scorel.setLayoutX(400 - scorel.getPrefWidth());
+		scorel.setLayoutY(0);
+		livesl.setLayoutX(0);
+		livesl.setLayoutY(0);
 		
 		Scene s = new Scene(bp, 400, 450);
 		return s;
@@ -168,6 +195,13 @@ public class SpaceInvaders extends Game {
 	
 	private void startGame() {
 		kp = new KeyPressHandler();
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mh = new MovementHandler();
 	}
 
 	@Override

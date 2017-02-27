@@ -5,7 +5,7 @@ import javafx.scene.shape.Rectangle;
 
 public class Bullet {
 
-	private final Rectangle bullet;
+	private Rectangle bullet;
 	private double x = 0;
 	private double y = 0;
 	private double width = 3.5;
@@ -30,12 +30,18 @@ public class Bullet {
 	}
 	public void setX(double x) {
 		this.x = x;
+		if (bullet != null) {
+			bullet.setLayoutX(getX());
+		}
 	}
 	public double getY() {
 		return y;
 	}
 	public void setY(double y) {
 		this.y = y;
+		if (bullet != null) {
+			bullet.setLayoutY(getY());
+		}
 	}
 	public double getWidth() {
 		return width;
