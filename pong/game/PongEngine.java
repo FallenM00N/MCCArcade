@@ -36,8 +36,8 @@ public class PongEngine {
 	public static void run(int players) {
 		createPlayers();
 		createBall();
+		createGroup();
 		createBackround();
-//		createGroup();
 		buildScene();
 		showScene();
 		PongKeyPressHandler keyHandler = new PongKeyPressHandler();
@@ -50,10 +50,6 @@ public class PongEngine {
 	private static void createBackround() {
 		background = new Pane();
 		background.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-		components.getChildren().add(leftPlayer.getPaddle());
-		components.getChildren().add(rightPlayer.getPaddle());
-		components.getChildren().add(ball.getBall());
-		components.getChildren().add(scoreBoard.getScoreBoard());
 		background.getChildren().add(components);
 	}
 
@@ -73,5 +69,8 @@ public class PongEngine {
 	private static void createGroup() {
 		components = new Group();
 		components.getChildren().add(leftPlayer.getPaddle());
+		components.getChildren().add(rightPlayer.getPaddle());
+		components.getChildren().add(ball.getBall());
+		components.getChildren().add(scoreBoard.getScoreBoard());
 	}
 }
