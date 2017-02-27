@@ -92,7 +92,7 @@ public class KeyPressHandler implements Runnable {
 		if (pressedKeys.contains("left") && !pressedKeys.contains("right")) {
 			moveLeft();
 		}
-		if (pressedKeys.contains("right") && !pressedKeys.contains("left")) {
+		else if (pressedKeys.contains("right") && !pressedKeys.contains("left")) {
 			moveRight();
 		}
 		if (pressedKeys.contains("space")) {
@@ -113,11 +113,18 @@ public class KeyPressHandler implements Runnable {
 	}
 	
 	private void shoot() {
-		if (time - lastFire >= 700) {
+		if (time - lastFire >= 800) {
 			Character p = SpaceInvaders.player;
-			Bullet b = new Bullet(p.getX() + p.getWidth() / 2 - 1.5, p.getY() - 10, true);
+			Bullet b = new Bullet(p.getX() + p.getWidth() / 2 - 1.5, p.getY() - 12, true);
+			SpaceInvaders.bullets.add(b);
 			SpaceInvaders.entities.getChildren().add(b.getBullet());
 			lastFire = time;
+			if (SpaceInvaders.player.getX() >= 400 - SpaceInvaders.player.getWidth() - 2) {
+				SpaceInvaders.player.setX(SpaceInvaders.player.getX() - .25);
+			}
+			else if (SpaceInvaders.player.getX() <= 2) {
+				SpaceInvaders.player.setX(SpaceInvaders.player.getX() + .25);
+			}
 		}
 	}
 	

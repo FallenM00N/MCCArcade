@@ -1,5 +1,6 @@
 package models;
 
+import game.SpaceInvaders;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -46,6 +47,10 @@ public class Barrier {
 	public void takeDamage(int damage) {
 		setHitPoints(getHitPoints() - damage);
 		pBar.setWidth(pBar.getWidth() - damage);
+		if (getHitPoints() <= 0) {
+			SpaceInvaders.entities.getChildren().remove(this.getImg());
+			SpaceInvaders.barriers.remove(this);
+		}
 	}
 
 	public Group getImg() {
