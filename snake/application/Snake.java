@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 
 import application.MainMenu;
+import game.PongEngine;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,13 +33,13 @@ public class Snake extends Game{
 	@FXML
 	@Override
 	public void mainMenu() {
-		showScene(MainMenu.getMenuScene());
+		showScene(MainMenu.getMenuScene(), "MCC Arcade");
 	}
 
 	@FXML
 	@Override
 	public void titleScreen() {
-		showScene(titleScene);
+		showScene(titleScene, "Snake");
 	}
 
 	@FXML
@@ -62,9 +63,13 @@ public class Snake extends Game{
 		return null;
 	}
 	
+	public void startGame(ActionEvent e) throws Exception {
+		SnakeEngine.run();
+	}
+	
 	@FXML
-	public void playSnake(){
-		
+	public void playSnake(ActionEvent e) throws Exception{
+		startGame(e);
 	}
 	
 	@FXML
