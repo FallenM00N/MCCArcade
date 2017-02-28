@@ -2,7 +2,11 @@ package game;
 
 import java.util.ArrayList;
 
+import application.ArcadeView;
 import application.MainMenu;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,6 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -20,30 +26,139 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import models.Barrier;
 import models.Bullet;
+import models.Character;
 import models.Enemy;
 import models.Game;
-import models.Character;
 
 public class SpaceInvaders extends Game {
 
+	public static boolean paused = false;
 	public static String scoreString = "0000000000";
 	public static ArrayList<Bullet> bullets = new ArrayList<>();
 	public static ArrayList<Enemy> enemies = new ArrayList<>();
 	public static ArrayList<Barrier> barriers = new ArrayList<>();
 	public static int score = 0;
-	private Scene titleScene;
+	private static Scene titleScene;
 	private Scene difficultyScene;
+	private static Scene winScene;
+	private static Scene pauseScene;
 	public static Scene gameScene;
 	public static Group entities = new Group();
 	public static Character player;
 	private Scene infoScene;
 	private Scene overScene;
-	public KeyPressHandler kp;
-	public MovementHandler mh;
+	public static KeyPressHandler kp;
+	public static MovementHandler mh;
 	public static Label scorel;
 	public static Label livesl;
+	private Timeline timeline;
+	
+	private void timerTick() {
+		if (player.getLives() <= 0) {
+			gameOver();
+			timeline.stop();
+		}
+	}
+	
+	private static Scene createWinScene(String message) {
+		BorderPane bp = new BorderPane();
+		VBox vbox = new VBox();
+		VBox vbox2 = new VBox();
+		
+		String f = Integer.toString(SpaceInvaders.score);
+		SpaceInvaders.scoreString = SpaceInvaders.scoreString.substring(0, SpaceInvaders.scoreString.length() - f.length());
+		SpaceInvaders.scoreString += f;
+		
+		Text t = new Text(message);
+		t.setStyle("-fx-font: 20 Arial;");
+		Text t2 = new Text("Score: " + scoreString);
+		t2.setStyle("-fx-font: 15 Arial;");
+		
+		vbox2.setSpacing(5);
+		vbox2.getChildren().addAll(t, t2);
+		vbox2.setAlignment(Pos.CENTER);
+		
+		Button title = new Button("Return to Title Screen");
+		title.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				ArcadeView.setScene(titleScene);
+			}
+		});
+		Button menu = new Button("Return to Main Menu");
+		menu.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				ArcadeView.setScene(MainMenu.getMenuScene());
+			}
+		});
+		Button quit = new Button("Quit Application");
+		quit.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				System.exit(0);
+			}
+		});
+		
+		vbox.setSpacing(10);
+		vbox.getChildren().addAll(title, menu, quit);
+		vbox.setAlignment(Pos.CENTER);
+		
+		bp.setTop(vbox2);
+		bp.setCenter(vbox);
+		
+		Scene s = new Scene(bp, 250, 200);
+		return s;
+	}
+	
+	private Scene createPauseScene() {
+		BorderPane bp = new BorderPane();
+		VBox vbox = new VBox();
+		
+		Text t = new Text("Game Paused");
+		t.setStyle("-fx-font: 20 Arial;");
+		
+		Button resume = new Button("Resume Game");
+		resume.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				kp.resumeTimer();
+				mh.resumeTimer();
+				showScene(gameScene);
+				paused = false;
+			}
+		});
+		Button title = new Button("Return to Title Screen");
+		title.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				kp.stopTimer();
+				mh.stopTimer();
+				showScene(titleScene);
+				paused = false;
+			}
+		});
+		Button quit = new Button("Quit Application");
+		quit.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				exit();
+			}
+		});
+		
+		vbox.setSpacing(10);
+		vbox.getChildren().addAll(resume, title, quit);
+		vbox.setAlignment(Pos.CENTER);
+		
+		bp.setCenter(vbox);
+		bp.setTop(t);
+		
+		Scene s = new Scene(bp , 200, 200);
+		return s;
+	}
 	
 	private Scene createInfoScene() {
 		BorderPane bp = new BorderPane();
@@ -115,7 +230,46 @@ public class SpaceInvaders extends Game {
 	}
 	
 	private Scene createDifficultyScene() {
-		return null;
+		BorderPane bp = new BorderPane();
+		
+		VBox vbox = new VBox();
+		
+		Text t = new Text("Select a Difficulty");
+		t.setStyle("-fx-font: 20 Arial;");
+		
+		Button easy = new Button("Easy");
+		easy.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				startGame(1500, 601);
+			}
+		});
+		Button medium = new Button("Medium");
+		medium.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				startGame(1000, 501);
+			}
+		});
+		Button hard = new Button("Hard");
+		hard.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				startGame(500, 401);
+			}
+		});
+		
+		vbox.setSpacing(10);
+		vbox.getChildren().addAll(easy, medium, hard);
+		vbox.setAlignment(Pos.CENTER);
+		
+		bp.setTop(t);
+		bp.setCenter(vbox);
+		BorderPane.setAlignment(t, Pos.CENTER);
+		BorderPane.setMargin(vbox, new Insets(0,0,0,0));
+		
+		Scene s = new Scene(bp, 200, 150);
+		return s;
 	}
 	
 	private Scene createGameScene() {
@@ -125,16 +279,36 @@ public class SpaceInvaders extends Game {
 		scorel.setTextFill(Color.web("#FFF"));
 		scorel.setTextAlignment(TextAlignment.RIGHT);
 		scorel.setPrefWidth(150);
+		barriers.clear();
+		bullets.clear();
+		enemies.clear();
 		
 		int x = 50;
 		int y = 50;
 		for (int i = 1; i < 51; i++) {
-			Enemy e = new Enemy(x, y);
+			Image img = new Image("file:spaceInvaders/images/Enemy.png");
+			if (i < 11) {
+				img = new Image("file:spaceInvaders/images/EnemyRound.png");
+			}
+			else if (i < 21) {
+				img = new Image("file:spaceInvaders/images/EnemySun.png");
+			}
+			else if (i < 31) {
+				img = new Image("file:spaceInvaders/images/EnemyTriangle.png");
+			}
+			else if (i < 41) {
+				img = new Image("file:spaceInvaders/images/EnemyX.png");
+			}
+			else{
+				img = new Image("file:spaceInvaders/images/Enemy.png");
+			}
+			
+			Enemy e = new Enemy(x, y, img);
 			enemies.add(e);
 			entities.getChildren().add(e.getImg());
 			x += e.getWidth() + 5;
 			if (i % 10 == 0 && i != 0) {
-				y += e.getWidth() + 2;
+				y += e.getWidth() + 3;
 				x = 50;
 			}
 		}
@@ -168,13 +342,59 @@ public class SpaceInvaders extends Game {
 		return s;
 	}
 	
-	private Scene createOverScene() {
-		return null;
+	private Scene createOverScene(String titleText) {
+		BorderPane bp = new BorderPane();
+		VBox vbox = new VBox();
+		VBox vbox2 = new VBox();
+		
+		String f = Integer.toString(SpaceInvaders.score);
+		SpaceInvaders.scoreString = SpaceInvaders.scoreString.substring(0, SpaceInvaders.scoreString.length() - f.length());
+		SpaceInvaders.scoreString += f;
+		
+		Text t = new Text(titleText);
+		t.setStyle("-fx-font: 20 Arial;");
+		Text t2 = new Text("Score: " + scoreString);
+		t2.setStyle("-fx-font: 15 Arial;");
+		
+		vbox2.setSpacing(5);
+		vbox2.getChildren().addAll(t, t2);
+		vbox2.setAlignment(Pos.CENTER);
+		
+		Button title = new Button("Return to Title Screen");
+		title.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				showScene(titleScene);
+			}
+		});
+		Button menu = new Button("Return to Main Menu");
+		menu.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				mainMenu();
+			}
+		});
+		Button quit = new Button("Quit Application");
+		quit.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				exit();
+			}
+		});
+		
+		vbox.setSpacing(10);
+		vbox.getChildren().addAll(title, menu, quit);
+		vbox.setAlignment(Pos.CENTER);
+		
+		bp.setTop(vbox2);
+		bp.setCenter(vbox);
+		
+		Scene s = new Scene(bp, 250, 200);
+		return s;
 	}
 	
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -193,15 +413,49 @@ public class SpaceInvaders extends Game {
 		showScene(titleScene);
 	}
 	
-	private void startGame() {
+	public static void pauseGame() {
+		if (paused) {
+			kp.resumeTimer();
+			mh.resumeTimer();
+			ArcadeView.setScene(gameScene);
+		}
+		else {
+			kp.pauseTimer();
+			mh.pauseTimer();
+			ArcadeView.setScene(pauseScene);
+		}
+		paused = !paused;
+	}
+	
+	private void startGame(int shotLimit, int timeLimit) {
+		livesl.setText("LIVES: 3");
+		scoreString = "0000000000";
+		scorel.setText("SCORE: " + scoreString);
+		score = 0;
+		timeline = new Timeline(new KeyFrame(
+		        Duration.millis(500),
+		        ae -> timerTick()));
+		timeline.setCycleCount(Animation.INDEFINITE);
+		timeline.play();
+		gameScene = createGameScene();
+		showScene(gameScene);
+		
 		kp = new KeyPressHandler();
 		try {
 			Thread.sleep(50);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 		mh = new MovementHandler();
+		mh.shotLimit = shotLimit;
+		mh.timeLimit = timeLimit;
+	}
+	
+	public static void winGame(String message) {
+		kp.stopTimer();
+		mh.stopTimer();
+		winScene = createWinScene(message);
+		ArcadeView.setScene(winScene);
 	}
 
 	@Override
@@ -210,7 +464,24 @@ public class SpaceInvaders extends Game {
 		gameScene = createGameScene();
 		infoScene = createInfoScene();
 		difficultyScene = createDifficultyScene();
-		overScene = createOverScene();
+		overScene = createOverScene("Game Over - You Lose");
+		pauseScene = createPauseScene();
+		pauseScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode().equals(KeyCode.P) || event.getCode().equals(KeyCode.ESCAPE)) {
+					mh.resumeTimer();
+					kp.resumeTimer();
+					showScene(gameScene);
+				}
+			}
+		});
+		
+//		String musicFile = "spaceInvaders/audio/01 Monody (feat. Laura Brehm).mp3";     // For example
+//
+//		Media sound = new Media(new File(musicFile).toURI().toString());
+//		MediaPlayer mediaPlayer = new MediaPlayer(sound);
+//		mediaPlayer.play();
 		
 		titleScreen();
 	}
@@ -227,8 +498,7 @@ public class SpaceInvaders extends Game {
 		start.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				showScene(gameScene);
-				startGame();
+				showScene(difficultyScene);
 			}
 		});
 		Button info = new Button("Info/Controls");
@@ -269,13 +539,14 @@ public class SpaceInvaders extends Game {
 
 	@Override
 	public void gameOver() {
-		// TODO Auto-generated method stub
-		
+		kp.stopTimer();
+		mh.stopTimer();
+		overScene = createOverScene("Game Over - You Lose");
+		showScene(overScene);
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -1,11 +1,18 @@
 package models;
 
+import java.io.File;
+
 import game.SpaceInvaders;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class Barrier {
 	private final Group img;
@@ -48,9 +55,37 @@ public class Barrier {
 		setHitPoints(getHitPoints() - damage);
 		pBar.setWidth(pBar.getWidth() - damage);
 		if (getHitPoints() <= 0) {
-			SpaceInvaders.entities.getChildren().remove(this.getImg());
-			SpaceInvaders.barriers.remove(this);
+			playDeathAnimation();
 		}
+	}
+	
+	public void playDeathAnimation() {
+		Timeline timeline = new Timeline(new KeyFrame(
+		        Duration.millis(100),
+		        ae -> timerTick()));
+		Image i = new Image("file:spaceInvaders/images/BarrierExplode.png");
+		setImgSrc(i);
+		ImageView iv = new ImageView(i);
+		iv.setFitWidth(getWidth());
+		iv.setFitHeight(getHeight());
+		setIv(iv);
+		img.getChildren().clear();
+		img.getChildren().add(getIv());
+		img.setLayoutX(getX());
+		img.setLayoutY(getY());
+		
+		String musicFile = "spaceInvaders/audio/Boom.mp3";
+
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.play();
+		
+		timeline.play();
+	}
+	
+	private void timerTick() {
+		SpaceInvaders.entities.getChildren().remove(this.getImg());
+		SpaceInvaders.barriers.remove(this);
 	}
 
 	public Group getImg() {
@@ -100,9 +135,17 @@ public class Barrier {
 	public ImageView getIv() {
 		return iv;
 	}
+	
+	public void setIv(ImageView iv) {
+		this.iv = iv;
+	}
 
 	public Image getImgSrc() {
 		return imgSrc;
+	}
+	
+	public void setImgSrc(Image img) {
+		this.imgSrc = img;
 	}
 
 	public int getHitPoints() {

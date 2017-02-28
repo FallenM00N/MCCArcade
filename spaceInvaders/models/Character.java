@@ -3,8 +3,6 @@ package models;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 
 public class Character {
 	private int lives = 3;

@@ -1,11 +1,14 @@
 package game;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import models.Barrier;
 import models.Bullet;
@@ -13,11 +16,10 @@ import models.Enemy;
 
 public class MovementHandler implements Runnable {
 
-	private Enemy[][] enemies = new Enemy[5][10];
-	private int shotLimit = 1000;
+	public int shotLimit = 1000;
 	private int lastShot = 0;
 	private int direction = 5;
-	private int timeLimit = 501;
+	public int timeLimit = 501;
 	private int time = 0;
 	private int lastSpawn = 0;
 	private Thread thread;
@@ -25,12 +27,6 @@ public class MovementHandler implements Runnable {
 	private Random rand = new Random();
 	
 	public MovementHandler() {
-		ArrayList<Enemy> e = SpaceInvaders.enemies;
-		
-		for (int i = 0; i < e.size(); i++) {
-			enemies[i / 10][i % 10] = e.get(i);
-		}
-		
 		timeline = new Timeline(new KeyFrame(
 		        Duration.millis(1),
 		        ae -> timerTick()));
@@ -47,16 +43,18 @@ public class MovementHandler implements Runnable {
 	
 	private void timerTick() {
 		time++;
-		if (time - lastSpawn >= timeLimit) {
-			moveEnemies();
-			lastSpawn = time;
-		}
-		
-		moveBullets();
-		
-		if (time - lastShot >= shotLimit) {
-			enemyShoot();
-			lastShot = time;
+		if (!SpaceInvaders.enemies.isEmpty()) {
+			if (time - lastSpawn >= timeLimit) {
+				moveEnemies();
+				lastSpawn = time;
+			}
+			
+			moveBullets();
+			
+			if (time - lastShot >= shotLimit) {
+				enemyShoot();
+				lastShot = time;
+			}
 		}
 	}
 	
@@ -70,7 +68,9 @@ public class MovementHandler implements Runnable {
 				x = rand.nextInt(10);
 			}
 			else {
-				x = rand.nextInt(e.size());
+				if (!e.isEmpty()) {
+					x = rand.nextInt(e.size());
+				}
 			}
 			
 			if (x > e.size()) {
@@ -116,6 +116,9 @@ public class MovementHandler implements Runnable {
 				for (int j = 0; j < e.size(); j++) {
 					e.get(j).setY(e.get(j).getY() + 10);
 				}
+			}
+			if (e.get(i).getY() >= SpaceInvaders.player.getY()) {
+				SpaceInvaders.winGame("Game Over - You Lose");
 			}
 		}
 		
@@ -176,21 +179,34 @@ public class MovementHandler implements Runnable {
 	}
 	
 	private void killEnemy(Bullet b, Enemy e) {
-		SpaceInvaders.score += 100 + (500 - (timeLimit - 1));
+		SpaceInvaders.score += 100 + (601 - (timeLimit));
 		String f = Integer.toString(SpaceInvaders.score);
 		SpaceInvaders.scoreString = SpaceInvaders.scoreString.substring(0, SpaceInvaders.scoreString.length() - f.length());
 		SpaceInvaders.scoreString += f;
 		SpaceInvaders.scorel.setText("SCORE: " + SpaceInvaders.scoreString);
 		
+		e.playDeathAnimation();
 		SpaceInvaders.entities.getChildren().remove(b.getBullet());
-		SpaceInvaders.entities.getChildren().remove(e.getImg());
 		SpaceInvaders.bullets.remove(b);
-		SpaceInvaders.enemies.remove(e);
+		if (SpaceInvaders.enemies.size() <= 1) {
+			SpaceInvaders.winGame("Game Over - You Win");
+		}
+		String musicFile = "spaceInvaders/audio/Boom.mp3";
+
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.play();
 	}
 	
 	private void loseLife(int livesLost) {
 		SpaceInvaders.player.loseLife(1);
 		SpaceInvaders.livesl.setText("LIVES: " + SpaceInvaders.player.getLives());
+		
+		String musicFile = "spaceInvaders/audio/TakeDamge.mp3";
+
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.play();
 	}
 	
 	public void stopTimer() {

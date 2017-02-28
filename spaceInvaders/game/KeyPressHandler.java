@@ -1,16 +1,16 @@
 package game;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import models.Bullet;
 import models.Character;
@@ -47,8 +47,8 @@ public class KeyPressHandler implements Runnable {
 				else if (kc.equals(KeyCode.SPACE) && !pressedKeys.contains("space")) {
 					pressedKeys.add("space");
 				}
-				else if (kc.equals(KeyCode.P) || kc.equals(KeyCode.ESCAPE) && !pressedKeys.contains("pause")) {
-					pauseGame();
+				else if (kc.equals(KeyCode.P) || kc.equals(KeyCode.ESCAPE)) {
+					SpaceInvaders.pauseGame();
 				}
 			}
 		});
@@ -65,9 +65,6 @@ public class KeyPressHandler implements Runnable {
 				}
 				else if (kc.equals(KeyCode.SPACE)) {
 					pressedKeys.remove("space");
-				}
-				else if (kc.equals(KeyCode.P) || kc.equals(KeyCode.ESCAPE)) {
-					
 				}
 			}
 		});
@@ -95,8 +92,23 @@ public class KeyPressHandler implements Runnable {
 		else if (pressedKeys.contains("right") && !pressedKeys.contains("left")) {
 			moveRight();
 		}
+		else {
+			if (pressedKeys.contains("left") && pressedKeys.contains("right")) {
+				
+			}
+		}
+		
 		if (pressedKeys.contains("space")) {
 			shoot();
+		}
+		if (pressedKeys.size() > 3) {
+			if (pressedKeys.contains("space")) {
+				pressedKeys.clear();
+				pressedKeys.add("space");
+			}
+			else {
+				pressedKeys.clear();
+			}
 		}
 	}
 	
@@ -104,11 +116,17 @@ public class KeyPressHandler implements Runnable {
 		if (SpaceInvaders.player.getX() > 2) {
 			SpaceInvaders.player.setX(SpaceInvaders.player.getX() - .25);
 		}
+		else {
+			pressedKeys.remove("left");
+		}
 	}
 	
 	private void moveRight() {
 		if (SpaceInvaders.player.getX() < 400 - SpaceInvaders.player.getWidth() - 2) {
 			SpaceInvaders.player.setX(SpaceInvaders.player.getX() + .25);
+		}
+		else {
+			pressedKeys.remove("right");
 		}
 	}
 	
@@ -125,10 +143,11 @@ public class KeyPressHandler implements Runnable {
 			else if (SpaceInvaders.player.getX() <= 2) {
 				SpaceInvaders.player.setX(SpaceInvaders.player.getX() + .25);
 			}
+			String musicFile = "spaceInvaders/audio/Shoot.mp3";
+
+			Media sound = new Media(new File(musicFile).toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.play();
 		}
-	}
-	
-	private void pauseGame() {
-		
 	}
 }
