@@ -18,12 +18,7 @@
                   <Insets bottom="30.0" top="30.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="infoButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#infoScreen" prefHeight="50.0" prefWidth="160.0" text="Help">
-               <VBox.margin>
-                  <Insets bottom="30.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="menuButton" mnemonicParsing="false" onAction="#mainMenu" prefHeight="50.0" prefWidth="160.0" text="Main Menu">
+            <Button fx:id="returnToTitleButton" mnemonicParsing="false" onAction="#returnToTitle" prefHeight="50.0" prefWidth="160.0" text="Return to Title Screen">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>

@@ -1,6 +1,5 @@
 package application;
 
-import java.awt.Label;
 import java.io.File;
 
 import javafx.animation.KeyFrame;
@@ -72,6 +71,7 @@ public class SnakeEngine extends Snake{
 
 		timeline.getKeyFrames().add(frame);
 		timeline.setCycleCount(Timeline.INDEFINITE);
+		
 
 		root.getChildren().addAll(food, snakeBody);
 		root.getChildren().add(t);
@@ -83,10 +83,10 @@ public class SnakeEngine extends Snake{
 		root.setPrefSize(WIDTH, HEIGHT);
 		root.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE.darker().darker().darker().darker(), null, null)));
 		t = new Text(10,20, "Score: 1");
-//		t = new Text(10,20, "Score: ");
+
 		t.setFill(Color.WHITE);
 		t.setFont(Font.font(java.awt.Font.SANS_SERIF, 15));
-//		root.getChildren().add(t);
+
 		
 		String musicFile = "snake\\application\\snake8bit.mp3";
 		sound = new AudioClip(new File(musicFile).toURI().toString());
@@ -143,8 +143,6 @@ public class SnakeEngine extends Snake{
 		for (Node rect : snake) {
 			if (rect != tail && tail.getTranslateX() == rect.getTranslateX()
 					&& tail.getTranslateY() == rect.getTranslateY()) {
-				stopGame();
-				sound.stop();
 				sn.gameOver();
 				break;
 			}
@@ -152,9 +150,8 @@ public class SnakeEngine extends Snake{
 
 		if (tail.getTranslateX() < 0 || tail.getTranslateX() >= WIDTH || tail.getTranslateY() < 0
 				|| tail.getTranslateY() >= HEIGHT) {
-			stopGame();
-			sound.stop();
 			sn.gameOver();
+
 		}
 
 	}
@@ -166,7 +163,6 @@ public class SnakeEngine extends Snake{
 
 			root.getChildren().remove(t);
 			s.setScore(s.getScore() + 1);
-//			t = new Text(10,20, "Score: ");
 			t.setFill(Color.WHITE);
 			t.setFont(Font.font(java.awt.Font.SANS_SERIF, 15));
 			String score = Integer.toString(s.getScore());
@@ -185,17 +181,21 @@ public class SnakeEngine extends Snake{
 		}
 	}
 
-	
+	public static void restartGame() throws Exception{
+		run();
+	}
 
-	private static void stopGame() {
+	public static void stopGame() {
+		sound.stop();
 		running = false;
 		timeline.stop();
+		timeline = new Timeline();
 		snake.clear();
 		s.setScore(0);
 
 	}
 
-	private static void startGame() {
+	public static void startGame() {
 		running = true;
 		direction = Direction.RIGHT;
 		Rectangle head = new Rectangle(SQUARE_SIZE, SQUARE_SIZE);
@@ -208,8 +208,14 @@ public class SnakeEngine extends Snake{
 
 	public static void initializeGame() throws Exception {
 		gameScene = new Scene(createSnakeContent());
-
+		
 		gameScene.setOnKeyPressed(event -> {
+			
+			if (event.getCode().equals(KeyCode.SPACE) && running) {
+				pauseSnake();
+				sn.pause();
+			}
+			
 			if (!moved)
 				return;
 
@@ -219,7 +225,15 @@ public class SnakeEngine extends Snake{
 					if (direction != Direction.DOWN)
 						direction = Direction.UP;
 					break;
+				case W:
+					if (direction != Direction.DOWN)
+						direction = Direction.UP;
+					break;
 				case DOWN:
+					if (direction != Direction.UP)
+						direction = Direction.DOWN;
+					break;
+				case S:
 					if (direction != Direction.UP)
 						direction = Direction.DOWN;
 					break;
@@ -227,7 +241,15 @@ public class SnakeEngine extends Snake{
 					if (direction != Direction.RIGHT)
 						direction = Direction.LEFT;
 					break;
+				case A:
+					if (direction != Direction.RIGHT)
+						direction = Direction.LEFT;
+					break;
 				case RIGHT:
+					if (direction != Direction.LEFT)
+						direction = Direction.RIGHT;
+					break;
+				case D:
 					if (direction != Direction.LEFT)
 						direction = Direction.RIGHT;
 					break;
@@ -248,26 +270,13 @@ public class SnakeEngine extends Snake{
 		
 	}
 	
-	private void createPauseListener() {
-		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				KeyCode kc = event.getCode();
-				
-				if (kc.equals(KeyCode.ESCAPE) && running) {
-					pauseSnake();
-					sn.pause();
-					ArcadeView.setScene(pauseScene);
-				}
-			}
-		});
-	}
 	
 	public static void pauseSnake(){
 		timeline.pause();
 	}
 	
-	public void resumeSnake(){
+	public static void resumeSnake(){
+		ArcadeView.setScene(gameScene);
 		timeline.play();
 	}
 
