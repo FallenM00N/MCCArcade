@@ -30,6 +30,8 @@ public class JumperEngine extends Jumper{
 	private static ImageView llama;
 	private static Group root;
 	private static Timer timer = new Timer();
+	private static Timeline timeline = new Timeline();
+	private static Jumper j = new Jumper();
 	
 	private static int yJumpMotion;
 	private static AudioClip sound;
@@ -37,12 +39,13 @@ public class JumperEngine extends Jumper{
 	public static void run(){
 		startGame();
 		showScene();
+
 	}
 	
 	public static void showScene(){
 		
 			if(isRunning){
-				ArcadeView.setScene(gameScene, "Snake");			
+				ArcadeView.setScene(gameScene, "Llama Run");			
 			}
 			else{
 				ArcadeView.setScene(gameOverScene);
@@ -104,6 +107,9 @@ public class JumperEngine extends Jumper{
 			}
 			else if (event.getCode().equals(KeyCode.ESCAPE) && isRunning) {
 				//for pause later
+				pauseJumper();
+				j.pause();
+				
 			}
 			
 		});
@@ -120,6 +126,7 @@ public class JumperEngine extends Jumper{
 		createJumperContent();
 		createKeyListener();
 		timer.schedule(new UpdateHandler(llama), 16, 16);
+		timeline.play();
 	}
 	
 	private static class UpdateHandler extends TimerTask{
@@ -144,6 +151,15 @@ public class JumperEngine extends Jumper{
 			//move rectangles to the left put code in here.
 		}
 		
+	}
+	
+	public static void pauseJumper(){
+		timeline.pause();
+	}
+	
+	public static void resumeJumper(){
+		ArcadeView.setScene(gameScene , "Llama Run");
+		timeline.play();
 	}
 	
 	

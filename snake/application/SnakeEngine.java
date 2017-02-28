@@ -46,7 +46,10 @@ public class SnakeEngine extends Snake{
 	private static Text t = new Text();
 	private static Score s = new Score();
 	private static Snake sn = new Snake();
+	private static String musicFile;
 	private static AudioClip sound;
+	private static boolean isMusicPlaying = false;
+
 	private static Scene gameScene;
 
 	public static void run() throws Exception {
@@ -88,9 +91,7 @@ public class SnakeEngine extends Snake{
 		t.setFont(Font.font(java.awt.Font.SANS_SERIF, 15));
 
 		
-		String musicFile = "snake\\application\\snake8bit.mp3";
-		sound = new AudioClip(new File(musicFile).toURI().toString());
-		sound.play();
+
 	}
 
 	private static void createFood() {
@@ -186,11 +187,13 @@ public class SnakeEngine extends Snake{
 	}
 
 	public static void stopGame() {
-		sound.stop();
+		if(isMusicPlaying){
+			sound.stop();			
+			snake.clear();
+		}
 		running = false;
 		timeline.stop();
 		timeline = new Timeline();
-		snake.clear();
 		s.setScore(0);
 
 	}
@@ -262,7 +265,12 @@ public class SnakeEngine extends Snake{
 	
 	public static void showScene(){
 		if(running){
-			ArcadeView.setScene(gameScene, "Snake");			
+			ArcadeView.setScene(gameScene, "Snake");	
+			musicFile = "snake\\application\\snake8bit.mp3";
+			sound = new AudioClip(new File(musicFile).toURI().toString());
+			sound.play();
+			isMusicPlaying = true;
+			//System.out.println(isMusicPlaying);
 		}
 		else{
 			ArcadeView.setScene(overScene);
@@ -276,7 +284,7 @@ public class SnakeEngine extends Snake{
 	}
 	
 	public static void resumeSnake(){
-		ArcadeView.setScene(gameScene);
+		ArcadeView.setScene(gameScene, "Snake");
 		timeline.play();
 	}
 
