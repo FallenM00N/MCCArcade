@@ -1,6 +1,8 @@
 package application;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -20,13 +22,14 @@ import javafx.scene.shape.Rectangle;
 public class JumperEngine extends Jumper{
 	private static final int WIDTH = 700;
 	private static final int HEIGHT = 500;
+	private static boolean isJumping = false;
 
 	private static Scene gameScene;
 	private static boolean isRunning = false;
 	private static Image image;
 	private static ImageView llama;
 	private static Group root;
-	private static Timeline timeline = new Timeline();
+	private static Timer timer = new Timer();
 	
 	private static int yJumpMotion;
 	private static AudioClip sound;
@@ -64,8 +67,8 @@ public class JumperEngine extends Jumper{
         root.getChildren().add(ground);
         
 		String musicFile = "jumper\\models\\jumperSong.mp3";
-		sound = new AudioClip(new File(musicFile).toURI().toString());
-		sound.play();
+		sound = new AudioClip(new File(musicFile).toURI().toString());		
+			sound.play();
         
 	}
 	
@@ -81,10 +84,10 @@ public class JumperEngine extends Jumper{
 	}
 	
 	public static void jump(){
-		llama.setTranslateY(yJumpMotion); 
-		yJumpMotion -= 100;
+		//llama.setTranslateY(yJumpMotion); 
+		yJumpMotion = 150;//adjust jumpheight
 		if(isRunning){
-			llama.setTranslateY(yJumpMotion);
+			llama.setTranslateY(llama.getTranslateY() - yJumpMotion);
 		}
 	}
 	
@@ -92,8 +95,12 @@ public class JumperEngine extends Jumper{
 		gameScene.setOnKeyPressed(event -> {
 			
 			if (event.getCode().equals(KeyCode.SPACE) && isRunning) {
-				jump();
-				System.out.println("Jump");
+				
+				if(!isJumping){
+					jump();
+					System.out.println("Jump");
+					//donothing
+				}
 			}
 			else if (event.getCode().equals(KeyCode.ESCAPE) && isRunning) {
 				//for pause later
@@ -112,8 +119,33 @@ public class JumperEngine extends Jumper{
 		isRunning = true;
 		createJumperContent();
 		createKeyListener();
-		timeline.play();
+		timer.schedule(new UpdateHandler(llama), 16, 16);
 	}
+	
+	private static class UpdateHandler extends TimerTask{
+
+		private ImageView llama;
+		
+
+		public UpdateHandler(ImageView llama){
+			this.llama = llama;
+		}
+		
+		@Override
+		public void run() {
+//			System.out.println(llama.getTranslateY()); 
+			if(llama.getTranslateY()<0){ //if llama is in the air
+				isJumping = true;
+				llama.setTranslateY(llama.getTranslateY() + 10);//bring back llama to ground
+			} 
+			else{
+				isJumping = false;
+			}
+			//move rectangles to the left put code in here.
+		}
+		
+	}
+	
 	
 	
 }
