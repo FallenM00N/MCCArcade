@@ -10,23 +10,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Jumper">
    <children>
       <VBox layoutX="229.0" layoutY="139.0" prefHeight="222.0" prefWidth="142.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="152.0" text="New Game" />
-            <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="168.0" text="Help">
+            <Button fx:id="playButton" mnemonicParsing="false" onAction="#playJumper" prefHeight="44.0" prefWidth="152.0" text="New Game" />
+            <Button fx:id="helpButton" mnemonicParsing="false" onAction="#helpScreen" prefHeight="44.0" prefWidth="168.0" text="Help">
                <VBox.margin>
                   <Insets top="15.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="146.0" text="Return to Main Menu">
+            <Button fx:id="menuButton" mnemonicParsing="false" onAction="#mainMenu" prefHeight="45.0" prefWidth="146.0" text="Return to Main Menu">
                <VBox.margin>
                   <Insets top="15.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="150.0" text="Quit">
+            <Button fx:id="quitButton" mnemonicParsing="false" onAction="#exit" prefHeight="45.0" prefWidth="150.0" text="Quit">
                <VBox.margin>
                   <Insets top="15.0" />
                </VBox.margin>
