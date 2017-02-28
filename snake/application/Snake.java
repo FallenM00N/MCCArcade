@@ -3,13 +3,13 @@ package application;
 import java.io.IOException;
 
 import application.MainMenu;
-import game.PongEngine;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 import models.Game;
 
 public class Snake extends Game{
@@ -19,27 +19,31 @@ public class Snake extends Game{
 	public static Scene overScene;
 	public static Scene pauseScene;
 	
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@FXML
 	@Override
 	public void exit() {
+
 		System.exit(0);
 	}
 
 	@FXML
 	@Override
 	public void mainMenu() {
+		SnakeEngine.stopGame();
 		showScene(MainMenu.getMenuScene(), "MCC Arcade");
 	}
 
 	@FXML
 	@Override
 	public void titleScreen() {
+		showScene(titleScene, "Snake");
+	}
+	
+	@FXML
+	public void returnToTitle(){
+		SnakeEngine.stopGame();
 		showScene(titleScene, "Snake");
 	}
 
@@ -56,7 +60,7 @@ public class Snake extends Game{
 
 	private Scene createInfoScene() {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("SnakeHelp.fxml"));
+			AnchorPane root = FXMLLoader.load(getClass().getResource("SnakeHelp.fxml"));
 			Scene scene = new Scene(root);
 			return scene;
 		} catch (IOException e) {
@@ -135,6 +139,12 @@ public class Snake extends Game{
 	@Override
 	public void pause() {
 		showScene(pauseScene, "Snake - Paused");
+	}
+	
+	@FXML
+	@Override
+	public void resume() {
+		SnakeEngine.resumeSnake();
 	}
 	
 	@FXML

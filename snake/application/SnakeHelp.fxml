@@ -1,43 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.Light.Distant?>
 <?import javafx.scene.effect.Lighting?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Snake">
-   <top>
-      <Label text="Directions" BorderPane.alignment="CENTER">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Snake">
+   <children>
+      <Label layoutX="220.0" layoutY="14.0" text="Directions">
          <font>
             <Font size="36.0" />
          </font>
-         <BorderPane.margin>
-            <Insets top="10.0" />
-         </BorderPane.margin>
       </Label>
-   </top>
+      <Button fx:id="returnToTitleButton" layoutX="235.0" layoutY="345.0" mnemonicParsing="false" onAction="#titleScreen" text="Return to Title Screen" />
+      <ImageView fitHeight="79.0" fitWidth="144.0" layoutX="327.0" layoutY="129.0">
+         <image>
+            <Image url="@../models/arrowKeys.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="271.0" layoutY="145.0" text="OR">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Label>
+      <Label layoutX="97.0" layoutY="79.0" prefHeight="19.0" prefWidth="396.0" text="Move the snake and eat the food by using the WASD or Arrow Keys">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="53.0" fitWidth="160.0" layoutX="221.0" layoutY="270.0">
+         <image>
+            <Image url="@../models/spacebar.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="162.0" layoutY="237.0" prefHeight="19.0" prefWidth="299.0" text="Pause or Resume the game by hitting the spacebar">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="79.0" fitWidth="122.0" layoutX="122.0" layoutY="126.0">
+         <image>
+            <Image url="@../models/wasdKeys.png" />
+         </image>
+      </ImageView>
+   </children>
    <effect>
-      <Lighting bumpInput="$null">
+      <Lighting>
+         <bumpInput>
+            <Shadow />
+         </bumpInput>
          <light>
             <Light.Distant color="#97ff73" />
          </light>
       </Lighting>
    </effect>
-   <center>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="31.0" prefWidth="473.0" text="Use the Up, Down, Left, and Right Keys to move " textAlignment="CENTER" BorderPane.alignment="TOP_CENTER">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-   </center>
-   <bottom>
-      <Button fx:id="returnToTitleButton" mnemonicParsing="false" onAction="#titleScreen" text="Return to Title Screen" BorderPane.alignment="BOTTOM_CENTER">
-         <BorderPane.margin>
-            <Insets bottom="50.0" />
-         </BorderPane.margin>
-      </Button>
-   </bottom>
-</BorderPane>
+</AnchorPane>

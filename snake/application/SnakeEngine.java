@@ -197,7 +197,6 @@ public class SnakeEngine extends Snake{
 
 	public static void startGame() {
 		running = true;
-		createPauseListener();
 		direction = Direction.RIGHT;
 		Rectangle head = new Rectangle(SQUARE_SIZE, SQUARE_SIZE);
 		head.setFill(Color.MEDIUMSEAGREEN);
@@ -211,6 +210,12 @@ public class SnakeEngine extends Snake{
 		gameScene = new Scene(createSnakeContent());
 		
 		gameScene.setOnKeyPressed(event -> {
+			
+			if (event.getCode().equals(KeyCode.SPACE) && running) {
+				pauseSnake();
+				sn.pause();
+			}
+			
 			if (!moved)
 				return;
 
@@ -220,7 +225,15 @@ public class SnakeEngine extends Snake{
 					if (direction != Direction.DOWN)
 						direction = Direction.UP;
 					break;
+				case W:
+					if (direction != Direction.DOWN)
+						direction = Direction.UP;
+					break;
 				case DOWN:
+					if (direction != Direction.UP)
+						direction = Direction.DOWN;
+					break;
+				case S:
 					if (direction != Direction.UP)
 						direction = Direction.DOWN;
 					break;
@@ -228,7 +241,15 @@ public class SnakeEngine extends Snake{
 					if (direction != Direction.RIGHT)
 						direction = Direction.LEFT;
 					break;
+				case A:
+					if (direction != Direction.RIGHT)
+						direction = Direction.LEFT;
+					break;
 				case RIGHT:
+					if (direction != Direction.LEFT)
+						direction = Direction.RIGHT;
+					break;
+				case D:
 					if (direction != Direction.LEFT)
 						direction = Direction.RIGHT;
 					break;
@@ -249,27 +270,13 @@ public class SnakeEngine extends Snake{
 		
 	}
 	
-	private static void createPauseListener() {
-		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				KeyCode kc = event.getCode();
-				
-				if (kc.equals(KeyCode.SPACE) && running) {
-					System.out.println("pause snake");
-					pauseSnake();
-					sn.pause();
-					ArcadeView.setScene(pauseScene);
-				}
-			}
-		});
-	}
 	
 	public static void pauseSnake(){
 		timeline.pause();
 	}
 	
-	public void resumeSnake(){
+	public static void resumeSnake(){
+		ArcadeView.setScene(gameScene);
 		timeline.play();
 	}
 
