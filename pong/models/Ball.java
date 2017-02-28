@@ -1,10 +1,11 @@
 package models;
 
+import game.PongEngine;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 public class Ball {
-	Rectangle ball;
+	static Rectangle ball;
 	double x;
 	double y;
 	double width;
@@ -19,9 +20,6 @@ public class Ball {
 	
 	public Rectangle getBall() {
 		return ball;
-	}
-	public void setBall(Rectangle ball) {
-		this.ball = ball;
 	}
 	public double getX() {
 		return x;
@@ -58,6 +56,13 @@ public class Ball {
 	}
 	public void setdY(double dY) {
 		this.dY = dY;
+	}
+	public static void move(double speed) {
+		ball.setLayoutX(ball.getLayoutX() + speed);
+	}
+	public static void reset() {
+		ball.setLayoutX(0);
+		ball.setLayoutY(0);
 	}
 	
 }
