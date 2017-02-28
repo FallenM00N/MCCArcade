@@ -13,6 +13,7 @@ import models.Game;
 public class Jumper extends Game {
 	public static Scene titleScene;
 	public static Scene helpScene;
+	public static Scene gameOverScene;
 
 	@FXML
 	@Override
