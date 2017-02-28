@@ -17,6 +17,8 @@ import models.Character;
 
 public class KeyPressHandler implements Runnable {
 
+	public boolean leftAdded = false;
+	public boolean rightAdded = false;
 	private int time = 0;
 	private int lastFire = 0;
 	private Thread thread;
@@ -38,11 +40,15 @@ public class KeyPressHandler implements Runnable {
 			@Override
 			public void handle(KeyEvent event) {
 				KeyCode kc = event.getCode();
-				if (kc.equals(KeyCode.LEFT) || kc.equals(KeyCode.A) && !pressedKeys.contains("left")) {
+				if (kc.equals(KeyCode.LEFT) || kc.equals(KeyCode.A) && !pressedKeys.contains("left") &&
+						pressedKeys.size() < 3 && !leftAdded) {
 					pressedKeys.add("left");
+					leftAdded = true;
 				}
-				else if (kc.equals(KeyCode.RIGHT) || kc.equals(KeyCode.D) && !pressedKeys.contains("right")) {
+				else if (kc.equals(KeyCode.RIGHT) || kc.equals(KeyCode.D) && !pressedKeys.contains("right") &&
+						pressedKeys.size() < 3 && !rightAdded) {
 					pressedKeys.add("right");
+					rightAdded = true;
 				}
 				else if (kc.equals(KeyCode.SPACE) && !pressedKeys.contains("space")) {
 					pressedKeys.add("space");
@@ -58,13 +64,21 @@ public class KeyPressHandler implements Runnable {
 			public void handle(KeyEvent event) {
 				KeyCode kc = event.getCode();
 				if (kc.equals(KeyCode.LEFT) || kc.equals(KeyCode.A)) {
-					pressedKeys.remove("left");
+					for (int i = 0; i < 3; i++) {
+						pressedKeys.remove("left");
+						leftAdded = false;
+					}
 				}
 				else if (kc.equals(KeyCode.RIGHT) || kc.equals(KeyCode.D)) {
-					pressedKeys.remove("right");
+					for (int i = 0; i < 3; i++) {
+						pressedKeys.remove("right");
+						rightAdded = false;
+					}
 				}
 				else if (kc.equals(KeyCode.SPACE)) {
-					pressedKeys.remove("space");
+					for (int i = 0; i < 3; i++) {
+						pressedKeys.remove("space");
+					}
 				}
 			}
 		});
@@ -86,30 +100,32 @@ public class KeyPressHandler implements Runnable {
 	
 	private void timerTick() {
 		time++;
-		if (pressedKeys.contains("left") && !pressedKeys.contains("right")) {
+		
+		if (leftAdded && !rightAdded) {
 			moveLeft();
 		}
-		else if (pressedKeys.contains("right") && !pressedKeys.contains("left")) {
+		else if (rightAdded && !leftAdded) {
 			moveRight();
-		}
-		else {
-			if (pressedKeys.contains("left") && pressedKeys.contains("right")) {
-				
-			}
 		}
 		
 		if (pressedKeys.contains("space")) {
 			shoot();
 		}
-		if (pressedKeys.size() > 3) {
-			if (pressedKeys.contains("space")) {
-				pressedKeys.clear();
-				pressedKeys.add("space");
-			}
-			else {
-				pressedKeys.clear();
-			}
-		}
+//		if (pressedKeys.size() > 3) {
+//			if (pressedKeys.contains("space")) {
+//				pressedKeys.clear();
+//				pressedKeys.add("space");
+//			}
+//			else {
+//				pressedKeys.clear();
+//			}
+//			pressedKeys.add("left");
+//			pressedKeys.add("right");
+//		}
+//		System.out.println(pressedKeys.size());
+//		for (String s : pressedKeys) {
+//			System.out.println(s);
+//		}
 	}
 	
 	private void moveLeft() {

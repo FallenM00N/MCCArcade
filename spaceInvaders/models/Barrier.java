@@ -20,9 +20,9 @@ public class Barrier {
 	private Image imgSrc;
 	private double x = 0;
 	private double y = 0;
-	private double width = 80;
+	private double width = 65;
 	private double height = 40;
-	private int hitPoints = 80;
+	private int hitPoints = 65;
 	private Rectangle pBar;
 	private Rectangle pBarEmpty;
 	

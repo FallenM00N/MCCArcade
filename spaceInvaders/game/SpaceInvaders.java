@@ -58,6 +58,7 @@ public class SpaceInvaders extends Game {
 	
 	private void timerTick() {
 		if (player.getLives() <= 0) {
+			player = new Character(0,0);
 			gameOver();
 			timeline.stop();
 		}
@@ -85,6 +86,8 @@ public class SpaceInvaders extends Game {
 		title.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				kp.stopTimer();
+				mh.stopTimer();
 				ArcadeView.setScene(titleScene);
 			}
 		});
@@ -125,6 +128,8 @@ public class SpaceInvaders extends Game {
 		resume.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				kp.leftAdded = false;
+				kp.rightAdded = false;
 				kp.resumeTimer();
 				mh.resumeTimer();
 				showScene(gameScene);
@@ -313,13 +318,13 @@ public class SpaceInvaders extends Game {
 			}
 		}
 		
-		x = 40;
+		x = 51;
 		y = 350;
 		for (int i = 0; i < 3; i++) {
 			Barrier b = new Barrier(x, y);
 			barriers.add(b);
 			entities.getChildren().add(b.getImg());
-			x += b.getWidth() + 40;
+			x += b.getWidth() + 51;
 		}
 		
 		player = new Character(200, 450);
@@ -415,6 +420,8 @@ public class SpaceInvaders extends Game {
 	
 	public static void pauseGame() {
 		if (paused) {
+			kp.leftAdded = false;
+			kp.rightAdded = false;
 			kp.resumeTimer();
 			mh.resumeTimer();
 			ArcadeView.setScene(gameScene);
@@ -433,7 +440,7 @@ public class SpaceInvaders extends Game {
 		scorel.setText("SCORE: " + scoreString);
 		score = 0;
 		timeline = new Timeline(new KeyFrame(
-		        Duration.millis(500),
+		        Duration.millis(250),
 		        ae -> timerTick()));
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
@@ -470,6 +477,8 @@ public class SpaceInvaders extends Game {
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode().equals(KeyCode.P) || event.getCode().equals(KeyCode.ESCAPE)) {
+					kp.leftAdded = false;
+					kp.rightAdded = false;
 					mh.resumeTimer();
 					kp.resumeTimer();
 					showScene(gameScene);

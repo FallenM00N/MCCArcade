@@ -173,7 +173,7 @@ public class MovementHandler implements Runnable {
 	}
 	
 	private void damageBarrier(Bullet b, Barrier a) {
-		a.takeDamage(16);
+		a.takeDamage(13);
 		SpaceInvaders.entities.getChildren().remove(b.getBullet());
 		SpaceInvaders.bullets.remove(b);
 	}
@@ -190,6 +190,10 @@ public class MovementHandler implements Runnable {
 		SpaceInvaders.bullets.remove(b);
 		if (SpaceInvaders.enemies.size() <= 1) {
 			SpaceInvaders.winGame("Game Over - You Win");
+		}
+		else if (SpaceInvaders.enemies.size()% 26 == 0) {
+			SpaceInvaders.player.setLives(SpaceInvaders.player.getLives() + 1);
+			SpaceInvaders.livesl.setText("LIVES: " + SpaceInvaders.player.getLives());
 		}
 		String musicFile = "spaceInvaders/audio/Boom.mp3";
 
