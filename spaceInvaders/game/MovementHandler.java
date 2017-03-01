@@ -13,6 +13,7 @@ import javafx.util.Duration;
 import models.Barrier;
 import models.Bullet;
 import models.Enemy;
+import models.UFO;
 
 public class MovementHandler implements Runnable {
 
@@ -25,6 +26,7 @@ public class MovementHandler implements Runnable {
 	private Thread thread;
 	private Timeline timeline;
 	private Random rand = new Random();
+	private int chance = 3;
 	
 	public MovementHandler() {
 		timeline = new Timeline(new KeyFrame(
@@ -50,10 +52,21 @@ public class MovementHandler implements Runnable {
 			}
 			
 			moveBullets();
+			moveUfo();
 			
 			if (time - lastShot >= shotLimit) {
 				enemyShoot();
 				lastShot = time;
+			}
+		}
+	}
+	
+	private void moveUfo() {
+		UFO ufo = SpaceInvaders.ufo;
+		if (SpaceInvaders.ufo != null) {
+			ufo.setX(ufo.getX() - .07);
+			if (ufo.getX() + ufo.getWidth() <= 0) {
+				SpaceInvaders.entities.getChildren().remove(ufo);
 			}
 		}
 	}
@@ -110,8 +123,8 @@ public class MovementHandler implements Runnable {
 				if (timeLimit > 200) {
 					timeLimit -= 50;
 				}
-				else if (timeLimit > 40) {
-					timeLimit -= 25;
+				else if (timeLimit > 50) {
+					timeLimit -= 10;
 				}
 				for (int j = 0; j < e.size(); j++) {
 					e.get(j).setY(e.get(j).getY() + 10);
@@ -143,6 +156,13 @@ public class MovementHandler implements Runnable {
 				b.get(i).setY(b.get(i).getY() + .2);
 			}
 			
+			for (int x = 0; x < b.size(); x++) {
+				if (b.get(i).getBullet().getBoundsInParent().intersects(b.get(x).getBullet().getBoundsInParent())
+						&& !b.get(i).equals(b.get(x))) {
+					collideBullets(b.get(i), b.get(x));
+				}
+			}
+			
 			for (int x = 0; x < e.size(); x++) {
 				if (i < b.size() && x < e.size() &&
 						b.get(i).getBullet().getBoundsInParent().intersects(e.get(x).getImg().getBoundsInParent())
@@ -158,6 +178,20 @@ public class MovementHandler implements Runnable {
 				}
 			}
 			
+			if (i < b.size() && SpaceInvaders.ufo != null &&
+					b.get(i).getBullet().getBoundsInParent().intersects(SpaceInvaders.ufo.getImg().getBoundsInParent())) {
+				SpaceInvaders.score += 5000;
+				String f = Integer.toString(SpaceInvaders.score);
+				SpaceInvaders.scoreString = SpaceInvaders.scoreString.substring(0, SpaceInvaders.scoreString.length() - f.length());
+				SpaceInvaders.scoreString += f;
+				SpaceInvaders.scorel.setText("SCORE: " + SpaceInvaders.scoreString);
+				
+				SpaceInvaders.entities.getChildren().remove(b.get(i).getBullet());
+				SpaceInvaders.bullets.remove(b.get(i));
+				SpaceInvaders.entities.getChildren().remove(SpaceInvaders.ufo.getImg());
+				SpaceInvaders.ufo = null;
+			}
+			
 			if (i < b.size() &&
 					b.get(i).getBullet().getBoundsInParent().intersects(p.getImg().getBoundsInParent())) {
 				loseLife(1);
@@ -170,6 +204,13 @@ public class MovementHandler implements Runnable {
 				b.remove(i);
 			}
 		}
+	}
+	
+	private void collideBullets(Bullet b1, Bullet b2) {
+		SpaceInvaders.entities.getChildren().remove(b1.getBullet());
+		SpaceInvaders.entities.getChildren().remove(b2.getBullet());
+		SpaceInvaders.bullets.remove(b1);
+		SpaceInvaders.bullets.remove(b2);
 	}
 	
 	private void damageBarrier(Bullet b, Barrier a) {
@@ -195,6 +236,23 @@ public class MovementHandler implements Runnable {
 			SpaceInvaders.player.setLives(SpaceInvaders.player.getLives() + 1);
 			SpaceInvaders.livesl.setText("LIVES: " + SpaceInvaders.player.getLives());
 		}
+		
+		if (SpaceInvaders.enemies.size() == 15 || SpaceInvaders.enemies.size() == 25 ||
+				SpaceInvaders.enemies.size() == 35) {
+			int x = 0;
+			if (chance > 0) {
+				x = rand.nextInt(chance);
+			}
+			if (x == 0 && chance > 0) {
+				SpaceInvaders.ufo = new UFO(400, 20);
+				SpaceInvaders.entities.getChildren().add(SpaceInvaders.ufo.getImg());
+				chance = 0;
+			}
+			else {
+				chance--;
+			}
+		}
+		
 		String musicFile = "spaceInvaders/audio/Boom.mp3";
 
 		Media sound = new Media(new File(musicFile).toURI().toString());

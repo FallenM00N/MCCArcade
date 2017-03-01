@@ -130,7 +130,7 @@ public class KeyPressHandler implements Runnable {
 	
 	private void moveLeft() {
 		if (SpaceInvaders.player.getX() > 2) {
-			SpaceInvaders.player.setX(SpaceInvaders.player.getX() - .25);
+			SpaceInvaders.player.setX(SpaceInvaders.player.getX() - .15);
 		}
 		else {
 			pressedKeys.remove("left");
@@ -139,7 +139,7 @@ public class KeyPressHandler implements Runnable {
 	
 	private void moveRight() {
 		if (SpaceInvaders.player.getX() < 400 - SpaceInvaders.player.getWidth() - 2) {
-			SpaceInvaders.player.setX(SpaceInvaders.player.getX() + .25);
+			SpaceInvaders.player.setX(SpaceInvaders.player.getX() + .15);
 		}
 		else {
 			pressedKeys.remove("right");

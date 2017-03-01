@@ -45,6 +45,7 @@ import models.Bullet;
 import models.Character;
 import models.Enemy;
 import models.Game;
+import models.UFO;
 import models.User;
 
 public class SpaceInvaders extends Game {
@@ -63,6 +64,7 @@ public class SpaceInvaders extends Game {
 	public static Scene gameScene;
 	public static Group entities = new Group();
 	public static Character player;
+	public static UFO ufo;
 	private Scene infoScene;
 	//private Scene overScene;
 	public static KeyPressHandler kp;
@@ -200,7 +202,12 @@ public class SpaceInvaders extends Game {
 		submit.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				user.setInitials(tf.getText());
+				if (tf.getText().isEmpty()) {
+					user.setInitials("AAA");
+				}
+				else {
+					user.setInitials(tf.getText());
+				}
 				user.setScore(scoreString);
 				loadHighScores();
 				sortHighScores();
@@ -472,6 +479,10 @@ public class SpaceInvaders extends Game {
 		bullets.clear();
 		enemies.clear();
 		
+		loadHighScores();
+		Label l = new Label("HIGH SCORE: " + users[0].getScore());
+		l.setTextFill(Color.WHITE);
+		
 		int x = 50;
 		int y = 50;
 		for (int i = 1; i < 51; i++) {
@@ -519,13 +530,16 @@ public class SpaceInvaders extends Game {
 		livesl = new Label("LIVES: " + player.getLives());
 		livesl.setTextFill(Color.web("#FFF"));
 		
-		bp.getChildren().addAll(entities, scorel, livesl);
+		bp.getChildren().addAll(entities, scorel, livesl, l);
 		bp.setStyle("-fx-background-color: #000;");
 		
-		scorel.setLayoutX(400 - scorel.getPrefWidth());
+		
+		scorel.setLayoutX(420 - scorel.getPrefWidth());
 		scorel.setLayoutY(0);
 		livesl.setLayoutX(0);
 		livesl.setLayoutY(0);
+		l.setLayoutX(100);
+		l.setLayoutY(0);
 		
 		Scene s = new Scene(bp, 400, 450);
 		return s;
