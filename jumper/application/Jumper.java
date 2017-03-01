@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import models.Game;
 
@@ -56,6 +57,7 @@ public class Jumper extends Game {
 		titleScene = createTitleScene();
 		helpScene = createHelpScene();
 		pauseScene = createPauseScene();
+		gameOverScene = createGameOverScene();
 		titleScreen();
 	}
 
@@ -92,10 +94,24 @@ public class Jumper extends Game {
 		}
 		return null;
 	}
+	
+	public Scene createGameOverScene(){
+		try {
+			BorderPane root = FXMLLoader.load(getClass().getResource("JumperGameOverScene.fxml"));
+			Scene scene = new Scene(root);
+			return scene;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
+	@FXML
 	@Override
 	public void gameOver() {
-		// TODO Auto-generated method stub
+		JumperEngine.stopGame();
+		showScene(gameOverScene, "Llama Run - Game Over!");
 		
 	}
 
@@ -108,6 +124,14 @@ public class Jumper extends Game {
 	@Override
 	public void resume() {
 		JumperEngine.resumeJumper();
+	}
+	
+	public void restartGame(ActionEvent e) throws Exception{
+		JumperEngine.restartGame();
+	}
+	@FXML
+	public void restartJumper(ActionEvent e) throws Exception{
+		restartGame(e);
 	}
 	
 	@FXML
@@ -124,4 +148,6 @@ public class Jumper extends Game {
 	private Button pauseButton;
 	@FXML
 	private Button resumeButton;
+	@FXML
+	private Button restartButton;
 }
