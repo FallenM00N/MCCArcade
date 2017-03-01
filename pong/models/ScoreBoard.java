@@ -91,7 +91,7 @@ public class ScoreBoard {
 	private Rectangle[] createRects() {
 		Rectangle[] rects = new Rectangle[] { new Rectangle(0, 0, big, small), new Rectangle(0, 0, small, big),
 				new Rectangle(big - small, 0, small, big), new Rectangle(0, big, big, small),
-				new Rectangle(0, big, small, big), new Rectangle(big - small, big, small, big),
+				new Rectangle(0, big, small, big + small), new Rectangle(big - small, big, small, big + small),
 				new Rectangle(0, big + big, big, small) };
 		return rects;
 	}

@@ -10,7 +10,7 @@ public abstract class Game implements Pausable{
 	
 	public abstract Scene createTitleScene(); 
 		
-	public void showScene(Scene scene, String title){
+	public static void showScene(Scene scene, String title){
 		ArcadeView.setScene(scene, title);
 	}
 	

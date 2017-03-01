@@ -157,6 +157,12 @@ public class PongKeyPressHandler implements Runnable {
 	}
 
 	private void pauseGame() {
-		
+		timeline.pause();
+		Pong.showPauseScreen();
+	}
+
+	public void resume() {
+		pressedKeys.clear();
+		timeline.play();
 	}
 }

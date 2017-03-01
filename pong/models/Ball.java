@@ -12,6 +12,7 @@ public class Ball {
 	double height;
 	double dX;
 	double dY;
+	double angle = Math.PI / 2;
 	
 	public Ball(double x, double y, double width) {
 		ball = new Rectangle(x, y, width, width);
@@ -63,6 +64,30 @@ public class Ball {
 	public static void reset() {
 		ball.setLayoutX(0);
 		ball.setLayoutY(0);
+	}
+
+	public double getDirection() {
+		if(bounce()) {
+			angle = angle - Math.PI;
+		}
+		return angle;
+	}
+
+	private boolean bounce() {
+		if(ball.getBoundsInParent().intersects(PongEngine.getBottomWall().getBoundsInParent())) {
+			return true;
+		}
+		if(ball.getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
+			return true;
+		}
+		return false;
+	}
+
+	public void move(double speed, double angle) {
+		dX = Math.cos(angle);
+		dY = Math.sin(angle);
+		ball.setLayoutX(ball.getLayoutX() + (speed * dX));
+		ball.setLayoutY(ball.getLayoutY() + (speed * dY));
 	}
 	
 }

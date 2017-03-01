@@ -11,24 +11,23 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import models.Game;
 
-public class Pong extends Game{
-	
+public class PongMenu extends Game {
+
 	public static Scene titleScene;
 	public static Scene playerSelection;
 	public static Scene infoScene;
 	public static Scene overScene;
-	public static Scene pauseScene;
 	
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
 		
 	}
-	@FXML
+
 	@Override
 	public void resume() {
-		PongEngine.getKeyHandler().resume();
-		showScene(PongEngine.gameScene, "Pong");
+		// TODO Auto-generated method stub
+		
 	}
 	
 	@FXML
@@ -53,7 +52,6 @@ public class Pong extends Game{
 	public void play() {
 		titleScene = createTitleScene();
 		infoScene = createInfoScene();
-		pauseScene = createPauseScene();
 		titleScreen();
 	}
 
@@ -77,7 +75,7 @@ public class Pong extends Game{
 	}
 	
 	public void startGame(ActionEvent e) {
-		PongEngine.run(2);
+
 	}
 	
 
@@ -104,17 +102,6 @@ public class Pong extends Game{
 		return null;
 	}
 	
-	public Scene createPauseScene() {
-		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("PauseScreen.fxml"));
-			Scene scene = new Scene(root);
-			return scene;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	@FXML
 	private Button playButton;
 	@FXML
@@ -123,10 +110,6 @@ public class Pong extends Game{
 	private Button menuButton;
 	@FXML
 	private Button quitButton;
-
-	public static void showPauseScreen() {
-		showScene(pauseScene, "Paused - Pong");
-	}
 	
 
 }

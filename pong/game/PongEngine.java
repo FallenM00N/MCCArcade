@@ -1,6 +1,7 @@
 package game;
 
 import application.ArcadeView;
+import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -28,6 +29,7 @@ public class PongEngine {
 	private static Rectangle bottomWall = new Rectangle(0, HEIGHT, WIDTH, 1);
 	private static Rectangle leftWall = new Rectangle(0, 0, 1, HEIGHT);
 	private static Rectangle rightWall = new Rectangle(WIDTH, 0, 1, HEIGHT);
+	private static PongKeyPressHandler keyHandler;
 
 	public static double getHeight() {
 		return HEIGHT;
@@ -37,14 +39,33 @@ public class PongEngine {
 		return WIDTH;
 	}
 
+	public static PongKeyPressHandler getKeyHandler() {
+		return keyHandler;
+	}
+
 	public static void run(int players) {
 		createPlayers();
+		updateScore();
 		createBall();
 		createGroup();
 		createBackround();
 		buildScene();
 		showScene();
-		PongKeyPressHandler keyHandler = new PongKeyPressHandler();
+		animateBall();
+		keyHandler = new PongKeyPressHandler();
+	}
+
+	private static void animateBall() {
+		double speed = 5;
+		AnimationTimer timer = new AnimationTimer() {
+
+			@Override
+			public void handle(long now) {
+				double direction = ball.getDirection();
+				ball.move(speed, direction);
+			}
+		};
+		timer.start();
 	}
 
 	private static void createBall() {
@@ -72,15 +93,9 @@ public class PongEngine {
 
 	private static void createGroup() {
 		components = new Group();
-		components.getChildren().addAll(leftPlayer.getPaddle(),
-										rightPlayer.getPaddle(),
-										ball.getBall(),
-										scoreBoard.getScoreBoard(),
-										bottomWall,
-										leftWall,
-										rightWall
-										);
-		
+		components.getChildren().addAll(leftPlayer.getPaddle(), rightPlayer.getPaddle(), ball.getBall(),
+				scoreBoard.getScoreBoard(), bottomWall, leftWall, rightWall);
+
 	}
 
 	public static Rectangle getBottomWall() {
@@ -106,15 +121,15 @@ public class PongEngine {
 	public static void setRightWall(Rectangle rightWall) {
 		PongEngine.rightWall = rightWall;
 	}
-	
+
 	public static Ball getBall() {
 		return ball;
 	}
-	
+
 	public static Player getLeftPlayer() {
 		return leftPlayer;
 	}
-	
+
 	public static Player getRightPlayer() {
 		return rightPlayer;
 	}
