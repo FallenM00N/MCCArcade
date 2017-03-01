@@ -89,6 +89,24 @@ public class Simon extends Game {
 		});
 	}
 	
+	private void resetColor(Rectangle r) {
+		if (r.equals(top)) {
+			top.setFill(Paint.valueOf("rgba(255,0,60,.3)"));
+			
+		}
+		else if (r.equals(right)) {
+			right.setFill( Paint.valueOf("rgba(0,100,255,.3)"));
+			
+		}
+		else if (r.equals(bottom)) {
+			bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
+			
+		}
+		else {
+			left.setFill(Paint.valueOf("rgba(220,220,0,.3)"));
+		}
+	}
+	
 	private void createGameScene() {
 		BorderPane bp = new BorderPane();
 		GridPane gp = new GridPane();
@@ -104,11 +122,17 @@ public class Simon extends Game {
 		pause.setStyle("-fx-font: 30 Arial;");
 		
 		top = new Rectangle(50, 50, Paint.valueOf("rgba(255,0,60,.3)"));
+		
 		top.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				if (playerTurn && !paused) {
+					top.setFill(Paint.valueOf("rgba(255,0,60,1.0)"));
 					checkCorrect(CommandType.RED);
+					Timeline timeline = new Timeline(new KeyFrame(
+					        Duration.millis(70),
+					        ae -> resetColor(top)));
+					timeline.play();
 				}
 			}
 		});
@@ -117,7 +141,12 @@ public class Simon extends Game {
 			@Override
 			public void handle(MouseEvent event) {
 				if (playerTurn && !paused) {
+					right.setFill(Paint.valueOf("rgba(0,100,255,1.0)"));
 					checkCorrect(CommandType.BLUE);
+					Timeline timeline = new Timeline(new KeyFrame(
+					        Duration.millis(70),
+					        ae -> resetColor(right)));
+					timeline.play();
 				}
 			}
 		});
@@ -126,7 +155,12 @@ public class Simon extends Game {
 			@Override
 			public void handle(MouseEvent event) {
 				if (playerTurn && !paused) {
+					bottom.setFill(Paint.valueOf("rgba(0,200,40,1.0)"));
 					checkCorrect(CommandType.GREEN);
+					Timeline timeline = new Timeline(new KeyFrame(
+					        Duration.millis(70),
+					        ae -> resetColor(bottom)));
+					timeline.play();
 				}
 			}
 		});
@@ -135,7 +169,12 @@ public class Simon extends Game {
 			@Override
 			public void handle(MouseEvent event) {
 				if (playerTurn && !paused) {
+					left.setFill(Paint.valueOf("rgba(220,220,0,1.0)"));
 					checkCorrect(CommandType.YELLOW);
+					Timeline timeline = new Timeline(new KeyFrame(
+					        Duration.millis(70),
+					        ae -> resetColor(left)));
+					timeline.play();
 				}
 			}
 		});
@@ -273,6 +312,13 @@ public class Simon extends Game {
 		difficultyScene = new Scene(bp, 200, 200);
 	}
 	
+	private void resetColors() {
+		top.setFill(Paint.valueOf("rgba(255,0,60,.3)"));
+		right.setFill( Paint.valueOf("rgba(0,100,255,.3)"));
+		bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
+		left.setFill(Paint.valueOf("rgba(220,220,0,.3)"));
+	}
+	
 	private void selectNextCommand() {
 		if (commands.get(currentIndex).equals(CommandType.RED)) {
 			top.setFill(Paint.valueOf("rgba(255,0,60,1.0)"));
@@ -308,6 +354,10 @@ public class Simon extends Game {
 			else {
 				if (playerTurn) {
 					title.setText("Your Turn");
+					Timeline timeline = new Timeline(new KeyFrame(
+					        Duration.millis((timeLimit * 1000) / 2),
+					        ae -> resetColors()));
+					timeline.play();
 				}
 				else {
 					title.setText("Simon's Turn");
@@ -320,6 +370,7 @@ public class Simon extends Game {
 	}
 	
 	private void startGame() {
+		timeLimit = 2;
 		round = 0;
 		time = 0;
 		commands.clear();
@@ -332,6 +383,9 @@ public class Simon extends Game {
 		right.setFill( Paint.valueOf("rgba(0,100,255,.3)"));
 		bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
 		left.setFill(Paint.valueOf("rgba(220,220,0,.3)"));
+		timeline = new Timeline(new KeyFrame(
+		        Duration.millis(100),
+		        ae -> timerTick()));
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
 		createCommands();

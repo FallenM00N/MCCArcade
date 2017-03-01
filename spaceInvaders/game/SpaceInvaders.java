@@ -45,6 +45,7 @@ import models.Bullet;
 import models.Character;
 import models.Enemy;
 import models.Game;
+import models.UFO;
 import models.User;
 
 public class SpaceInvaders extends Game {
@@ -63,6 +64,7 @@ public class SpaceInvaders extends Game {
 	public static Scene gameScene;
 	public static Group entities = new Group();
 	public static Character player;
+	public static UFO ufo;
 	private Scene infoScene;
 	//private Scene overScene;
 	public static KeyPressHandler kp;
@@ -200,7 +202,12 @@ public class SpaceInvaders extends Game {
 		submit.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				user.setInitials(tf.getText());
+				if (tf.getText().isEmpty()) {
+					user.setInitials("AAA");
+				}
+				else {
+					user.setInitials(tf.getText());
+				}
 				user.setScore(scoreString);
 				loadHighScores();
 				sortHighScores();
