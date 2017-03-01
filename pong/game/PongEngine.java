@@ -30,6 +30,7 @@ public class PongEngine {
 	private static Rectangle leftWall = new Rectangle(0, 0, 1, HEIGHT);
 	private static Rectangle rightWall = new Rectangle(WIDTH, 0, 1, HEIGHT);
 	private static PongKeyPressHandler keyHandler;
+	private static AnimationTimer timer;
 
 	public static double getHeight() {
 		return HEIGHT;
@@ -55,14 +56,14 @@ public class PongEngine {
 		keyHandler = new PongKeyPressHandler();
 	}
 
-	private static void animateBall() {
-		double speed = 5;
-		AnimationTimer timer = new AnimationTimer() {
+	public static void animateBall() {
+		double speed = 2;
+		timer = new AnimationTimer() {
 
 			@Override
 			public void handle(long now) {
-				double direction = ball.getDirection();
-				ball.move(speed, direction);
+				ball.getDirection();
+				ball.move(speed);
 			}
 		};
 		timer.start();
@@ -136,5 +137,9 @@ public class PongEngine {
 
 	public static void updateScore() {
 		scoreBoard.updateScore(leftPlayer.getScore(), rightPlayer.getScore());
+	}
+
+	public static void closeAnimation() {
+		timer.stop();
 	}
 }

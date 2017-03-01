@@ -114,12 +114,6 @@ public class PongKeyPressHandler implements Runnable {
 			PongEngine.getRightPlayer().incrementScore();
 			PongEngine.updateScore();
 		}
-		if(pressedKeys.contains("left")) {
-			Ball.move(0 - speed);
-		}
-		if(pressedKeys.contains("right")) {
-			Ball.move(speed);
-		}
 	}
 	
 	private boolean checkPlayer2Score() {

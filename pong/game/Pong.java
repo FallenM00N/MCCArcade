@@ -29,6 +29,7 @@ public class Pong extends Game{
 	public void resume() {
 		PongEngine.getKeyHandler().resume();
 		showScene(PongEngine.gameScene, "Pong");
+		PongEngine.animateBall();
 	}
 	
 	@FXML
@@ -126,6 +127,7 @@ public class Pong extends Game{
 
 	public static void showPauseScreen() {
 		showScene(pauseScene, "Paused - Pong");
+		PongEngine.closeAnimation();
 	}
 	
 
