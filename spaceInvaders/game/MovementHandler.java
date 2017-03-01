@@ -107,11 +107,11 @@ public class MovementHandler implements Runnable {
 					direction > 0 || direction < 0 &&
 					e.get(i).getX() <= 5) {
 				direction = -direction;
-				if (timeLimit > 100) {
+				if (timeLimit > 200) {
 					timeLimit -= 50;
 				}
-				else if (timeLimit > 30) {
-					timeLimit -= 10;
+				else if (timeLimit > 40) {
+					timeLimit -= 25;
 				}
 				for (int j = 0; j < e.size(); j++) {
 					e.get(j).setY(e.get(j).getY() + 10);
@@ -179,7 +179,7 @@ public class MovementHandler implements Runnable {
 	}
 	
 	private void killEnemy(Bullet b, Enemy e) {
-		SpaceInvaders.score += 100 + (601 - (timeLimit));
+		SpaceInvaders.score += 100 + (551 - (timeLimit));
 		String f = Integer.toString(SpaceInvaders.score);
 		SpaceInvaders.scoreString = SpaceInvaders.scoreString.substring(0, SpaceInvaders.scoreString.length() - f.length());
 		SpaceInvaders.scoreString += f;
