@@ -9,14 +9,16 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
+import models.Ball;
 import models.Player;
+import models.ScoreBoard;
 
 public class PongKeyPressHandler implements Runnable {
 	private int time = 0;
 	private Thread thread;
 	private Timeline timeline;
 	private ArrayList<String> pressedKeys = new ArrayList<>();
-	private double speed = 0.5;
+	private double speed = 1;
 
 	public PongKeyPressHandler() {
 		timeline = new Timeline(new KeyFrame(
@@ -45,6 +47,12 @@ public class PongKeyPressHandler implements Runnable {
 				if(kc.equals(KeyCode.DOWN) && !pressedKeys.contains("p2down")) {
 					pressedKeys.add("p2down");
 				}
+				if(kc.equals(KeyCode.LEFT) && !pressedKeys.contains("left")) {
+					pressedKeys.add("left");
+				}
+				if(kc.equals(KeyCode.RIGHT) && !pressedKeys.contains("right")) {
+					pressedKeys.add("right");
+				}
 			}
 		});
 		PongEngine.gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -64,9 +72,17 @@ public class PongKeyPressHandler implements Runnable {
 				case DOWN:
 					pressedKeys.remove("p2down");
 					break;
+				case LEFT:
+					pressedKeys.remove("left");
+					break;
+				case RIGHT:
+					pressedKeys.remove("right");
+					break;
 				case ESCAPE:
 				case P:
 					pauseGame();
+				default:
+					break;
 				}
 			}
 		});
@@ -88,28 +104,59 @@ public class PongKeyPressHandler implements Runnable {
 		if(pressedKeys.contains("p2down") && !pressedKeys.contains("p2up")) {
 			movePaddle2("down");
 		}
+		if(checkPlayer1Score()) {
+			Ball.reset();
+			PongEngine.getLeftPlayer().incrementScore();
+			PongEngine.updateScore();
+		}
+		if(checkPlayer2Score()) {
+			Ball.reset();
+			PongEngine.getRightPlayer().incrementScore();
+			PongEngine.updateScore();
+		}
+		if(pressedKeys.contains("left")) {
+			Ball.move(0 - speed);
+		}
+		if(pressedKeys.contains("right")) {
+			Ball.move(speed);
+		}
 	}
 	
+	private boolean checkPlayer2Score() {
+		boolean hasScored = false;
+		if(PongEngine.getBall().getBall().getBoundsInParent().intersects(PongEngine.getLeftWall().getBoundsInParent())) {
+			hasScored = true;
+		}
+		return hasScored;
+	}
+
+	private boolean checkPlayer1Score() {
+		boolean hasScored = false;
+		if(PongEngine.getBall().getBall().getBoundsInParent().intersects(PongEngine.getRightWall().getBoundsInParent())) {
+			hasScored = true;
+		}
+		return hasScored;
+	}
+
 	private void movePaddle1(String dir) {
 		Player leftPlayer = PongEngine.leftPlayer;
-		if(dir.equals("up") && !leftPlayer.isTouchingTop()) {
-			leftPlayer.setY(leftPlayer.getY() - speed);
-		}else if(dir.equals("down") && !leftPlayer.isTouchingBottom()) {
-			leftPlayer.setY(leftPlayer.getY() + speed);
+		if(dir.equals("up") && !leftPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
+			leftPlayer.move(-speed);
+		}else if(dir.equals("down") && !leftPlayer.getPaddle().getBoundsInParent().intersects(PongEngine.getBottomWall().getBoundsInParent())) {
+			leftPlayer.move(speed);
 		}
 	}
 	
 	private void movePaddle2(String dir) {
 		Player rightPlayer = PongEngine.rightPlayer;
-		if(dir.equals("up") && !rightPlayer.isTouchingTop()) {
-			rightPlayer.setY(rightPlayer.getY() - speed);
-		}else if(dir.equals("down") && !rightPlayer.isTouchingBottom()) {
-			rightPlayer.setY(rightPlayer.getY() + speed);
+		if(dir.equals("up") && !rightPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
+			rightPlayer.move(-speed);
+		}else if(dir.equals("down") && !rightPlayer.getPaddle().getBoundsInParent().intersects(PongEngine.getBottomWall().getBoundsInParent())) {
+			rightPlayer.move(speed);
 		}
 	}
 
 	private void pauseGame() {
-		// TODO Auto-generated method stub
-
+		
 	}
 }

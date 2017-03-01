@@ -9,6 +9,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import models.Ball;
 import models.Player;
 import models.ScoreBoard;
@@ -20,10 +21,13 @@ public class PongEngine {
 	private static Ball ball;
 	public static Scene gameScene;
 	private static ScoreBoard scoreBoard = new ScoreBoard();
-	private static Group components = new Group();
+	public static Group components = new Group();
 	private static Pane background;
 	private static final double HEIGHT = 800;
 	public static final double WIDTH = 1000;
+	private static Rectangle bottomWall = new Rectangle(0, HEIGHT, WIDTH, 1);
+	private static Rectangle leftWall = new Rectangle(0, 0, 1, HEIGHT);
+	private static Rectangle rightWall = new Rectangle(WIDTH, 0, 1, HEIGHT);
 
 	public static double getHeight() {
 		return HEIGHT;
@@ -68,9 +72,54 @@ public class PongEngine {
 
 	private static void createGroup() {
 		components = new Group();
-		components.getChildren().add(leftPlayer.getPaddle());
-		components.getChildren().add(rightPlayer.getPaddle());
-		components.getChildren().add(ball.getBall());
-		components.getChildren().add(scoreBoard.getScoreBoard());
+		components.getChildren().addAll(leftPlayer.getPaddle(),
+										rightPlayer.getPaddle(),
+										ball.getBall(),
+										scoreBoard.getScoreBoard(),
+										bottomWall,
+										leftWall,
+										rightWall
+										);
+		
+	}
+
+	public static Rectangle getBottomWall() {
+		return bottomWall;
+	}
+
+	public static void setBottomWall(Rectangle bottomWall) {
+		PongEngine.bottomWall = bottomWall;
+	}
+
+	public static Rectangle getLeftWall() {
+		return leftWall;
+	}
+
+	public static void setLeftWall(Rectangle leftWall) {
+		PongEngine.leftWall = leftWall;
+	}
+
+	public static Rectangle getRightWall() {
+		return rightWall;
+	}
+
+	public static void setRightWall(Rectangle rightWall) {
+		PongEngine.rightWall = rightWall;
+	}
+	
+	public static Ball getBall() {
+		return ball;
+	}
+	
+	public static Player getLeftPlayer() {
+		return leftPlayer;
+	}
+	
+	public static Player getRightPlayer() {
+		return rightPlayer;
+	}
+
+	public static void updateScore() {
+		scoreBoard.updateScore(leftPlayer.getScore(), rightPlayer.getScore());
 	}
 }
