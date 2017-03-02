@@ -2,7 +2,6 @@ package application;
 
 import java.io.File;
 import java.util.Random;
-import java.util.TimerTask;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.Timeline;
@@ -17,6 +16,9 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import models.JumperScore;
 
 
 
@@ -33,6 +35,8 @@ public class JumperEngine extends Jumper{
 	private static AnimationTimer timer;
 	private static Timeline timeline = new Timeline();
 	private static Jumper j = new Jumper();
+	private static JumperScore js = new JumperScore();
+	private static Text t = new Text();
 	
 	private static int yJumpMotion;
 	private static AudioClip song;
@@ -41,7 +45,7 @@ public class JumperEngine extends Jumper{
 	private static ImageView pickle;
 	private static boolean didCollide = false;
 	public static Random rand = new Random();
-	public static int speed = rand.nextInt(20) + 10;
+	public static int speed = 12;
 	public static void run(){
 		startGame();
 		showScene();
@@ -80,6 +84,11 @@ public class JumperEngine extends Jumper{
 		song = new AudioClip(new File(musicFile).toURI().toString());		
 			song.play();
 			
+			t = new Text(340,70,"0");
+
+			t.setFill(Color.WHITE);
+			t.setFont(Font.font(java.awt.Font.SANS_SERIF, 50));
+			root.getChildren().add(t);
 
         
 //		wall = new Rectangle(100,75);
@@ -121,7 +130,7 @@ public class JumperEngine extends Jumper{
 	public static void createKeyListener(){
 		gameScene.setOnKeyPressed(event -> {
 			
-			if (event.getCode().equals(KeyCode.SPACE) && isRunning) {
+			if (event.getCode().equals(KeyCode.ENTER) && isRunning) {
 				
 				if(!isJumping){
 					jump();
@@ -154,7 +163,7 @@ public class JumperEngine extends Jumper{
 			System.out.println("collision");
 			String loseSound = "jumper\\models\\loseSound.mp3";
 			sound = new AudioClip(new File(loseSound).toURI().toString());		
-			sound.play();
+			//sound.play();
 			j.gameOver();
 				
 		}
@@ -163,6 +172,7 @@ public class JumperEngine extends Jumper{
 	
 	
 	public static void startGame(){
+		speed = 12;
 		isRunning = true;
 		createJumperContent();
 		createKeyListener();
@@ -187,7 +197,15 @@ public class JumperEngine extends Jumper{
 				if(isRunning){
 					pickle.setTranslateX(pickle.getTranslateX() - speed);	
 					if(pickle.getTranslateX() <= 0){
+						js.setScore(js.getScore() + 1);
+						t.setFill(Color.WHITE);
+						t.setFont(Font.font(java.awt.Font.SANS_SERIF, 50));
+						String score = Integer.toString(js.getScore());
+						t.setText(score);
+						
 						pickle.setTranslateX(700);
+						//speed = rand.nextInt(12) + 9;
+						
 					}
 				}
 			}
@@ -202,6 +220,7 @@ public class JumperEngine extends Jumper{
 		timeline = new Timeline();
 		timer.stop();
 		isRunning = false;
+		js.setScore(0);
 	}
 	
 	public static void restartGame() throws Exception{
