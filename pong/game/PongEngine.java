@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Random;
+
 import application.ArcadeView;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
@@ -24,7 +26,7 @@ public class PongEngine {
 	private static ScoreBoard scoreBoard = new ScoreBoard();
 	public static Group components = new Group();
 	private static Pane background;
-	private static final double HEIGHT = 750;
+	private static final double HEIGHT = 700;
 	public static final double WIDTH = 1000;
 	private static Rectangle bottomWall = new Rectangle(0, HEIGHT, WIDTH, 1);
 	private static Rectangle leftWall = new Rectangle(0, 0, 1, HEIGHT);
@@ -32,6 +34,7 @@ public class PongEngine {
 	private static PongKeyPressHandler keyHandler;
 	private static AnimationTimer timer;
 	private static double speed = 8;
+	private static double target = 0;
 
 	public static double getHeight() {
 		return HEIGHT;
@@ -53,11 +56,11 @@ public class PongEngine {
 		createBackround();
 		buildScene();
 		showScene();
-		animateBall();
+		animateGame(players);
 		keyHandler = new PongKeyPressHandler();
 	}
 
-	public static void animateBall() {
+	public static void animateGame(int players) {
 		double speed = 12;
 		timer = new AnimationTimer() {
 
@@ -65,61 +68,98 @@ public class PongEngine {
 			public void handle(long now) {
 				ball.getDirection();
 				ball.move(speed);
-				animatePaddles();
-				if(checkPlayer1Score()) {
+				animatePaddles(players);
+				if (checkPlayer1Score()) {
 					Ball.reset();
 					PongEngine.getLeftPlayer().incrementScore();
 					PongEngine.updateScore();
 				}
-				if(checkPlayer2Score()) {
+				if (checkPlayer2Score()) {
 					Ball.reset();
 					PongEngine.getRightPlayer().incrementScore();
 					PongEngine.updateScore();
 				}
-				if(ball.getdX() == 0) {
+				if (ball.getdX() == 0) {
 					ball.countDown();
 				}
 			}
 
-			private void animatePaddles() {
-				if(PongKeyPressHandler.pressedKeys.contains("p1up") && !PongKeyPressHandler.pressedKeys.contains("p1down")) {
+			private void animatePaddles(int players) {
+				if (PongKeyPressHandler.pressedKeys.contains("p1up")
+						&& !PongKeyPressHandler.pressedKeys.contains("p1down")) {
 					movePaddle1("up");
 				}
-				if(PongKeyPressHandler.pressedKeys.contains("p1down") && !PongKeyPressHandler.pressedKeys.contains("p1up")) {
+				if (PongKeyPressHandler.pressedKeys.contains("p1down")
+						&& !PongKeyPressHandler.pressedKeys.contains("p1up")) {
 					movePaddle1("down");
 				}
-				if(PongKeyPressHandler.pressedKeys.contains("p2up") && !PongKeyPressHandler.pressedKeys.contains("p2down")) {
+				if (PongKeyPressHandler.pressedKeys.contains("p2up")
+						&& !PongKeyPressHandler.pressedKeys.contains("p2down") && players == 2) {
 					movePaddle2("up");
 				}
-				if(PongKeyPressHandler.pressedKeys.contains("p2down") && !PongKeyPressHandler.pressedKeys.contains("p2up")) {
+				if (PongKeyPressHandler.pressedKeys.contains("p2down")
+						&& !PongKeyPressHandler.pressedKeys.contains("p2up") && players == 2) {
 					movePaddle2("down");
+				}
+				if (players == 1) {
+					movePaddleAI();
 				}
 			}
 		};
 		timer.start();
 	}
-	
+
+	private static void movePaddleAI() {
+		double dY = 0;
+		if (ball.getBall().getLayoutY() != 0) {
+			target = ball.getBall().getLayoutY();
+		} else if(target > 30 || target < -30){
+			Random rand = new Random();
+			target = ball.getBall().getLayoutY() + rand.nextInt(60) - 30;
+		} 
+		if (target > rightPlayer.getPaddle().getLayoutY() + 10) {
+			dY = 1;
+		} else if (target < rightPlayer.getPaddle().getLayoutY() - 10) {
+			dY = -1;
+		}
+		if (rightPlayer.getPaddle().getBoundsInParent().intersects(bottomWall.getBoundsInParent())) {
+			if (dY > 0) {
+				dY = 0;
+			}
+		}
+		if (rightPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
+			if (dY < 0) {
+				dY = 0;
+			}
+		}
+		rightPlayer.getPaddle().setLayoutY(rightPlayer.getPaddle().getLayoutY() + (dY * speed * 0.8));
+	}
+
 	private static void movePaddle1(String dir) {
 		Player leftPlayer = PongEngine.leftPlayer;
-		if(dir.equals("up") && !leftPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
+		if (dir.equals("up")
+				&& !leftPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
 			leftPlayer.move(-speed);
-		}else if(dir.equals("down") && !leftPlayer.getPaddle().getBoundsInParent().intersects(PongEngine.getBottomWall().getBoundsInParent())) {
+		} else if (dir.equals("down") && !leftPlayer.getPaddle().getBoundsInParent()
+				.intersects(PongEngine.getBottomWall().getBoundsInParent())) {
 			leftPlayer.move(speed);
 		}
 	}
-	
+
 	private static void movePaddle2(String dir) {
 		Player rightPlayer = PongEngine.rightPlayer;
-		if(dir.equals("up") && !rightPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
+		if (dir.equals("up")
+				&& !rightPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
 			rightPlayer.move(-speed);
-		}else if(dir.equals("down") && !rightPlayer.getPaddle().getBoundsInParent().intersects(PongEngine.getBottomWall().getBoundsInParent())) {
+		} else if (dir.equals("down") && !rightPlayer.getPaddle().getBoundsInParent()
+				.intersects(PongEngine.getBottomWall().getBoundsInParent())) {
 			rightPlayer.move(speed);
 		}
 	}
-	
+
 	private static boolean checkPlayer2Score() {
 		boolean hasScored = false;
-		if(getBall().getBall().getBoundsInParent().intersects(PongEngine.getLeftWall().getBoundsInParent())) {
+		if (getBall().getBall().getBoundsInParent().intersects(PongEngine.getLeftWall().getBoundsInParent())) {
 			hasScored = true;
 		}
 		return hasScored;
@@ -127,7 +167,7 @@ public class PongEngine {
 
 	private static boolean checkPlayer1Score() {
 		boolean hasScored = false;
-		if(getBall().getBall().getBoundsInParent().intersects(PongEngine.getRightWall().getBoundsInParent())) {
+		if (getBall().getBall().getBoundsInParent().intersects(PongEngine.getRightWall().getBoundsInParent())) {
 			hasScored = true;
 		}
 		return hasScored;
@@ -201,6 +241,24 @@ public class PongEngine {
 
 	public static void updateScore() {
 		scoreBoard.updateScore(leftPlayer.getScore(), rightPlayer.getScore());
+		if (leftPlayer.getScore() == 10) {
+			player1Win();
+		}
+		if (rightPlayer.getScore() == 10) {
+			player2Win();
+		}
+	}
+
+	private static void player2Win() {
+		keyHandler.close();
+		timer.stop();
+		Pong.player2Wins();
+	}
+
+	private static void player1Win() {
+		keyHandler.close();
+		timer.stop();
+		Pong.player1Wins();
 	}
 
 	public static void closeAnimation() {
