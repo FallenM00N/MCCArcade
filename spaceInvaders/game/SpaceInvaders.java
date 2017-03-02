@@ -475,24 +475,24 @@ public class SpaceInvaders extends Game {
 		easy.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				mh.difficulty = "easy";
 				startGame(1500, 551);
+				mh.difficulty = "easy";
 			}
 		});
 		Button medium = new Button("Medium");
 		medium.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				mh.difficulty = "medium";
 				startGame(1000, 451);
+				mh.difficulty = "medium";
 			}
 		});
 		Button hard = new Button("Hard");
 		hard.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
-				mh.difficulty = "hard";
 				startGame(500, 351);
+				mh.difficulty = "hard";
 			}
 		});
 		
