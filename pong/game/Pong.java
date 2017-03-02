@@ -18,6 +18,9 @@ public class Pong extends Game{
 	public static Scene infoScene;
 	public static Scene overScene;
 	public static Scene pauseScene;
+	public static Scene player1Scene;
+	public static Scene player2Scene;
+	private static int players;
 	
 	@Override
 	public void pause() {
@@ -29,7 +32,7 @@ public class Pong extends Game{
 	public void resume() {
 		PongEngine.getKeyHandler().resume();
 		showScene(PongEngine.gameScene, "Pong");
-		PongEngine.animateBall();
+		PongEngine.animateGame(players);
 	}
 	
 	@FXML
@@ -55,9 +58,30 @@ public class Pong extends Game{
 		titleScene = createTitleScene();
 		infoScene = createInfoScene();
 		pauseScene = createPauseScene();
+		playerSelection = createPlayerSelection();
+		player1Scene = createPlayer1Scene();
+		player2Scene = createPlayer2Scene();
 		titleScreen();
 	}
 
+	public static void player1Wins() {
+		showScene(player1Scene, "Player 1 Wins!");
+	}
+	public static void player2Wins() {
+		showScene(player2Scene, "Player 2 Wins!");
+	}
+	
+	private Scene createPlayerSelection() {
+		try {
+			BorderPane root = FXMLLoader.load(getClass().getResource("PlayerSelection.fxml"));
+			Scene scene = new Scene(root);
+			return scene;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	@Override
 	public Scene createTitleScene() {
 		try {
@@ -71,6 +95,30 @@ public class Pong extends Game{
 		return null;
 	}
 
+	public Scene createPlayer1Scene() {
+		try {
+			BorderPane root = FXMLLoader.load(getClass().getResource("player1win.fxml"));
+			Scene scene = new Scene(root);
+			return scene;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Scene createPlayer2Scene() {
+		try {
+			BorderPane root = FXMLLoader.load(getClass().getResource("player2win.fxml"));
+			Scene scene = new Scene(root);
+			return scene;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	@Override
 	public void gameOver() {
 		// TODO Auto-generated method stub
@@ -78,15 +126,19 @@ public class Pong extends Game{
 	}
 	
 	public void startGame(ActionEvent e) {
-		PongEngine.run(2);
+		if(e.getSource().toString().contains("one")) {
+			players = 1;
+		}
+		else {
+			players = 2;
+		}
+		PongEngine.run(players);
 	}
 	
 
 	@FXML
-	public void playerSelection(ActionEvent e) {
-		startGame(e);
-//		Scene playerSelect = new Scene(null);
-//		showScene(playerSelect);
+	public void playerSelection(ActionEvent e){
+		showScene(playerSelection, "Player Select - Pong");
 	}
 	
 	@FXML
@@ -124,7 +176,13 @@ public class Pong extends Game{
 	private Button menuButton;
 	@FXML
 	private Button quitButton;
-
+	@FXML
+	private Button onePlayer;
+	@FXML
+	private Button twoPlayers;
+	@FXML
+	private Button titleButton;
+	
 	public static void showPauseScreen() {
 		showScene(pauseScene, "Paused - Pong");
 		PongEngine.closeAnimation();

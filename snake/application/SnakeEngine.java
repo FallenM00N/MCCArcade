@@ -85,7 +85,7 @@ public class SnakeEngine extends Snake{
 		root = new Pane();
 		root.setPrefSize(WIDTH, HEIGHT);
 		root.setBackground(new Background(new BackgroundFill(Color.MIDNIGHTBLUE.darker().darker().darker().darker(), null, null)));
-		t = new Text(10,20, "Score: 1");
+		t = new Text(10,20, "Score: 0");
 
 		t.setFill(Color.WHITE);
 		t.setFont(Font.font(java.awt.Font.SANS_SERIF, 15));
@@ -164,8 +164,8 @@ public class SnakeEngine extends Snake{
 
 			root.getChildren().remove(t);
 			s.setScore(s.getScore() + 1);
-			t.setFill(Color.WHITE);
-			t.setFont(Font.font(java.awt.Font.SANS_SERIF, 15));
+			//t.setFill(Color.WHITE);
+			//t.setFont(Font.font(java.awt.Font.SANS_SERIF, 15));
 			String score = Integer.toString(s.getScore());
 			t.setText("Score: " + score);
 			root.getChildren().add(t);
