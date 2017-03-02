@@ -28,9 +28,9 @@ public class PongEngine {
 	private static Pane background;
 	private static final double HEIGHT = 650;
 	public static final double WIDTH = 1000;
-	private static Rectangle bottomWall = new Rectangle(0, HEIGHT, WIDTH, 1);
-	private static Rectangle leftWall = new Rectangle(0, 0, 1, HEIGHT);
-	private static Rectangle rightWall = new Rectangle(WIDTH, 0, 1, HEIGHT);
+	private static Rectangle bottomWall = new Rectangle(0 - 5, HEIGHT, WIDTH, 5);
+	private static Rectangle leftWall = new Rectangle(0, 0, 5, HEIGHT);
+	private static Rectangle rightWall = new Rectangle(WIDTH, 0, 5, HEIGHT);
 	private static PongKeyPressHandler keyHandler;
 	private static AnimationTimer timer;
 	private static double speed = 8;
@@ -113,9 +113,9 @@ public class PongEngine {
 		double dY = 0;
 		if (ball.getBall().getLayoutY() != 0) {
 			target = ball.getBall().getLayoutY();
-		} else if(target > 30 || target < -30){
+		} else if(target > 20 || target < -20){
 			Random rand = new Random();
-			target = ball.getBall().getLayoutY() + rand.nextInt(60) - 30;
+			target = ball.getBall().getLayoutY() + rand.nextInt(40) - 20;
 		} 
 		if (target > rightPlayer.getPaddle().getLayoutY() + 10) {
 			dY = 1;
@@ -174,7 +174,7 @@ public class PongEngine {
 	}
 
 	private static void createBall() {
-		ball = new Ball(WIDTH / 2, HEIGHT / 2, 20);
+		ball = new Ball(WIDTH / 2, HEIGHT / 2, 15);
 	}
 
 	private static void createBackround() {
@@ -192,8 +192,8 @@ public class PongEngine {
 	}
 
 	private static void createPlayers() {
-		leftPlayer = new Player(20, HEIGHT / 2, 20, 100);
-		rightPlayer = new Player(WIDTH - 40, HEIGHT / 2, 20, 100);
+		leftPlayer = new Player(20, HEIGHT / 2, 15, 100);
+		rightPlayer = new Player(WIDTH - 40, HEIGHT / 2, 15, 100);
 	}
 
 	private static void createGroup() {

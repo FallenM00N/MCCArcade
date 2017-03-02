@@ -256,6 +256,7 @@ public class Ball {
 			} else {
 				dX = 1;
 			} 
+			dY = rand.nextDouble() / 3;
 		}
 	}
 	

@@ -7,9 +7,9 @@ import javafx.scene.shape.Rectangle;
 
 public class ScoreBoard {
 
-	private int small = 15;
-	private int big = 50;
-	private static final int HEIGHT = 160;
+	private int small = 7;
+	private int big = 20;
+	private static final int HEIGHT = 80;
 	private static Rectangle wall;
 	private Group player1Score;
 	private Group player2Score;
@@ -113,15 +113,15 @@ public class ScoreBoard {
 	}
 
 	public Rectangle getDivider() {
-		Rectangle divider = new Rectangle(25, 15);
+		Rectangle divider = new Rectangle(big, small);
 		divider.setFill(Paint.valueOf("#fff"));
-		divider.setX(PongEngine.getWidth() / 2 - 15);
-		divider.setY(70);
+		divider.setX(PongEngine.getWidth() / 2 - big);
+		divider.setY(20 + big);
 		return divider;
 	}
 
 	private void getHR() {
-		wall = new Rectangle(0, HEIGHT, PongEngine.getWidth(), 10);
+		wall = new Rectangle(0, HEIGHT, PongEngine.getWidth(), small);
 		wall.setFill(Paint.valueOf("#fff"));
 	}
 
