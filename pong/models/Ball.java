@@ -241,7 +241,6 @@ public class Ball {
 			countDown = 60;
 		}
 		countDown--;
-		System.out.println(countDown);
 		if (dX == 0 && countDown == 0) {
 			Random rand = new Random();
 			if (rand.nextBoolean()) {

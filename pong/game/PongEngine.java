@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Random;
+
 import application.ArcadeView;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
@@ -53,11 +55,11 @@ public class PongEngine {
 		createBackround();
 		buildScene();
 		showScene();
-		animateBall();
+		animateGame(players);
 		keyHandler = new PongKeyPressHandler();
 	}
 
-	public static void animateBall() {
+	public static void animateGame(int players) {
 		double speed = 12;
 		timer = new AnimationTimer() {
 
@@ -65,7 +67,7 @@ public class PongEngine {
 			public void handle(long now) {
 				ball.getDirection();
 				ball.move(speed);
-				animatePaddles();
+				animatePaddles(players);
 				if(checkPlayer1Score()) {
 					Ball.reset();
 					PongEngine.getLeftPlayer().incrementScore();
@@ -81,22 +83,47 @@ public class PongEngine {
 				}
 			}
 
-			private void animatePaddles() {
+			private void animatePaddles(int players) {
 				if(PongKeyPressHandler.pressedKeys.contains("p1up") && !PongKeyPressHandler.pressedKeys.contains("p1down")) {
 					movePaddle1("up");
 				}
 				if(PongKeyPressHandler.pressedKeys.contains("p1down") && !PongKeyPressHandler.pressedKeys.contains("p1up")) {
 					movePaddle1("down");
 				}
-				if(PongKeyPressHandler.pressedKeys.contains("p2up") && !PongKeyPressHandler.pressedKeys.contains("p2down")) {
+				if(PongKeyPressHandler.pressedKeys.contains("p2up") && !PongKeyPressHandler.pressedKeys.contains("p2down") && players == 2) {
 					movePaddle2("up");
 				}
-				if(PongKeyPressHandler.pressedKeys.contains("p2down") && !PongKeyPressHandler.pressedKeys.contains("p2up")) {
+				if(PongKeyPressHandler.pressedKeys.contains("p2down") && !PongKeyPressHandler.pressedKeys.contains("p2up") && players == 2) {
 					movePaddle2("down");
+				}
+				if(players == 1) {
+					movePaddleAI();
 				}
 			}
 		};
 		timer.start();
+	}
+	
+	private static void movePaddleAI() {
+		double dY= 0;
+		double target = ball.getBall().getLayoutY();
+		if(target > rightPlayer.getPaddle().getLayoutY() + 10) {
+			dY = 1;
+		}
+		else if(target < rightPlayer.getPaddle().getLayoutY() - 10) {
+			dY = -1;
+		}
+		if(rightPlayer.getPaddle().getBoundsInParent().intersects(bottomWall.getBoundsInParent())) {
+			if(dY > 0) {
+				dY = 0;
+			}
+		}
+		if(rightPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
+			if(dY < 0) {
+				dY = 0;
+			}
+		}
+		rightPlayer.getPaddle().setLayoutY(rightPlayer.getPaddle().getLayoutY() + (dY * speed * 0.8));
 	}
 	
 	private static void movePaddle1(String dir) {
@@ -201,6 +228,24 @@ public class PongEngine {
 
 	public static void updateScore() {
 		scoreBoard.updateScore(leftPlayer.getScore(), rightPlayer.getScore());
+		if(leftPlayer.getScore() == 10) {
+			player1Win();
+		}
+		if(rightPlayer.getScore() == 10) {
+			player2Win();
+		}
+	}
+
+	private static void player2Win() {
+		keyHandler.close();
+		timer.stop();
+		Pong.player2Wins();
+	}
+
+	private static void player1Win() {
+		keyHandler.close();
+		timer.stop();
+		Pong.player1Wins();
 	}
 
 	public static void closeAnimation() {
