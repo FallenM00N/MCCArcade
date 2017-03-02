@@ -94,6 +94,44 @@ public class SpaceInvaders extends Game {
 		}
 	}
 	
+	public static void continueGame(int playerLives) {
+		int x = 50;
+		int y = 50;
+		for (int i = 1; i < 51; i++) {
+			Image img = new Image("file:spaceInvaders/images/Enemy.png");
+			if (i < 11) {
+				img = new Image("file:spaceInvaders/images/EnemyRound.png");
+			}
+			else if (i < 21) {
+				img = new Image("file:spaceInvaders/images/EnemySun.png");
+			}
+			else if (i < 31) {
+				img = new Image("file:spaceInvaders/images/EnemyTriangle.png");
+			}
+			else if (i < 41) {
+				img = new Image("file:spaceInvaders/images/EnemyX.png");
+			}
+			else{
+				img = new Image("file:spaceInvaders/images/Enemy.png");
+			}
+			
+			Enemy e = new Enemy(x, y, img);
+			enemies.add(e);
+			entities.getChildren().add(e.getImg());
+			x += e.getWidth() + 5;
+			if (i % 10 == 0 && i != 0) {
+				y += e.getWidth() + 3;
+				x = 50;
+			}
+		}
+		if (playerLives <= 0) {
+			player.setLives(1);
+		}
+		else {
+			player.setLives(playerLives);
+		}
+	}
+	
 	private static void saveHighScores() {
 		File f = new File("spaceInvaders/highScores.txt");
 		
@@ -437,6 +475,7 @@ public class SpaceInvaders extends Game {
 		easy.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				mh.difficulty = "easy";
 				startGame(1500, 551);
 			}
 		});
@@ -444,6 +483,7 @@ public class SpaceInvaders extends Game {
 		medium.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				mh.difficulty = "medium";
 				startGame(1000, 451);
 			}
 		});
@@ -451,6 +491,7 @@ public class SpaceInvaders extends Game {
 		hard.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				mh.difficulty = "hard";
 				startGame(500, 351);
 			}
 		});
@@ -468,7 +509,7 @@ public class SpaceInvaders extends Game {
 		return s;
 	}
 	
-	private Scene createGameScene() {
+	private static Scene createGameScene() {
 		Pane bp = new Pane();
 		entities = new Group();
 		scorel = new Label("SCORE: " + scoreString);
