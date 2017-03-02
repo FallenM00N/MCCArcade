@@ -24,13 +24,14 @@ public class PongEngine {
 	private static ScoreBoard scoreBoard = new ScoreBoard();
 	public static Group components = new Group();
 	private static Pane background;
-	private static final double HEIGHT = 800;
+	private static final double HEIGHT = 750;
 	public static final double WIDTH = 1000;
 	private static Rectangle bottomWall = new Rectangle(0, HEIGHT, WIDTH, 1);
 	private static Rectangle leftWall = new Rectangle(0, 0, 1, HEIGHT);
 	private static Rectangle rightWall = new Rectangle(WIDTH, 0, 1, HEIGHT);
 	private static PongKeyPressHandler keyHandler;
 	private static AnimationTimer timer;
+	private static double speed = 8;
 
 	public static double getHeight() {
 		return HEIGHT;
@@ -57,16 +58,79 @@ public class PongEngine {
 	}
 
 	public static void animateBall() {
-		double speed = 2;
+		double speed = 12;
 		timer = new AnimationTimer() {
 
 			@Override
 			public void handle(long now) {
 				ball.getDirection();
 				ball.move(speed);
+				animatePaddles();
+				if(checkPlayer1Score()) {
+					Ball.reset();
+					PongEngine.getLeftPlayer().incrementScore();
+					PongEngine.updateScore();
+				}
+				if(checkPlayer2Score()) {
+					Ball.reset();
+					PongEngine.getRightPlayer().incrementScore();
+					PongEngine.updateScore();
+				}
+				if(ball.getdX() == 0) {
+					ball.countDown();
+				}
+			}
+
+			private void animatePaddles() {
+				if(PongKeyPressHandler.pressedKeys.contains("p1up") && !PongKeyPressHandler.pressedKeys.contains("p1down")) {
+					movePaddle1("up");
+				}
+				if(PongKeyPressHandler.pressedKeys.contains("p1down") && !PongKeyPressHandler.pressedKeys.contains("p1up")) {
+					movePaddle1("down");
+				}
+				if(PongKeyPressHandler.pressedKeys.contains("p2up") && !PongKeyPressHandler.pressedKeys.contains("p2down")) {
+					movePaddle2("up");
+				}
+				if(PongKeyPressHandler.pressedKeys.contains("p2down") && !PongKeyPressHandler.pressedKeys.contains("p2up")) {
+					movePaddle2("down");
+				}
 			}
 		};
 		timer.start();
+	}
+	
+	private static void movePaddle1(String dir) {
+		Player leftPlayer = PongEngine.leftPlayer;
+		if(dir.equals("up") && !leftPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
+			leftPlayer.move(-speed);
+		}else if(dir.equals("down") && !leftPlayer.getPaddle().getBoundsInParent().intersects(PongEngine.getBottomWall().getBoundsInParent())) {
+			leftPlayer.move(speed);
+		}
+	}
+	
+	private static void movePaddle2(String dir) {
+		Player rightPlayer = PongEngine.rightPlayer;
+		if(dir.equals("up") && !rightPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
+			rightPlayer.move(-speed);
+		}else if(dir.equals("down") && !rightPlayer.getPaddle().getBoundsInParent().intersects(PongEngine.getBottomWall().getBoundsInParent())) {
+			rightPlayer.move(speed);
+		}
+	}
+	
+	private static boolean checkPlayer2Score() {
+		boolean hasScored = false;
+		if(getBall().getBall().getBoundsInParent().intersects(PongEngine.getLeftWall().getBoundsInParent())) {
+			hasScored = true;
+		}
+		return hasScored;
+	}
+
+	private static boolean checkPlayer1Score() {
+		boolean hasScored = false;
+		if(getBall().getBall().getBoundsInParent().intersects(PongEngine.getRightWall().getBoundsInParent())) {
+			hasScored = true;
+		}
+		return hasScored;
 	}
 
 	private static void createBall() {

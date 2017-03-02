@@ -55,9 +55,21 @@ public class Pong extends Game{
 		titleScene = createTitleScene();
 		infoScene = createInfoScene();
 		pauseScene = createPauseScene();
+		playerSelection = createPlayerSelection();
 		titleScreen();
 	}
 
+	private Scene createPlayerSelection() {
+		try {
+			BorderPane root = FXMLLoader.load(getClass().getResource("PlayerSelection.fxml"));
+			Scene scene = new Scene(root);
+			return scene;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	@Override
 	public Scene createTitleScene() {
 		try {
@@ -78,15 +90,19 @@ public class Pong extends Game{
 	}
 	
 	public void startGame(ActionEvent e) {
-		PongEngine.run(2);
+		if(e.getSource().toString().contains("one")) {
+			PongEngine.run(1);
+			System.out.println("1");
+		}
+		else {
+			PongEngine.run(2);
+		}
 	}
 	
 
 	@FXML
-	public void playerSelection(ActionEvent e) {
-		startGame(e);
-//		Scene playerSelect = new Scene(null);
-//		showScene(playerSelect);
+	public void playerSelection(ActionEvent e){
+		showScene(playerSelection, "Player Select - Pong");
 	}
 	
 	@FXML
@@ -124,6 +140,10 @@ public class Pong extends Game{
 	private Button menuButton;
 	@FXML
 	private Button quitButton;
+	@FXML
+	private Button onePlayer;
+	@FXML
+	private Button twoPlayers;
 
 	public static void showPauseScreen() {
 		showScene(pauseScene, "Paused - Pong");
