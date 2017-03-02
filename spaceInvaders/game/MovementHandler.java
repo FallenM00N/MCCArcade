@@ -228,10 +228,10 @@ public class MovementHandler implements Runnable {
 			points = 100 + (551 - (timeLimit));
 			break;
 		case "medium":
-			points = 200 + (551 - (timeLimit));
+			points = 140 + (551 - (timeLimit));
 			break;
 		case "hard":
-			points = 300 + (551 - (timeLimit));
+			points = 180 + (551 - (timeLimit));
 			break;
 		default:
 			points = 100 + (551 - (timeLimit));

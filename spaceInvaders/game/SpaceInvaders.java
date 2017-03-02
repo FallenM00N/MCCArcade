@@ -115,6 +115,7 @@ public class SpaceInvaders extends Game {
 				img = new Image("file:spaceInvaders/images/Enemy.png");
 			}
 			
+			mh.timeLimit -= 100;
 			Enemy e = new Enemy(x, y, img);
 			enemies.add(e);
 			entities.getChildren().add(e.getImg());
