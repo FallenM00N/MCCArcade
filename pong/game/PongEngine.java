@@ -26,7 +26,7 @@ public class PongEngine {
 	private static ScoreBoard scoreBoard = new ScoreBoard();
 	public static Group components = new Group();
 	private static Pane background;
-	private static final double HEIGHT = 700;
+	private static final double HEIGHT = 650;
 	public static final double WIDTH = 1000;
 	private static Rectangle bottomWall = new Rectangle(0, HEIGHT, WIDTH, 1);
 	private static Rectangle leftWall = new Rectangle(0, 0, 1, HEIGHT);
