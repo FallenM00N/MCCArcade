@@ -2,6 +2,11 @@ package models;
 
 import java.util.Random;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
+import application.Main;
 import game.PongEngine;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -85,16 +90,18 @@ public class Ball {
 			if (dY > 0) {
 				dY *= -1;
 			}
+			playSound("3");
 		}
 		if (ball.getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
 			if (dY < 0) {
 				dY *= -1;
 			}
+			playSound("4");
 		}
 		if (ball.getBoundsInParent().intersects(PongEngine.getLeftPlayer().getPaddle().getBoundsInParent())) {
 			double curY = PongEngine.getLeftPlayer().getPaddle().getLayoutY();
 			double colY = ball.getLayoutY();
-			double hitLocation = colY - curY - 50;
+			double hitLocation = colY - curY - 40;
 			if (hitLocation > 50)
 				hitLocation = 50;
 			if (hitLocation < 0 - 50)
@@ -120,6 +127,7 @@ public class Ball {
 			dY = hitLocation / 50;
 		}
 		dX = -1;
+		playSound("1");
 
 		// double height = PongEngine.getRightPlayer().getPaddle().getHeight();
 		// double m;
@@ -178,7 +186,7 @@ public class Ball {
 			dY = hitLocation / 50;
 		}
 		dX = 1;
-
+		playSound("2");
 		// double height = PongEngine.getLeftPlayer().getPaddle().getHeight();
 		// double m;
 		// m = hitLocation * (height * 4);
@@ -250,5 +258,23 @@ public class Ball {
 			} 
 		}
 	}
+	
+	public static synchronized void playSound(String file) {
+		  new Thread(new Runnable() {
+		  // The wrapper thread is unnecessary, unless it blocks on the
+		  // Clip finishing; see comments.
+		    public void run() {
+		      try {
+		        Clip clip = AudioSystem.getClip();
+		        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+		        Main.class.getResourceAsStream("/sounds/sound" + file + ".wav"));
+		        clip.open(inputStream);
+		        clip.start(); 
+		      } catch (Exception e) {
+		        System.err.println(e.getMessage());
+		      }
+		    }
+		  }).start();
+		}
 
 }
