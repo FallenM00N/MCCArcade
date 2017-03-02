@@ -1,9 +1,10 @@
 package application;
 
 import java.io.File;
-import java.util.Timer;
+import java.util.Random;
 import java.util.TimerTask;
 
+import javafx.animation.AnimationTimer;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -15,10 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcBuilder;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 
@@ -33,15 +30,18 @@ public class JumperEngine extends Jumper{
 	private static Image image;
 	private static ImageView llama;
 	private static Group root;
-	private static Timer timer = new Timer();
+	private static AnimationTimer timer;
 	private static Timeline timeline = new Timeline();
 	private static Jumper j = new Jumper();
 	
 	private static int yJumpMotion;
 	private static AudioClip song;
 	private static AudioClip sound;
-	private static Rectangle wall;
-	
+	//private static Rectangle wall;
+	private static ImageView pickle;
+	private static boolean didCollide = false;
+	public static Random rand = new Random();
+	public static int speed = rand.nextInt(20) + 10;
 	public static void run(){
 		startGame();
 		showScene();
@@ -82,11 +82,20 @@ public class JumperEngine extends Jumper{
 			
 
         
-		wall = new Rectangle(100,75);
-		wall.setTranslateX(600);
-		wall.setTranslateY(325);
-		wall.setFill(Color.FIREBRICK);
-		root.getChildren().add(wall);
+//		wall = new Rectangle(100,75);
+//		wall.setTranslateX(600);
+//		wall.setTranslateY(325);
+//		wall.setFill(Color.FIREBRICK);
+//		root.getChildren().add(wall);
+			
+		image = new Image("file:jumper/models/pickle.png");
+		pickle = new ImageView();
+		pickle.setImage(image);
+		pickle.setTranslateX(600);
+		pickle.setTranslateY(300);
+		pickle.setFitHeight(110);
+		pickle.setFitWidth(110);
+		root.getChildren().add(pickle);
 	}
 	
 	public static void createJumper(){
@@ -102,7 +111,7 @@ public class JumperEngine extends Jumper{
 	
 	public static void jump(){
 		//llama.setTranslateY(yJumpMotion); 
-		yJumpMotion = 350;//adjust jumpheight
+		yJumpMotion = 360;//adjust jumpheight
 		if(isRunning){
 			llama.setTranslateY(llama.getTranslateY() - yJumpMotion);
 			
@@ -141,7 +150,7 @@ public class JumperEngine extends Jumper{
 	}
 	
 	public static void detectCollision(){
-		if(wall.getBoundsInParent().intersects(llama.getBoundsInParent())){
+		if(pickle.getBoundsInParent().intersects(llama.getBoundsInParent())){
 			System.out.println("collision");
 			String loseSound = "jumper\\models\\loseSound.mp3";
 			sound = new AudioClip(new File(loseSound).toURI().toString());		
@@ -157,7 +166,33 @@ public class JumperEngine extends Jumper{
 		isRunning = true;
 		createJumperContent();
 		createKeyListener();
-		timer.schedule(new UpdateHandler(llama, wall), 32, 32);
+		//timer.schedule(new UpdateHandler(llama, pickle), 32, 32);
+		timer = new AnimationTimer() {
+			
+			@Override
+			public void handle(long now) {
+			
+				
+				// TODO Auto-generated method stub
+				detectCollision();
+				//			System.out.println(llama.getTranslateY()); 
+				if(llama.getTranslateY()<0){ //if llama is in the air
+					isJumping = true;
+					llama.setTranslateY(llama.getTranslateY() + 11);//bring back llama to ground
+				} 
+				else{
+					isJumping = false;
+				}
+				//move rectangles to the left put code in here.
+				if(isRunning){
+					pickle.setTranslateX(pickle.getTranslateX() - speed);	
+					if(pickle.getTranslateX() <= 0){
+						pickle.setTranslateX(700);
+					}
+				}
+			}
+		};
+		timer.start();
 		timeline.play();
 	}
 	
@@ -165,8 +200,7 @@ public class JumperEngine extends Jumper{
 		song.stop();
 		timeline.stop();
 		timeline = new Timeline();
-		//timer.cancel();
-		//timer = new Timer();
+		timer.stop();
 		isRunning = false;
 	}
 	
@@ -174,49 +208,55 @@ public class JumperEngine extends Jumper{
 		run();
 	}
 	
-	private static class UpdateHandler extends TimerTask{
-
-		private ImageView llama;
-		private Rectangle wall;
-		
-
-		public UpdateHandler(ImageView llama, Rectangle wall){
-			this.llama = llama;
-			this.wall = wall;
-		}
-		
-		@Override
-		public void run() {
-			detectCollision();
-			//			System.out.println(llama.getTranslateY()); 
-			if(llama.getTranslateY()<0){ //if llama is in the air
-				isJumping = true;
-				llama.setTranslateY(llama.getTranslateY() + 18);//bring back llama to ground
-			} 
-			else{
-				isJumping = false;
-			}
-			//move rectangles to the left put code in here.
-			if(isRunning){
-				wall.setTranslateX(wall.getTranslateX() - 16);	
-				if(wall.getTranslateX() <= 0){
-					wall.setTranslateX(700);
-				}
-			}
-			
-			
-			
-		}
-		
-	}
+//	private static class UpdateHandler extends TimerTask{
+//
+//		private ImageView llama;
+////		private Rectangle wall;
+//		private ImageView pickle;
+//		
+//
+//		public UpdateHandler(ImageView llama, ImageView pickle){
+//			this.llama = llama;
+////			this.wall = wall;
+//			this.pickle = pickle;
+//		}
+//		
+//		
+//		
+//		@Override
+//		public void run() {
+//			detectCollision();
+//			//			System.out.println(llama.getTranslateY()); 
+//			if(llama.getTranslateY()<0){ //if llama is in the air
+//				isJumping = true;
+//				llama.setTranslateY(llama.getTranslateY() + 20);//bring back llama to ground
+//			} 
+//			else{
+//				isJumping = false;
+//			}
+//			//move rectangles to the left put code in here.
+//			if(isRunning){
+//				pickle.setTranslateX(pickle.getTranslateX() - 20);	
+//				if(pickle.getTranslateX() <= 0){
+//					pickle.setTranslateX(700);
+//				}
+//			}
+//			
+//			
+//			
+//		}
+//		
+//	}
 	
 	public static void pauseJumper(){
 		timeline.pause();
+		timer.stop();
 	}
 	
 	public static void resumeJumper(){
 		ArcadeView.setScene(gameScene , "Llama Run");
 		timeline.play();
+		timer.start();
 	}
 	
 	

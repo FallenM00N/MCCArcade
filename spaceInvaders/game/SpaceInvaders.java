@@ -94,6 +94,45 @@ public class SpaceInvaders extends Game {
 		}
 	}
 	
+	public static void continueGame(int playerLives) {
+		int x = 50;
+		int y = 50;
+		for (int i = 1; i < 51; i++) {
+			Image img = new Image("file:spaceInvaders/images/Enemy.png");
+			if (i < 11) {
+				img = new Image("file:spaceInvaders/images/EnemyRound.png");
+			}
+			else if (i < 21) {
+				img = new Image("file:spaceInvaders/images/EnemySun.png");
+			}
+			else if (i < 31) {
+				img = new Image("file:spaceInvaders/images/EnemyTriangle.png");
+			}
+			else if (i < 41) {
+				img = new Image("file:spaceInvaders/images/EnemyX.png");
+			}
+			else{
+				img = new Image("file:spaceInvaders/images/Enemy.png");
+			}
+			
+			mh.timeLimit += 100;
+			Enemy e = new Enemy(x, y, img);
+			enemies.add(e);
+			entities.getChildren().add(e.getImg());
+			x += e.getWidth() + 5;
+			if (i % 10 == 0 && i != 0) {
+				y += e.getWidth() + 3;
+				x = 50;
+			}
+		}
+		if (playerLives <= 0) {
+			player.setLives(1);
+		}
+		else {
+			player.setLives(playerLives);
+		}
+	}
+	
 	private static void saveHighScores() {
 		File f = new File("spaceInvaders/highScores.txt");
 		
@@ -438,6 +477,7 @@ public class SpaceInvaders extends Game {
 			@Override
 			public void handle(MouseEvent arg0) {
 				startGame(1500, 551);
+				mh.difficulty = "easy";
 			}
 		});
 		Button medium = new Button("Medium");
@@ -445,6 +485,7 @@ public class SpaceInvaders extends Game {
 			@Override
 			public void handle(MouseEvent arg0) {
 				startGame(1000, 451);
+				mh.difficulty = "medium";
 			}
 		});
 		Button hard = new Button("Hard");
@@ -452,6 +493,7 @@ public class SpaceInvaders extends Game {
 			@Override
 			public void handle(MouseEvent arg0) {
 				startGame(500, 351);
+				mh.difficulty = "hard";
 			}
 		});
 		
@@ -468,7 +510,7 @@ public class SpaceInvaders extends Game {
 		return s;
 	}
 	
-	private Scene createGameScene() {
+	private static Scene createGameScene() {
 		Pane bp = new Pane();
 		entities = new Group();
 		scorel = new Label("SCORE: " + scoreString);

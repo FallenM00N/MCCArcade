@@ -17,6 +17,7 @@ import models.UFO;
 
 public class MovementHandler implements Runnable {
 
+	public String difficulty;
 	public int shotLimit = 1000;
 	private int lastShot = 0;
 	private int direction = 5;
@@ -64,7 +65,7 @@ public class MovementHandler implements Runnable {
 	private void moveUfo() {
 		UFO ufo = SpaceInvaders.ufo;
 		if (SpaceInvaders.ufo != null) {
-			ufo.setX(ufo.getX() - .07);
+			ufo.setX(ufo.getX() - .05);
 			if (ufo.getX() + ufo.getWidth() <= 0) {
 				SpaceInvaders.entities.getChildren().remove(ufo);
 			}
@@ -121,13 +122,13 @@ public class MovementHandler implements Runnable {
 					e.get(i).getX() <= 5) {
 				direction = -direction;
 				if (timeLimit > 200) {
-					timeLimit -= 50;
+					timeLimit -= 40;
 				}
 				else if (timeLimit > 50) {
 					timeLimit -= 10;
 				}
 				for (int j = 0; j < e.size(); j++) {
-					e.get(j).setY(e.get(j).getY() + 10);
+					e.get(j).setY(e.get(j).getY() + 20);
 				}
 			}
 			if (e.get(i).getY() >= SpaceInvaders.player.getY()) {
@@ -157,7 +158,8 @@ public class MovementHandler implements Runnable {
 			}
 			
 			for (int x = 0; x < b.size(); x++) {
-				if (b.get(i).getBullet().getBoundsInParent().intersects(b.get(x).getBullet().getBoundsInParent())
+				if (i < b.size() && x < b.size() &&
+						b.get(i).getBullet().getBoundsInParent().intersects(b.get(x).getBullet().getBoundsInParent())
 						&& !b.get(i).equals(b.get(x))) {
 					collideBullets(b.get(i), b.get(x));
 				}
@@ -219,18 +221,37 @@ public class MovementHandler implements Runnable {
 		SpaceInvaders.bullets.remove(b);
 	}
 	
-	private void killEnemy(Bullet b, Enemy e) {
-		SpaceInvaders.score += 100 + (551 - (timeLimit));
+	private void addPoints() {
+		int points = 0;
+		switch (difficulty) {
+		case "easy":
+			points = 100 + (551 - (timeLimit));
+			break;
+		case "medium":
+			points = 140 + (551 - (timeLimit));
+			break;
+		case "hard":
+			points = 180 + (551 - (timeLimit));
+			break;
+		default:
+			points = 100 + (551 - (timeLimit));
+			break;
+		}
+		SpaceInvaders.score += points;
 		String f = Integer.toString(SpaceInvaders.score);
 		SpaceInvaders.scoreString = SpaceInvaders.scoreString.substring(0, SpaceInvaders.scoreString.length() - f.length());
 		SpaceInvaders.scoreString += f;
 		SpaceInvaders.scorel.setText("SCORE: " + SpaceInvaders.scoreString);
+	}
+	
+	private void killEnemy(Bullet b, Enemy e) {
+		addPoints();
 		
 		e.playDeathAnimation();
 		SpaceInvaders.entities.getChildren().remove(b.getBullet());
 		SpaceInvaders.bullets.remove(b);
 		if (SpaceInvaders.enemies.size() <= 1) {
-			SpaceInvaders.winGame("Game Over - You Win");
+			SpaceInvaders.continueGame(SpaceInvaders.player.getLives());
 		}
 		else if (SpaceInvaders.enemies.size()% 26 == 0) {
 			SpaceInvaders.player.setLives(SpaceInvaders.player.getLives() + 1);
