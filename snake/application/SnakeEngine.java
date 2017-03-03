@@ -5,13 +5,11 @@ import java.io.File;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -48,6 +46,7 @@ public class SnakeEngine extends Snake{
 	private static Snake sn = new Snake();
 	private static String musicFile;
 	private static AudioClip sound;
+	private static AudioClip eat;
 	private static boolean isMusicPlaying = false;
 
 	private static Scene gameScene;
@@ -170,6 +169,9 @@ public class SnakeEngine extends Snake{
 			t.setText("Score: " + score);
 			root.getChildren().add(t);
 			
+			musicFile = "snake\\models\\eatSound.mp3";
+			eat = new AudioClip(new File(musicFile).toURI().toString());
+			eat.play();
 			
 			Rectangle rect = new Rectangle(SQUARE_SIZE, SQUARE_SIZE);
 			rect.setFill(Color.MEDIUMSEAGREEN);

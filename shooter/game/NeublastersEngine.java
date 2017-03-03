@@ -1,10 +1,11 @@
 package game;
 
-import java.awt.GraphicsEnvironment;
 
+import application.ArcadeView;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 
 public class NeublastersEngine {
 	
@@ -14,16 +15,18 @@ public class NeublastersEngine {
 	
 
 	public static void run() {
-		Neublasters.showScene(createBlankScene(), "Neublasters");
+		gameScene = createBlankScene();
+		Neublasters.showScene(gameScene, "Neublasters");
 	}
 	
 	private static Scene createBlankScene() {
-		java.awt.Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		Screen screen = Screen.getPrimary();
+		Rectangle2D bounds = screen.getVisualBounds();
 		double width = bounds.getWidth();
-		double height = bounds.getHeight() - 500;
+		double height = bounds.getHeight() - 20;
 		Pane background = new Pane();
 		Scene scene = new Scene(background, width, height);
-		return scene;
+		return scene; 
 	}
 
 }
