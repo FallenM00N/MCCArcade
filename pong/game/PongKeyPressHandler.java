@@ -17,8 +17,8 @@ public class PongKeyPressHandler implements Runnable {
 
 	public PongKeyPressHandler() {
 		timeline = new Timeline(new KeyFrame(
-				Duration.millis(1),
-				ae -> timerTick()));
+				Duration.millis(1)
+				));
 
 		thread = new Thread(this);
 		thread.start();
@@ -85,40 +85,6 @@ public class PongKeyPressHandler implements Runnable {
 		timeline.play();
 	}
 
-	private void timerTick() {
-//		if(pressedKeys.contains("p1up") && !pressedKeys.contains("p1down")) {
-//			movePaddle1("up");
-//		}
-//		if(pressedKeys.contains("p1down") && !pressedKeys.contains("p1up")) {
-//			movePaddle1("down");
-//		}
-//		if(pressedKeys.contains("p2up") && !pressedKeys.contains("p2down")) {
-//			movePaddle2("up");
-//		}
-//		if(pressedKeys.contains("p2down") && !pressedKeys.contains("p2up")) {
-//			movePaddle2("down");
-//		}
-	}
-	
-	
-
-//	private void movePaddle1(String dir) {
-//		Player leftPlayer = PongEngine.leftPlayer;
-//		if(dir.equals("up") && !leftPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
-//			leftPlayer.move(-speed);
-//		}else if(dir.equals("down") && !leftPlayer.getPaddle().getBoundsInParent().intersects(PongEngine.getBottomWall().getBoundsInParent())) {
-//			leftPlayer.move(speed);
-//		}
-//	}
-//	
-//	private void movePaddle2(String dir) {
-//		Player rightPlayer = PongEngine.rightPlayer;
-//		if(dir.equals("up") && !rightPlayer.getPaddle().getBoundsInParent().intersects(ScoreBoard.getWall().getBoundsInParent())) {
-//			rightPlayer.move(-speed);
-//		}else if(dir.equals("down") && !rightPlayer.getPaddle().getBoundsInParent().intersects(PongEngine.getBottomWall().getBoundsInParent())) {
-//			rightPlayer.move(speed);
-//		}
-//	}
 
 	private void pauseGame() {
 		timeline.pause();

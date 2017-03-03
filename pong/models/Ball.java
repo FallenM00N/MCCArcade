@@ -129,54 +129,6 @@ public class Ball {
 		dX = -1;
 		playSound("1");
 
-		// double height = PongEngine.getRightPlayer().getPaddle().getHeight();
-		// double m;
-		// m = hitLocation / (height * 4);
-		// double curSlope = dY / dX;
-		// double slope = (curSlope * Math.pow(m, 2) - curSlope + (2 * m)) / (0
-		// - Math.pow(m, 2) + 1 + (2 * m * curSlope));
-		// slope = Math.atan(slope);
-		// if(slope > 0 - (2 * Math.PI / 3) && slope < 0) {
-		// slope = 0 - 2 * Math.PI / 3;
-		// }
-		// if(slope < 2 * Math.PI / 3 && slope > 0) {
-		// slope = 2 * Math.PI / 3;
-		// }
-		// dY = Math.sin(slope);
-		// dX = 0 - 0.5 + Math.cos(slope);
-
-		// if (hitLocation < height / 2 + (height / 10) && hitLocation > height
-		// / 2 - (height / 10)) {
-		// m = 0;
-		// }
-		// if(hitLocation < height / 2 + (2 * height / 10) && hitLocation >
-		// height / 2 + (height / 10)) {
-		// dX = -0.8;
-		// dY -= 0.2;
-		// }
-		// if(hitLocation > height / 2 - (2 * height / 10) && hitLocation <
-		// height / 2 + (2 * height / 10)) {
-		// dX = -0.8;
-		// dY += 0.2;
-		// }
-		// if(hitLocation < height / 2 + (3 * height / 10) && hitLocation >
-		// height / 2 + (2 * height / 10)) {
-		// dX = -0.6;
-		// dY -= 0.4;
-		// }
-		// if(hitLocation > height / 2 - (3 * height / 10) && hitLocation <
-		// height / 2 + (2 * height / 10)) {
-		// dX = -0.6;
-		// dY += 0.4;
-		// }
-		// if(hitLocation < height / 2 - (4 * height / 10)) {
-		// dX = -0.4;
-		// dY -= 0.6;
-		// }
-		// if(hitLocation > height / 2 + (4 * height / 10)) {
-		// dX = -0.4;
-		// dY += 0.6;
-		// }
 	}
 
 	private void getPaddleBounceLeft(double hitLocation) {
@@ -187,56 +139,7 @@ public class Ball {
 		}
 		dX = 1;
 		playSound("2");
-		// double height = PongEngine.getLeftPlayer().getPaddle().getHeight();
-		// double m;
-		// m = hitLocation * (height * 4);
-		// double curSlope = dY / dX;
-		// double slope = (curSlope * Math.pow(m, 2) - curSlope + (2 * m)) / (0
-		// - Math.pow(m, 2) + 1 + (2 * m * curSlope));
-		// slope = Math.atan(slope);
-		// if(slope > Math.PI / 3 && slope < Math.PI) {
-		// slope = Math.PI / 3;
-		// }
-		// if(slope < 0 - (Math.PI / 3) && slope > Math.PI) {
-		// slope = 0 - Math.PI / 3;
-		// }
-		// dY = Math.sin(slope);
-		// dX = 0.5 + Math.cos(slope);
-
-		// if (hitLocation < height / 2 + (height / 10) && hitLocation > height
-		// / 2 - (height / 10)) {
-		// dX = -1;
-		// dY = 0;
-		// }
-		// if(hitLocation < height / 2 + (2 * height / 10) && hitLocation >
-		// height / 2 + (height / 10)) {
-		// dX = 0.8;
-		// dY -= 0.2;
-		// }
-		// if(hitLocation > height / 2 - (2 * height / 10) && hitLocation <
-		// height / 2 + (2 * height / 10)) {
-		// dX = 0.8;
-		// dY += 0.2;
-		// }
-		// if(hitLocation < height / 2 + (3 * height / 10) && hitLocation >
-		// height / 2 + (2 * height / 10)) {
-		// dX = 0.6;
-		// dY -= 0.4;
-		// }
-		// if(hitLocation > height / 2 - (3 * height / 10) && hitLocation <
-		// height / 2 + (2 * height / 10)) {
-		// dX = 0.6;
-		// dY += 0.4;
-		// }
-		// if(hitLocation < height / 2 - (4 * height / 10)) {
-		// dX = 0.4;
-		// dY -= 0.6;
-		// }
-		// if(hitLocation > height / 2 + (4 * height / 10)) {
-		// dX = 0.4;
-		// dY += 0.6;
-		// }
-		//
+		
 	}
 
 	public void move(double speed) {
@@ -262,8 +165,6 @@ public class Ball {
 	
 	public static synchronized void playSound(String file) {
 		  new Thread(new Runnable() {
-		  // The wrapper thread is unnecessary, unless it blocks on the
-		  // Clip finishing; see comments.
 		    public void run() {
 		      try {
 		        Clip clip = AudioSystem.getClip();

@@ -4,8 +4,14 @@ import java.io.File;
 import java.util.Random;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,9 +21,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import models.JumperScore;
 
 
@@ -41,11 +49,12 @@ public class JumperEngine extends Jumper{
 	private static int yJumpMotion;
 	private static AudioClip song;
 	private static AudioClip sound;
-	//private static Rectangle wall;
 	private static ImageView pickle;
 	private static boolean didCollide = false;
 	public static Random rand = new Random();
 	public static int speed = 12;
+	public static Cloud[] clouds;
+	
 	public static void run(){
 		startGame();
 		showScene();
@@ -89,13 +98,9 @@ public class JumperEngine extends Jumper{
 			t.setFill(Color.WHITE);
 			t.setFont(Font.font(java.awt.Font.SANS_SERIF, 50));
 			root.getChildren().add(t);
-
-        
-//		wall = new Rectangle(100,75);
-//		wall.setTranslateX(600);
-//		wall.setTranslateY(325);
-//		wall.setFill(Color.FIREBRICK);
-//		root.getChildren().add(wall);
+			
+			clouds = new Cloud[]{new Cloud(100, 200), new Cloud(170, 60), new Cloud(220, 150), new Cloud(290, 210), new Cloud(370, 75), new Cloud(450, 200), new Cloud(600, 30), new Cloud(550, 120)};
+	        root.getChildren().addAll(clouds);
 			
 		image = new Image("file:jumper/models/pickle.png");
 		pickle = new ImageView();
@@ -106,6 +111,17 @@ public class JumperEngine extends Jumper{
 		pickle.setFitWidth(110);
 		root.getChildren().add(pickle);
 	}
+	
+	  static class Cloud extends Ellipse {
+
+	        public Cloud(double centerX, double centerY) {
+	            super(0, 0, 50, 25);
+	            this.setTranslateX(centerX);
+	            this.setTranslateY(centerY);
+	            this.setFill(Color.WHITESMOKE);
+	            this.setOpacity(0.5);
+	        }
+	    }
 	
 	public static void createJumper(){
 		image = new Image("file:jumper/models/llama.png");
@@ -118,8 +134,7 @@ public class JumperEngine extends Jumper{
 		root.getChildren().add(llama);
 	}
 	
-	public static void jump(){
-		//llama.setTranslateY(yJumpMotion); 
+	public static void jump(){ 
 		yJumpMotion = 360;//adjust jumpheight
 		if(isRunning){
 			llama.setTranslateY(llama.getTranslateY() - yJumpMotion);
@@ -130,7 +145,7 @@ public class JumperEngine extends Jumper{
 	public static void createKeyListener(){
 		gameScene.setOnKeyPressed(event -> {
 			
-			if (event.getCode().equals(KeyCode.ENTER) && isRunning) {
+			if (event.getCode().equals(KeyCode.SPACE) && isRunning) {
 				
 				if(!isJumping){
 					jump();
@@ -142,7 +157,7 @@ public class JumperEngine extends Jumper{
 				}
 			}
 			else if (event.getCode().equals(KeyCode.ESCAPE) && isRunning) {
-				//for pause later
+
 				pauseJumper();
 				j.pause();
 				
@@ -155,7 +170,7 @@ public class JumperEngine extends Jumper{
 	public static void createJumperContent(){
 		createBackground();
 		createJumper();
-//		detectCollision();
+
 	}
 	
 	public static void detectCollision(){
@@ -176,16 +191,20 @@ public class JumperEngine extends Jumper{
 		isRunning = true;
 		createJumperContent();
 		createKeyListener();
-		//timer.schedule(new UpdateHandler(llama, pickle), 32, 32);
 		timer = new AnimationTimer() {
 			
 			@Override
 			public void handle(long now) {
 			
 				
-				// TODO Auto-generated method stub
+				for(int i = 0; i < clouds.length; i++){
+					clouds[i].setTranslateX(clouds[i].getTranslateX() - 5);
+					if(clouds[i].getTranslateX() <= 0){
+						clouds[i].setTranslateX(700);
+					}
+				}
+				
 				detectCollision();
-				//			System.out.println(llama.getTranslateY()); 
 				if(llama.getTranslateY()<0){ //if llama is in the air
 					isJumping = true;
 					llama.setTranslateY(llama.getTranslateY() + 11);//bring back llama to ground
@@ -204,8 +223,7 @@ public class JumperEngine extends Jumper{
 						t.setText(score);
 						
 						pickle.setTranslateX(700);
-						//speed = rand.nextInt(12) + 9;
-						
+					//	speed = rand.nextInt(13) + 12;
 					}
 				}
 			}
@@ -227,46 +245,6 @@ public class JumperEngine extends Jumper{
 		run();
 	}
 	
-//	private static class UpdateHandler extends TimerTask{
-//
-//		private ImageView llama;
-////		private Rectangle wall;
-//		private ImageView pickle;
-//		
-//
-//		public UpdateHandler(ImageView llama, ImageView pickle){
-//			this.llama = llama;
-////			this.wall = wall;
-//			this.pickle = pickle;
-//		}
-//		
-//		
-//		
-//		@Override
-//		public void run() {
-//			detectCollision();
-//			//			System.out.println(llama.getTranslateY()); 
-//			if(llama.getTranslateY()<0){ //if llama is in the air
-//				isJumping = true;
-//				llama.setTranslateY(llama.getTranslateY() + 20);//bring back llama to ground
-//			} 
-//			else{
-//				isJumping = false;
-//			}
-//			//move rectangles to the left put code in here.
-//			if(isRunning){
-//				pickle.setTranslateX(pickle.getTranslateX() - 20);	
-//				if(pickle.getTranslateX() <= 0){
-//					pickle.setTranslateX(700);
-//				}
-//			}
-//			
-//			
-//			
-//		}
-//		
-//	}
-	
 	public static void pauseJumper(){
 		timeline.pause();
 		timer.stop();
@@ -277,7 +255,6 @@ public class JumperEngine extends Jumper{
 		timeline.play();
 		timer.start();
 	}
-	
-	
+		
 	
 }
