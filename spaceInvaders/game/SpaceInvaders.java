@@ -121,6 +121,8 @@ public class SpaceInvaders extends Game {
 	private static void resumeGame(Text t) {
 		mh.resumeTimer();
 		kp.resumeTimer();
+		mh.chance = 3;
+		mh.resetSound();
 		entities.getChildren().remove(t);
 		int x = 50;
 		int y = 50;

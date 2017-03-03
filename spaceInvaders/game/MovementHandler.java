@@ -9,6 +9,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 import models.Barrier;
 import models.Bullet;
@@ -27,7 +28,11 @@ public class MovementHandler implements Runnable {
 	private Thread thread;
 	private Timeline timeline;
 	private Random rand = new Random();
-	private int chance = 3;
+	public int chance = 3;
+	private String musicFile = "spaceInvaders/audio/UFOMove.mp3";
+
+	private Media sound = new Media(new File(musicFile).toURI().toString());
+	private MediaPlayer mediaPlayer = new MediaPlayer(sound);
 	
 	public MovementHandler() {
 		timeline = new Timeline(new KeyFrame(
@@ -68,6 +73,13 @@ public class MovementHandler implements Runnable {
 			ufo.setX(ufo.getX() - .05);
 			if (ufo.getX() + ufo.getWidth() <= 0) {
 				SpaceInvaders.entities.getChildren().remove(ufo);
+				ufo = null;
+				mediaPlayer.stop();
+			}
+			
+			if (mediaPlayer.getStatus().equals(Status.READY)) {
+				mediaPlayer.setCycleCount(Animation.INDEFINITE);
+				mediaPlayer.play();
 			}
 		}
 	}
@@ -131,7 +143,7 @@ public class MovementHandler implements Runnable {
 					e.get(j).setY(e.get(j).getY() + 20);
 				}
 			}
-			if (e.get(i).getY() >= SpaceInvaders.player.getY()) {
+			if (e.get(i).getY() >= SpaceInvaders.player.getY() - 20) {
 				SpaceInvaders.winGame("Game Over - You Lose");
 			}
 		}
@@ -190,8 +202,10 @@ public class MovementHandler implements Runnable {
 				
 				SpaceInvaders.entities.getChildren().remove(b.get(i).getBullet());
 				SpaceInvaders.bullets.remove(b.get(i));
+				SpaceInvaders.ufo.playDeathAnimation();
 				SpaceInvaders.entities.getChildren().remove(SpaceInvaders.ufo.getImg());
 				SpaceInvaders.ufo = null;
+				mediaPlayer.stop();
 			}
 			
 			if (i < b.size() &&
@@ -244,20 +258,7 @@ public class MovementHandler implements Runnable {
 		SpaceInvaders.scorel.setText("SCORE: " + SpaceInvaders.scoreString);
 	}
 	
-	private void killEnemy(Bullet b, Enemy e) {
-		addPoints();
-		
-		e.playDeathAnimation();
-		SpaceInvaders.entities.getChildren().remove(b.getBullet());
-		SpaceInvaders.bullets.remove(b);
-		if (SpaceInvaders.enemies.size() <= 1) {
-			SpaceInvaders.continueGame(SpaceInvaders.player.getLives());
-		}
-		else if (SpaceInvaders.enemies.size()% 26 == 0) {
-			SpaceInvaders.player.setLives(SpaceInvaders.player.getLives() + 1);
-			SpaceInvaders.livesl.setText("LIVES: " + SpaceInvaders.player.getLives());
-		}
-		
+	private void summonUFO() {
 		if (SpaceInvaders.enemies.size() == 15 || SpaceInvaders.enemies.size() == 25 ||
 				SpaceInvaders.enemies.size() == 35) {
 			int x = 0;
@@ -273,6 +274,23 @@ public class MovementHandler implements Runnable {
 				chance--;
 			}
 		}
+	}
+	
+	private void killEnemy(Bullet b, Enemy e) {
+		addPoints();
+		
+		e.playDeathAnimation();
+		SpaceInvaders.entities.getChildren().remove(b.getBullet());
+		SpaceInvaders.bullets.remove(b);
+		if (SpaceInvaders.enemies.size() <= 1) {
+			SpaceInvaders.continueGame(SpaceInvaders.player.getLives());
+		}
+		else if (SpaceInvaders.enemies.size()% 26 == 0) {
+			SpaceInvaders.player.setLives(SpaceInvaders.player.getLives() + 1);
+			SpaceInvaders.livesl.setText("LIVES: " + SpaceInvaders.player.getLives());
+		}
+		
+		summonUFO();
 		
 		String musicFile = "spaceInvaders/audio/Boom.mp3";
 
@@ -303,5 +321,9 @@ public class MovementHandler implements Runnable {
 	
 	public void resumeTimer() {
 		timeline.play();
+	}
+	
+	public void resetSound() {
+		mediaPlayer = new MediaPlayer(sound);
 	}
 }
