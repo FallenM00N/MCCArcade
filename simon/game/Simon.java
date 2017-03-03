@@ -34,6 +34,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -139,7 +141,7 @@ public class Simon extends Game {
 	private void sortHighScores() {
 		for (int i = 0; i < users.length; i++) {
 			for (int y = 0; y < users[i].getScore().length(); y++) {
-				if (y < 10 && users[i].getScore().charAt(y) < user.getScore().charAt(y)) {
+				if (y < 5 && users[i].getScore().charAt(y) < user.getScore().charAt(y)) {
 					if (i != users.length - 1) {
 						for (int x = users.length - 1; x > i; x--) {
 							users[x] = users[x - 1];
@@ -154,7 +156,7 @@ public class Simon extends Game {
 						break;
 					}
 				}
-				else if (users[i].getScore().charAt(y) > user.getScore().charAt(y)) {
+				else if (y < 5 && users[i].getScore().charAt(y) > user.getScore().charAt(y)) {
 					break;
 				}
 			}
@@ -167,8 +169,7 @@ public class Simon extends Game {
 		VBox vbox2 = new VBox();
 
 		String f = Integer.toString(score);
-		scoreString = scoreString.substring(0,
-				scoreString.length() - f.length());
+		scoreString = scoreString.substring(0, scoreString.length() - f.length());
 		scoreString += f;
 
 		Text t = new Text(message);
@@ -207,7 +208,7 @@ public class Simon extends Game {
 				} else {
 					user.setInitials(tf.getText());
 				}
-				user.setScore(Integer.toString(score));
+				user.setScore(scoreString);
 				loadHighScores();
 				sortHighScores();
 				saveHighScores();
@@ -361,6 +362,11 @@ public class Simon extends Game {
 					checkCorrect(CommandType.RED);
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(top)));
 					timeline.play();
+					
+					String musicFile = "simon/audio/SimonRed.mp3";
+					Media sound = new Media(new File(musicFile).toURI().toString());
+					MediaPlayer mediaPlayer = new MediaPlayer(sound);
+					mediaPlayer.play();
 				}
 			}
 		});
@@ -373,6 +379,11 @@ public class Simon extends Game {
 					checkCorrect(CommandType.BLUE);
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(right)));
 					timeline.play();
+					
+					String musicFile = "simon/audio/SimonBlue.mp3";
+					Media sound = new Media(new File(musicFile).toURI().toString());
+					MediaPlayer mediaPlayer = new MediaPlayer(sound);
+					mediaPlayer.play();
 				}
 			}
 		});
@@ -385,6 +396,11 @@ public class Simon extends Game {
 					checkCorrect(CommandType.GREEN);
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(bottom)));
 					timeline.play();
+					
+					String musicFile = "simon/audio/SimonGreen.mp3";
+					Media sound = new Media(new File(musicFile).toURI().toString());
+					MediaPlayer mediaPlayer = new MediaPlayer(sound);
+					mediaPlayer.play();
 				}
 			}
 		});
@@ -397,6 +413,11 @@ public class Simon extends Game {
 					checkCorrect(CommandType.YELLOW);
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(left)));
 					timeline.play();
+					
+					String musicFile = "simon/audio/SimonYellow.mp3";
+					Media sound = new Media(new File(musicFile).toURI().toString());
+					MediaPlayer mediaPlayer = new MediaPlayer(sound);
+					mediaPlayer.play();
 				}
 			}
 		});
@@ -542,27 +563,50 @@ public class Simon extends Game {
 	}
 
 	private void selectNextCommand() {
+		String musicFile = "";
 		if (commands.get(currentIndex).equals(CommandType.RED)) {
+			musicFile = "simon/audio/SimonRed.mp3";
+
+			Media sound = new Media(new File(musicFile).toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.play();
 			top.setFill(Paint.valueOf("rgba(255,0,60,1.0)"));
 			right.setFill(Paint.valueOf("rgba(0,100,255,.3)"));
 			bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
 			left.setFill(Paint.valueOf("rgba(220,220,0,.3)"));
 		} else if (commands.get(currentIndex).equals(CommandType.BLUE)) {
+			musicFile = "simon/audio/SimonBlue.mp3";
+
+			
 			top.setFill(Paint.valueOf("rgba(255,0,60,.3)"));
 			right.setFill(Paint.valueOf("rgba(0,100,255,1.0)"));
 			bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
 			left.setFill(Paint.valueOf("rgba(220,220,0,.3)"));
 		} else if (commands.get(currentIndex).equals(CommandType.GREEN)) {
+			musicFile = "simon/audio/SimonGreen.mp3";
+
+			Media sound = new Media(new File(musicFile).toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.play();
 			top.setFill(Paint.valueOf("rgba(255,0,60,.3)"));
 			right.setFill(Paint.valueOf("rgba(0,100,255,.3)"));
 			bottom.setFill(Paint.valueOf("rgba(0,200,40,1.0)"));
 			left.setFill(Paint.valueOf("rgba(220,220,0,.3)"));
 		} else {
+			musicFile = "simon/audio/SimonYellow.mp3";
+
+			Media sound = new Media(new File(musicFile).toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.play();
 			top.setFill(Paint.valueOf("rgba(255,0,60,.3)"));
 			right.setFill(Paint.valueOf("rgba(0,100,255,.3)"));
 			bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
 			left.setFill(Paint.valueOf("rgba(220,220,0,1.0)"));
 		}
+		
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.play();
 
 		if (currentIndex == commands.size() - 1) {
 			playerTurn = !playerTurn;

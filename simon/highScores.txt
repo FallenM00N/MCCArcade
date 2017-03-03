@@ -1,20 +1,20 @@
-CMM -> 7
+AAA -> 00017
 
-CAT -> 3
+NRD -> 00013
 
-BOB -> 1
+AAA -> 00011
 
-BOB -> 1
+HOG -> 00010
 
-BOB -> 1
+RUG -> 00008
 
-BOB -> 1
+AAA -> 00007
 
-BOB -> 1
+CMM -> 00004
 
-BOB -> 1
+CMM -> 00003
 
-BOB -> 1
+CAT -> 00002
 
-BOB -> 1
+TST -> 00002
 

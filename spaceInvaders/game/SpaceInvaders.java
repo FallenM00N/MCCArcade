@@ -119,7 +119,7 @@ public class SpaceInvaders extends Game {
 	
 	private static void resumeGame(Text t) {
 		mh.resumeTimer();
-		//kp.resumeTimer();
+		kp.resumeTimer();
 		if (mh.chance == 0) {
 			mh.chance = 6;
 		}
@@ -157,7 +157,7 @@ public class SpaceInvaders extends Game {
 	
 	public static void continueGame(int playerLives) {
 		mh.pauseTimer();
-		//kp.pauseTimer();
+		kp.pauseTimer();
 		if (playerLives <= 0) {
 			player.setLives(1);
 		}
@@ -385,6 +385,12 @@ public class SpaceInvaders extends Game {
 		menu.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				kp.stopTimer();
+				mh.stopTimer();
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+				}
 				ArcadeView.setScene(MainMenu.getMenuScene());
 			}
 		});
@@ -452,6 +458,7 @@ public class SpaceInvaders extends Game {
 		
 		bp.setCenter(vbox);
 		bp.setTop(t);
+		BorderPane.setAlignment(t, Pos.CENTER);
 		
 		Scene s = new Scene(bp , 200, 200);
 		return s;
@@ -661,6 +668,14 @@ public class SpaceInvaders extends Game {
 
 	@Override
 	public void mainMenu() {
+		if (mh != null && kp != null) {
+		mh.stopTimer();
+		kp.stopTimer();
+		}
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+		}
 		showScene(MainMenu.getMenuScene());
 	}
 
