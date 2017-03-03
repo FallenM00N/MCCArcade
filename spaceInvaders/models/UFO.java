@@ -1,11 +1,15 @@
 package models;
 
+import java.io.File;
+
 import game.SpaceInvaders;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 public class UFO {
@@ -95,6 +99,12 @@ public class UFO {
 		Timeline timeline = new Timeline(new KeyFrame(
 		        Duration.millis(100),
 		        ae -> timerTick()));
+		String musicFile = "spaceInvaders/audio/Boom.mp3";
+
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.play();
+		
 		Image i = new Image("file:spaceInvaders/images/Explode.png");
 		setImgSrc(i);
 		ImageView iv = new ImageView(i);

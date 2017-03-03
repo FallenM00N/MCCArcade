@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import application.ArcadeView;
 import application.MainMenu;
 import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
@@ -35,6 +36,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -94,7 +96,34 @@ public class SpaceInvaders extends Game {
 		}
 	}
 	
-	public static void continueGame(int playerLives) {
+	private static void playGame() {
+		kp.resumeTimer();
+		mh.resumeTimer();
+		player.getImg().setOpacity(1.0);
+	}
+	
+	public static void liveLostAnimation(int lives) {
+		if (lives >= 1) {
+			kp.pauseTimer();
+			mh.pauseTimer();
+			FadeTransition ft = new FadeTransition(Duration.millis(500), player.getImg());
+			ft.setFromValue(1.0);
+			ft.setToValue(0.0);
+			ft.setCycleCount(3);
+			ft.play();
+			Timeline tline = new Timeline(new KeyFrame(
+			        Duration.millis(1500),
+			        ae -> playGame()));
+			tline.play();
+		}
+	}
+	
+	private static void resumeGame(Text t) {
+		mh.resumeTimer();
+		kp.resumeTimer();
+		mh.chance = 3;
+		mh.resetSound();
+		entities.getChildren().remove(t);
 		int x = 50;
 		int y = 50;
 		for (int i = 1; i < 51; i++) {
@@ -114,8 +143,6 @@ public class SpaceInvaders extends Game {
 			else{
 				img = new Image("file:spaceInvaders/images/Enemy.png");
 			}
-			
-			mh.timeLimit += 100;
 			Enemy e = new Enemy(x, y, img);
 			enemies.add(e);
 			entities.getChildren().add(e.getImg());
@@ -125,12 +152,32 @@ public class SpaceInvaders extends Game {
 				x = 50;
 			}
 		}
+	}
+	
+	public static void continueGame(int playerLives) {
+		mh.pauseTimer();
+		kp.pauseTimer();
 		if (playerLives <= 0) {
 			player.setLives(1);
 		}
 		else {
 			player.setLives(playerLives);
 		}
+		mh.timeLimit += 80;
+		Text t = new Text("Starting Next Phase");
+		t.setFont(new Font("Arial", 40));
+		t.setFill(Paint.valueOf("#06F"));
+		entities.getChildren().add(t);
+		t.setLayoutX(20);
+		t.setLayoutY(225);
+		FadeTransition ft = new FadeTransition(Duration.millis(3000), t);
+		ft.setFromValue(1.0);
+		ft.setToValue(0.3);
+		ft.play();
+		Timeline tline = new Timeline(new KeyFrame(
+		        Duration.millis(3000),
+		        ae -> resumeGame(t)));
+		tline.play();
 	}
 	
 	private static void saveHighScores() {
