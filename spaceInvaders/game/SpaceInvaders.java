@@ -88,7 +88,6 @@ public class SpaceInvaders extends Game {
 	private static User user = new User();
 	
 	private void timerTick() {
-		System.out.println("Bullets: " + bullets.size());
 		if (player.getLives() <= 0) {
 			player = new Character(0,0);
 			gameOver();
