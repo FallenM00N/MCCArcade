@@ -38,6 +38,7 @@ public class JumperEngine extends Jumper{
 	private static Jumper j = new Jumper();
 	private static JumperScore js = new JumperScore();
 	private static Text t = new Text();
+	private static Text m = new Text();
 	
 	private static int yJumpMotion;
 	private static AudioClip song;
@@ -47,6 +48,7 @@ public class JumperEngine extends Jumper{
 	public static Random rand = new Random();
 	public static int speed = 12;
 	public static Cloud[] clouds;
+	public static int pickleSpawn;
 	
 	public static void run(){
 		startGame();
@@ -86,10 +88,10 @@ public class JumperEngine extends Jumper{
 		song = new AudioClip(new File(musicFile).toURI().toString());		
 			song.play();
 			
-			t = new Text(340,70,"0");
+			t = new Text(310,90,"0");
 
 			t.setFill(Color.WHITE);
-			t.setFont(Font.font(java.awt.Font.SANS_SERIF, 50));
+			t.setFont(Font.font(java.awt.Font.SANS_SERIF, 90));
 			root.getChildren().add(t);
 			
 			clouds = new Cloud[]{new Cloud(100, 200), new Cloud(170, 60), new Cloud(220, 150), new Cloud(290, 210), new Cloud(370, 75), new Cloud(450, 200), new Cloud(600, 30), new Cloud(550, 120)};
@@ -128,9 +130,9 @@ public class JumperEngine extends Jumper{
 	}
 	
 	public static void jump(){ 
-		yJumpMotion = 360;//adjust jumpheight
+		yJumpMotion = 315;//adjust jumpheight
 		if(isRunning){
-			llama.setTranslateY(llama.getTranslateY() - yJumpMotion);
+			llama.setTranslateY((llama.getTranslateY() - yJumpMotion) - 10);
 			
 		}
 	}
@@ -169,9 +171,11 @@ public class JumperEngine extends Jumper{
 	public static void detectCollision(){
 		if(pickle.getBoundsInParent().intersects(llama.getBoundsInParent())){
 			System.out.println("collision");
-			String loseSound = "jumper\\models\\loseSound.mp3";
-			sound = new AudioClip(new File(loseSound).toURI().toString());		
-			//sound.play();
+//			String loseSound = "jumper\\models\\loseSound.mp3";
+//			sound = new AudioClip(new File(loseSound).toURI().toString());		
+//			//sound.play();
+
+			llama.setImage(image);
 			j.gameOver();
 				
 		}
@@ -189,11 +193,12 @@ public class JumperEngine extends Jumper{
 			@Override
 			public void handle(long now) {
 			
+				createKeyListener();
 				
 				for(int i = 0; i < clouds.length; i++){
 					clouds[i].setTranslateX(clouds[i].getTranslateX() - 5);
-					if(clouds[i].getTranslateX() <= 0){
-						clouds[i].setTranslateX(700);
+					if(clouds[i].getTranslateX() == -50){
+						clouds[i].setTranslateX(750);
 					}
 				}
 				
@@ -211,12 +216,47 @@ public class JumperEngine extends Jumper{
 					if(pickle.getTranslateX() <= 0){
 						js.setScore(js.getScore() + 1);
 						t.setFill(Color.WHITE);
-						t.setFont(Font.font(java.awt.Font.SANS_SERIF, 50));
+						t.setFont(Font.font(java.awt.Font.SANS_SERIF, 90));
 						String score = Integer.toString(js.getScore());
 						t.setText(score);
 						
-						pickle.setTranslateX(700);
-					//	speed = rand.nextInt(13) + 12;
+						pickleSpawn = rand.nextInt(700) + 600;
+						pickle.setTranslateX(pickleSpawn);
+
+						if(js.getScore() >= 10){
+							speed = 13;
+							t.setFill(Color.RED);
+
+						}
+						if(js.getScore() >= 30){
+							speed = 14;
+							t.setFill(Color.CORAL);
+						}
+						if(js.getScore() >= 40){
+							speed = 15;
+							t.setFill(Color.YELLOW);
+						}
+						if(js.getScore() >= 50){
+							speed = 16;
+							t.setFill(Color.LIMEGREEN);
+						}
+						if(js.getScore() >= 60){
+							speed = 17;
+							t.setFill(Color.MEDIUMBLUE);
+						}
+						if(js.getScore() >= 70){
+							speed = 18;
+							t.setFill(Color.DARKVIOLET);
+						}
+						if(js.getScore() >= 80){
+							speed = 19;
+							t.setFill(Color.DARKTURQUOISE);
+						}
+						if(js.getScore() >= 100){
+							speed = 20;
+							t.setFill(Color.CRIMSON);
+							
+						}
 					}
 				}
 			}
