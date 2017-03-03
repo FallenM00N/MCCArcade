@@ -28,7 +28,7 @@ public class MovementHandler implements Runnable {
 	private Thread thread;
 	private Timeline timeline;
 	private Random rand = new Random();
-	public int chance = 3;
+	public int chance = 6;
 	private String musicFile = "spaceInvaders/audio/UFOMove.mp3";
 
 	private Media sound = new Media(new File(musicFile).toURI().toString());
@@ -70,14 +70,13 @@ public class MovementHandler implements Runnable {
 	private void moveUfo() {
 		UFO ufo = SpaceInvaders.ufo;
 		if (SpaceInvaders.ufo != null) {
-			ufo.setX(ufo.getX() - .05);
+			ufo.setX(ufo.getX() - .07);
 			if (ufo.getX() + ufo.getWidth() <= 0) {
 				SpaceInvaders.entities.getChildren().remove(ufo);
 				ufo = null;
 				mediaPlayer.stop();
 			}
-			
-			if (mediaPlayer.getStatus().equals(Status.READY)) {
+			else if (mediaPlayer.getStatus().equals(Status.READY)) {
 				mediaPlayer.setCycleCount(Animation.INDEFINITE);
 				mediaPlayer.play();
 			}
@@ -216,6 +215,12 @@ public class MovementHandler implements Runnable {
 			}
 			
 			if (i < b.size() && b.get(i).getY() < -410) {
+				SpaceInvaders.entities.getChildren().remove(b.get(i).getBullet());
+				b.remove(i);
+			}
+			
+			if (i < b.size() && b.get(i).getY() > SpaceInvaders.gameScene.getHeight() - 160 &&
+					!b.get(i).isMovingUp()) {
 				SpaceInvaders.entities.getChildren().remove(b.get(i).getBullet());
 				b.remove(i);
 			}
