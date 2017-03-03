@@ -350,7 +350,7 @@ public class Simon extends Game {
 		
 		loadHighScores();
 		Label l = new Label("High Score: " + users[0].getInitials() + " - " + users[0].getScore());
-		l.setFont(new Font("Arial", 13));
+		l.setFont(new Font("Arial", 12));
 
 		top = new Rectangle(50, 50, Paint.valueOf("rgba(255,0,60,.3)"));
 
@@ -456,7 +456,7 @@ public class Simon extends Game {
 		BorderPane.setAlignment(vbox, Pos.CENTER);
 		BorderPane.setAlignment(menu, Pos.CENTER);
 
-		gameScene = new Scene(bp, 300, 250);
+		gameScene = new Scene(bp, 300, 300);
 	}
 
 	private void createInfoScene() {
