@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.Neublasters">
+   <center>
+      <VBox alignment="TOP_CENTER" prefHeight="330.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="playButton" mnemonicParsing="false" onAction="#start" prefHeight="50.0" prefWidth="160.0" text="New Game">
+               <VBox.margin>
+                  <Insets bottom="30.0" top="30.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="infoButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#infoScreen" prefHeight="50.0" prefWidth="160.0" text="Help">
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="menuButton" mnemonicParsing="false" onAction="#mainMenu" prefHeight="50.0" prefWidth="160.0" text="Main Menu">
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="quitButton" mnemonicParsing="false" onAction="#exit" prefHeight="50.0" prefWidth="160.0" text="Quit">
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </center>
+   <top>
+      <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="531.0" text="NEUBLASTERS" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
+         <font>
+            <Font name="BlackHole BB" size="70.0" />
+         </font>
+      </Label>
+   </top>
+</BorderPane>

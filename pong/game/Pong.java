@@ -13,13 +13,12 @@ import models.Game;
 
 public class Pong extends Game{
 	
-	public static Scene titleScene;
-	public static Scene playerSelection;
-	public static Scene infoScene;
-	public static Scene overScene;
-	public static Scene pauseScene;
-	public static Scene player1Scene;
-	public static Scene player2Scene;
+	private static Scene titleScene;
+	private static Scene playerSelection;
+	private static Scene infoScene;
+	private static Scene pauseScene;
+	private static Scene player1Scene;
+	private static Scene player2Scene;
 	private static int players;
 	
 	@Override
@@ -45,6 +44,7 @@ public class Pong extends Game{
 	@Override
 	public void mainMenu() {
 		showScene(MainMenu.getMenuScene(), "MCC Arcade");
+		System.gc();
 	}
 
 	@FXML
@@ -73,7 +73,7 @@ public class Pong extends Game{
 	
 	private Scene createPlayerSelection() {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("PlayerSelection.fxml"));
+			BorderPane root = FXMLLoader.load(getClass().getResource("PongPlayerSelection.fxml"));
 			Scene scene = new Scene(root);
 			return scene;
 		} catch (IOException e) {
@@ -85,7 +85,7 @@ public class Pong extends Game{
 	@Override
 	public Scene createTitleScene() {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("TitleScreen.fxml"));
+			BorderPane root = FXMLLoader.load(getClass().getResource("PongTitleScreen.fxml"));
 			Scene scene = new Scene(root);
 			return scene;
 		} catch (IOException e) {
@@ -148,7 +148,7 @@ public class Pong extends Game{
 	
 	public Scene createInfoScene() {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("Help.fxml"));
+			BorderPane root = FXMLLoader.load(getClass().getResource("PongHelp.fxml"));
 			Scene scene = new Scene(root);
 			return scene;
 		} catch (IOException e) {
@@ -159,7 +159,7 @@ public class Pong extends Game{
 	
 	public Scene createPauseScene() {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("PauseScreen.fxml"));
+			BorderPane root = FXMLLoader.load(getClass().getResource("PongPauseScreen.fxml"));
 			Scene scene = new Scene(root);
 			return scene;
 		} catch (IOException e) {

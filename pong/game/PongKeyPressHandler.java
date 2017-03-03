@@ -16,9 +16,7 @@ public class PongKeyPressHandler implements Runnable {
 	static ArrayList<String> pressedKeys = new ArrayList<>();
 
 	public PongKeyPressHandler() {
-		timeline = new Timeline(new KeyFrame(
-				Duration.millis(1)
-				));
+		timeline = new Timeline(new KeyFrame(Duration.millis(1)));
 
 		thread = new Thread(this);
 		thread.start();
