@@ -118,7 +118,7 @@ public class SpaceInvaders extends Game {
 	}
 	
 	private static void resumeGame(Text t) {
-		//mh.resumeTimer();
+		mh.resumeTimer();
 		//kp.resumeTimer();
 		if (mh.chance == 0) {
 			mh.chance = 6;
@@ -156,7 +156,7 @@ public class SpaceInvaders extends Game {
 	}
 	
 	public static void continueGame(int playerLives) {
-		//mh.pauseTimer();
+		mh.pauseTimer();
 		//kp.pauseTimer();
 		if (playerLives <= 0) {
 			player.setLives(1);
@@ -187,7 +187,7 @@ public class SpaceInvaders extends Game {
 		t.setLayoutY(225);
 		FadeTransition ft = new FadeTransition(Duration.millis(3000), t);
 		ft.setFromValue(1.0);
-		ft.setToValue(0.3);
+		ft.setToValue(0.0);
 		ft.play();
 		Timeline tline = new Timeline(new KeyFrame(
 		        Duration.millis(3000),
