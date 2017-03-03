@@ -38,7 +38,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
@@ -94,6 +93,28 @@ public class SpaceInvaders extends Game {
 			player = new Character(0,0);
 			gameOver();
 			timeline.stop();
+		}
+	}
+	
+	private static void playGame() {
+		kp.resumeTimer();
+		mh.resumeTimer();
+		player.getImg().setOpacity(1.0);
+	}
+	
+	public static void liveLostAnimation(int lives) {
+		if (lives >= 1) {
+			kp.pauseTimer();
+			mh.pauseTimer();
+			FadeTransition ft = new FadeTransition(Duration.millis(500), player.getImg());
+			ft.setFromValue(1.0);
+			ft.setToValue(0.0);
+			ft.setCycleCount(3);
+			ft.play();
+			Timeline tline = new Timeline(new KeyFrame(
+			        Duration.millis(1500),
+			        ae -> playGame()));
+			tline.play();
 		}
 	}
 	

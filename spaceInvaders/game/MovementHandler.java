@@ -282,6 +282,7 @@ public class MovementHandler implements Runnable {
 	}
 	
 	private void loseLife(int livesLost) {
+		SpaceInvaders.liveLostAnimation(SpaceInvaders.player.getLives());
 		SpaceInvaders.player.loseLife(1);
 		SpaceInvaders.livesl.setText("LIVES: " + SpaceInvaders.player.getLives());
 		
