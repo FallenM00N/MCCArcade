@@ -70,7 +70,7 @@ public class MovementHandler implements Runnable {
 	private void moveUfo() {
 		UFO ufo = SpaceInvaders.ufo;
 		if (SpaceInvaders.ufo != null) {
-			ufo.setX(ufo.getX() - .07);
+			ufo.setX(ufo.getX() - .06);
 			if (ufo.getX() + ufo.getWidth() <= 0) {
 				SpaceInvaders.entities.getChildren().remove(ufo);
 				ufo = null;
@@ -193,18 +193,7 @@ public class MovementHandler implements Runnable {
 			
 			if (i < b.size() && SpaceInvaders.ufo != null &&
 					b.get(i).getBullet().getBoundsInParent().intersects(SpaceInvaders.ufo.getImg().getBoundsInParent())) {
-				SpaceInvaders.score += 5000;
-				String f = Integer.toString(SpaceInvaders.score);
-				SpaceInvaders.scoreString = SpaceInvaders.scoreString.substring(0, SpaceInvaders.scoreString.length() - f.length());
-				SpaceInvaders.scoreString += f;
-				SpaceInvaders.scorel.setText("SCORE: " + SpaceInvaders.scoreString);
-				
-				SpaceInvaders.entities.getChildren().remove(b.get(i).getBullet());
-				SpaceInvaders.bullets.remove(b.get(i));
-				SpaceInvaders.ufo.playDeathAnimation();
-				SpaceInvaders.entities.getChildren().remove(SpaceInvaders.ufo.getImg());
-				SpaceInvaders.ufo = null;
-				mediaPlayer.stop();
+				killUFO(b.get(i));
 			}
 			
 			if (i < b.size() &&
@@ -227,6 +216,37 @@ public class MovementHandler implements Runnable {
 		}
 	}
 	
+	private void killUFO(Bullet b) {
+		int score = 0;
+		
+		switch (difficulty) {
+		case "easy":
+			score = 5000;
+			break;
+		case "medium":
+			score = 10000;
+			break;
+		case "hard":
+			score = 15000;
+			break;
+		default:
+			break;
+		}
+		
+		SpaceInvaders.score += score;
+		String f = Integer.toString(SpaceInvaders.score);
+		SpaceInvaders.scoreString = SpaceInvaders.scoreString.substring(0, SpaceInvaders.scoreString.length() - f.length());
+		SpaceInvaders.scoreString += f;
+		SpaceInvaders.scorel.setText("SCORE: " + SpaceInvaders.scoreString);
+		
+		SpaceInvaders.entities.getChildren().remove(b.getBullet());
+		SpaceInvaders.bullets.remove(b);
+		SpaceInvaders.ufo.playDeathAnimation();
+		SpaceInvaders.entities.getChildren().remove(SpaceInvaders.ufo.getImg());
+		SpaceInvaders.ufo = null;
+		mediaPlayer.stop();
+	}
+	
 	private void collideBullets(Bullet b1, Bullet b2) {
 		SpaceInvaders.entities.getChildren().remove(b1.getBullet());
 		SpaceInvaders.entities.getChildren().remove(b2.getBullet());
@@ -247,10 +267,10 @@ public class MovementHandler implements Runnable {
 			points = 100 + (551 - (timeLimit));
 			break;
 		case "medium":
-			points = 150 + (551 - (timeLimit));
+			points = 200 + (551 - (timeLimit));
 			break;
 		case "hard":
-			points = 200 + (551 - (timeLimit));
+			points = 300 + (551 - (timeLimit));
 			break;
 		default:
 			points = 100 + (551 - (timeLimit));

@@ -172,7 +172,7 @@ public class SpaceInvaders extends Game {
 			mh.timeLimit += 80;
 			break;
 		case "hard":
-			mh.timeLimit += 120;
+			mh.timeLimit += 160;
 			break;
 		default:
 			mh.timeLimit += 80;
