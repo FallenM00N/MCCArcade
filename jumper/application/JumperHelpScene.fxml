@@ -28,22 +28,32 @@
             <Font size="33.0" />
          </font>
       </Label>
-      <ImageView fitHeight="62.0" fitWidth="58.0" layoutX="271.0" layoutY="247.0">
+      <ImageView fitHeight="43.0" fitWidth="51.0" layoutX="271.0" layoutY="277.0">
          <image>
             <Image url="@../models/escapeKey.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="31.0" fitWidth="200.0" layoutX="200.0" layoutY="130.0">
+      <ImageView fitHeight="31.0" fitWidth="200.0" layoutX="200.0" layoutY="202.0">
          <image>
             <Image url="@../models/spaceKey.png" />
          </image>
       </ImageView>
-      <Label layoutX="146.0" layoutY="214.0" prefHeight="21.0" prefWidth="346.0" text="Press the Escape key to Pause/Resume the game">
+      <Label layoutX="146.0" layoutY="247.0" prefHeight="21.0" prefWidth="346.0" text="Press the Escape key to Pause/Resume the game">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="146.0" layoutY="95.0" prefHeight="21.0" prefWidth="346.0" text="Press the Spacebar to jump over the obstacles">
+      <Label layoutX="146.0" layoutY="167.0" prefHeight="21.0" prefWidth="346.0" text="Press the Spacebar to jump over the giant pickles">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="119.0" layoutY="72.0" prefHeight="21.0" prefWidth="356.0" text="Dedicated to Professor Krebs and his love for llamas ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="193.0" layoutY="93.0" prefHeight="21.0" prefWidth="259.0" text="...and his loathe for pickles.">
          <font>
             <Font size="15.0" />
          </font>

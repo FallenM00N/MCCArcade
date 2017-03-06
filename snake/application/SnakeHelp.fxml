@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Snake">
    <children>
       <Label layoutX="220.0" layoutY="14.0" text="Directions">
@@ -18,37 +17,47 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <Button fx:id="returnToTitleButton" layoutX="235.0" layoutY="345.0" mnemonicParsing="false" onAction="#titleScreen" text="Return to Title Screen" />
-      <ImageView fitHeight="79.0" fitWidth="144.0" layoutX="327.0" layoutY="129.0">
+      <Button fx:id="returnToTitleButton" layoutX="235.0" layoutY="362.0" mnemonicParsing="false" onAction="#titleScreen" text="Return to Title Screen" />
+      <ImageView fitHeight="79.0" fitWidth="144.0" layoutX="327.0" layoutY="169.0">
          <image>
             <Image url="@../models/arrowKeys.png" />
          </image>
       </ImageView>
-      <Label layoutX="271.0" layoutY="145.0" text="OR">
+      <Label layoutX="271.0" layoutY="184.0" text="OR">
          <font>
             <Font size="27.0" />
          </font>
       </Label>
-      <Label layoutX="97.0" layoutY="79.0" prefHeight="19.0" prefWidth="396.0" text="Move the snake and eat the food by using the WASD or Arrow Keys">
+      <Label layoutX="97.0" layoutY="142.0" prefHeight="19.0" prefWidth="396.0" text="Move the snake and eat the food by using the WASD or Arrow Keys">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
-      <ImageView fitHeight="53.0" fitWidth="160.0" layoutX="221.0" layoutY="270.0">
+      <ImageView fitHeight="53.0" fitWidth="160.0" layoutX="221.0" layoutY="284.0">
          <image>
             <Image url="@../models/spacebar.png" />
          </image>
       </ImageView>
-      <Label layoutX="162.0" layoutY="237.0" prefHeight="19.0" prefWidth="299.0" text="Pause or Resume the game by hitting the spacebar">
+      <Label layoutX="162.0" layoutY="265.0" prefHeight="19.0" prefWidth="299.0" text="Pause or Resume the game by hitting the spacebar">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
-      <ImageView fitHeight="79.0" fitWidth="122.0" layoutX="122.0" layoutY="126.0">
+      <ImageView fitHeight="79.0" fitWidth="122.0" layoutX="122.0" layoutY="171.0">
          <image>
             <Image url="@../models/wasdKeys.png" />
          </image>
       </ImageView>
+      <Label layoutX="97.0" layoutY="67.0" prefHeight="19.0" prefWidth="396.0" text="A new twist on the classic Snake. Faster pace. Watch out and choose">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="145.0" layoutY="86.0" prefHeight="19.0" prefWidth="311.0" text="your moves wisely as food can spawn right under you!">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
    </children>
    <effect>
       <Lighting>

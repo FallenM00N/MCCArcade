@@ -31,6 +31,7 @@ public class JumperEngine extends Jumper{
 	private static Scene gameScene;
 	private static boolean isRunning = false;
 	private static Image image;
+	private static Image image2;
 	private static ImageView llama;
 	private static Group root;
 	private static AnimationTimer timer;
@@ -119,9 +120,15 @@ public class JumperEngine extends Jumper{
 	    }
 	
 	public static void createJumper(){
-		image = new Image("file:jumper/models/llama.png");
+		
+
 		llama = new ImageView();
-		llama.setImage(image);
+		image = new Image("file:jumper/models/llama.png");			
+		
+		if(!isJumping){
+			llama.setImage(image);
+		}
+		
 		llama.setFitWidth(140);
 		llama.setFitHeight(160);
 		llama.setLayoutX(50);
@@ -130,9 +137,9 @@ public class JumperEngine extends Jumper{
 	}
 	
 	public static void jump(){ 
-		yJumpMotion = 315;//adjust jumpheight
+		yJumpMotion = 260;//adjust jumpheight
 		if(isRunning){
-			llama.setTranslateY((llama.getTranslateY() - yJumpMotion) - 10);
+			llama.setTranslateY((llama.getTranslateY() - yJumpMotion));
 			
 		}
 	}
@@ -205,10 +212,13 @@ public class JumperEngine extends Jumper{
 				detectCollision();
 				if(llama.getTranslateY()<0){ //if llama is in the air
 					isJumping = true;
-					llama.setTranslateY(llama.getTranslateY() + 11);//bring back llama to ground
+					image2 = new Image("file:jumper/models/llama2.png");
+					llama.setImage(image2);
+					llama.setTranslateY(llama.getTranslateY() + 8);//bring back llama to ground
 				} 
 				else{
 					isJumping = false;
+					llama.setImage(image);
 				}
 				//move rectangles to the left put code in here.
 				if(isRunning){
@@ -220,8 +230,8 @@ public class JumperEngine extends Jumper{
 						String score = Integer.toString(js.getScore());
 						t.setText(score);
 						
-						pickleSpawn = rand.nextInt(700) + 600;
-						pickle.setTranslateX(pickleSpawn);
+						//pickleSpawn = rand.nextInt(700) + 600;
+						pickle.setTranslateX(670);
 
 						if(js.getScore() >= 10){
 							speed = 13;
