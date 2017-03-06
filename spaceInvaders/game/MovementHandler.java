@@ -7,6 +7,8 @@ import java.util.Random;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
@@ -245,6 +247,26 @@ public class MovementHandler implements Runnable {
 		//SpaceInvaders.entities.getChildren().remove(SpaceInvaders.ufo.getImg());
 		//SpaceInvaders.ufo = null;
 		mediaPlayer.stop();
+		
+		ImageView iv = new ImageView(new Image("file:spaceInvaders/images/SpaceshipRed.png"));
+		iv.setFitWidth(SpaceInvaders.player.getWidth());
+		iv.setFitHeight(SpaceInvaders.player.getHeight());
+		SpaceInvaders.player.getImg().getChildren().remove(SpaceInvaders.player.getIv());
+		SpaceInvaders.player.getImg().getChildren().add(iv);
+		SpaceInvaders.player.setFireSpeed(300);
+		Timeline tl = new Timeline(new KeyFrame(
+		        Duration.millis(5000),
+		        ae -> resetFireSpeed(iv)));
+		tl.play();
+	}
+	
+	private void resetFireSpeed(ImageView iv1) {
+		ImageView iv = new ImageView(new Image("file:spaceInvaders/images/Spaceship.png"));
+		iv.setFitWidth(SpaceInvaders.player.getWidth());
+		iv.setFitHeight(SpaceInvaders.player.getHeight());
+		SpaceInvaders.player.getImg().getChildren().remove(iv1);
+		SpaceInvaders.player.getImg().getChildren().add(iv);
+		SpaceInvaders.player.setFireSpeed(800);
 	}
 	
 	private void collideBullets(Bullet b1, Bullet b2) {

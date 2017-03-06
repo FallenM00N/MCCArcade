@@ -31,10 +31,12 @@ public class NeublastersEngine {
 	private static double baseSpeed = 3;
 	private static ArrayList<NeuEnemy> enemies = new ArrayList<>();
 	private static ArrayList<NeuBullet> playerBullets = new ArrayList<>();
+	private static double time = 0;
+	private static double bulletCountdown = 0;
 
 	public static void run() {
 		gameScene = createBlankScene();
-		player = new SpaceShip(0, 0, baseSpeed);
+		player = new SpaceShip(0, 0, baseSpeed + 1);
 		Game.showScene(gameScene, "Neublasters");
 		createAnimationTimer();
 	}
@@ -42,8 +44,7 @@ public class NeublastersEngine {
 	private static void createAnimationTimer() {
 		timer = new AnimationTimer() {
 			ArrayList<String> pressedKeys = new ArrayList<>();
-			double time = 0;
-			double bulletCountdown = 0;
+			int collisionTimer = 0;
 
 			@Override
 			public void handle(long now) {
@@ -60,8 +61,9 @@ public class NeublastersEngine {
 				if (bulletCountdown > 0) {
 					bulletCountdown--;
 				}
-				if (pressedKeys.contains("fire") && bulletCountdown == 0) {
-					NeuBullet bullet = new NeuBullet(player.getX() + player.getImage().getWidth(), player.getY() + player.getImage().getHeight() / 2, player.getSpeed() * 2);
+				if (bulletCountdown == 0 && pressedKeys.contains("fire")) {
+					NeuBullet bullet = new NeuBullet(player.getX() + player.getImage().getWidth() - 10,
+							player.getY() + player.getImage().getHeight() / 2, player.getSpeed() * 4);
 					playerBullets.add(bullet);
 					bulletCountdown = 10;
 				}
@@ -71,32 +73,42 @@ public class NeublastersEngine {
 				// TODO Auto-generated method stub
 				Random rand = new Random();
 				if (time % 100 == 0) {
-					enemies.add(new NeuEnemy(gameCanvas.getWidth() + 40, rand.nextDouble() * gameCanvas.getHeight(),
-							-baseSpeed));
+					enemies.add(new NeuEnemy(gameCanvas.getWidth() + 40,
+							rand.nextDouble() * gameCanvas.getHeight() - 60, -baseSpeed));
 				}
 			}
 
 			private void updatePositions() {
 				if (pressedKeys.contains("up")) {
-					player.move(0, -baseSpeed);
+					player.move(0, -2.5);
 				}
 				if (pressedKeys.contains("down")) {
-					player.move(0, baseSpeed);
+					player.move(0, 2.5);
 				}
 				if (pressedKeys.contains("left")) {
-					player.move(-baseSpeed / 2, 0);
+					player.move(-1, 0);
 				}
 				if (pressedKeys.contains("right")) {
-					player.move(baseSpeed, 0);
+					player.move(1.5, 0);
 					player.setImage("neuBlasterThrust.png");
 				} else {
 					player.setImage("neuBlasterNoThrust.png");
 				}
-				for (NeuEnemy enemy : enemies) {
-					enemy.moveStraight();
+				for (int i = 0; i < enemies.size(); i++) {
+					if (enemies.get(i).getDestroyFrame() > 15) {
+						enemies.get(i).moveStraight();
+						if (enemies.get(i).getX() < 0 - enemies.get(i).getImage().getWidth() - 5) {
+							enemies.remove(i);
+							i--;
+						}
+					}
 				}
-				for (NeuBullet playerBullet : playerBullets) {
-					playerBullet.move();
+				for (int i = 0; i < playerBullets.size(); i++) {
+					playerBullets.get(i).move();
+					if (playerBullets.get(i).getX() > gameCanvas.getWidth()) {
+						playerBullets.remove(i);
+						i--;
+					}
 				}
 			}
 
@@ -105,6 +117,10 @@ public class NeublastersEngine {
 				gameCanvas.getGraphicsContext2D().drawImage(player.getImage(), player.getX(), player.getY());
 				for (NeuEnemy enemy : enemies) {
 					gameCanvas.getGraphicsContext2D().drawImage(enemy.getImage(), enemy.getX(), enemy.getY());
+					if (enemy.isDestroyed() && enemy.getDestroyFrame() > 0) {
+						System.out.println(enemy.getDestroyFrame());
+						enemy.setDestroyFrame(enemy.getDestroyFrame() - 1);
+					}
 				}
 				for (NeuBullet bullet : playerBullets) {
 					gameCanvas.getGraphicsContext2D().setFill(Paint.valueOf("#fff"));
@@ -114,8 +130,25 @@ public class NeublastersEngine {
 			}
 
 			private void handleCollisions() {
-				// TODO Auto-generated method stub
-
+				for (int i = 0; i < enemies.size(); i++) {
+					if (!enemies.get(i).isDestroyed() && enemies.get(i).collides(player)) {
+						enemies.get(i).destroy();
+					}
+						if (enemies.get(i).isDestroyed() && enemies.get(i).getDestroyFrame() <= 0) {
+						enemies.remove(i);
+						i--;
+					}
+				}
+				for (int i = 0; i < playerBullets.size(); i++) {
+					for(NeuEnemy enemy : enemies) {
+						if(enemy.collides(playerBullets.get(i))) {
+							enemy.destroy();
+							playerBullets.remove(i);
+							i--;
+							break;
+						}
+					}
+				}
 			}
 
 			private void keyListen() {
@@ -123,17 +156,21 @@ public class NeublastersEngine {
 					@Override
 					public void handle(KeyEvent event) {
 						KeyCode kc = event.getCode();
-						if (kc.equals(KeyCode.W) && !pressedKeys.contains("up")) {
+						if ((kc.equals(KeyCode.W) || kc.equals(KeyCode.UP)) && !pressedKeys.contains("up")) {
 							pressedKeys.add("up");
+							pressedKeys.remove("down");
 						}
-						if (kc.equals(KeyCode.S) && !pressedKeys.contains("down")) {
+						if ((kc.equals(KeyCode.S) || kc.equals(KeyCode.DOWN)) && !pressedKeys.contains("down")) {
 							pressedKeys.add("down");
+							pressedKeys.remove("up");
 						}
-						if (kc.equals(KeyCode.A) && !pressedKeys.contains("left")) {
+						if ((kc.equals(KeyCode.A) || kc.equals(KeyCode.LEFT)) && !pressedKeys.contains("left")) {
 							pressedKeys.add("left");
+							pressedKeys.remove("right");
 						}
-						if (kc.equals(KeyCode.D) && !pressedKeys.contains("right")) {
+						if ((kc.equals(KeyCode.D) || kc.equals(KeyCode.RIGHT)) && !pressedKeys.contains("right")) {
 							pressedKeys.add("right");
+							pressedKeys.remove("left");
 						}
 						if (kc.equals(KeyCode.SPACE) && !pressedKeys.contains("fire")) {
 							pressedKeys.add("fire");
@@ -148,16 +185,16 @@ public class NeublastersEngine {
 					@Override
 					public void handle(KeyEvent event) {
 						KeyCode kc = event.getCode();
-						if (kc.equals(KeyCode.W)) {
+						if (kc.equals(KeyCode.W) || kc.equals(KeyCode.UP)) {
 							pressedKeys.remove("up");
 						}
-						if (kc.equals(KeyCode.S)) {
+						if (kc.equals(KeyCode.S) || kc.equals(KeyCode.DOWN)) {
 							pressedKeys.remove("down");
 						}
-						if (kc.equals(KeyCode.A)) {
+						if (kc.equals(KeyCode.A) || kc.equals(KeyCode.LEFT)) {
 							pressedKeys.remove("left");
 						}
-						if (kc.equals(KeyCode.D)) {
+						if (kc.equals(KeyCode.D) || kc.equals(KeyCode.RIGHT)) {
 							pressedKeys.remove("right");
 						}
 						if (kc.equals(KeyCode.SPACE)) {

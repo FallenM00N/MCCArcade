@@ -10,7 +10,7 @@ import javafx.util.Duration;
 
 public class Character {
 	private int lives = 3;
-	private final Group img;
+	private Group img;
 	private ImageView extraLife;
 	private ImageView iv;
 	private Image imgSrc;
@@ -18,6 +18,7 @@ public class Character {
 	private double y = 0;
 	private double width = 35;
 	private double height = 35;
+	private int fireSpeed = 800;
 	
 	public Character(double x, double y) {
 		setX(x);
@@ -117,5 +118,25 @@ public class Character {
 
 	public void setLives(int lives) {
 		this.lives = lives;
+	}
+
+	public int getFireSpeed() {
+		return fireSpeed;
+	}
+
+	public void setFireSpeed(int fireSpeed) {
+		this.fireSpeed = fireSpeed;
+	}
+
+	public void setImgSrc(Image imgSrc) {
+		this.imgSrc = imgSrc;
+	}
+
+	public void setIv(ImageView iv) {
+		this.iv = iv;
+	}
+
+	public void setImg(Group img) {
+		this.img = img;
 	}
 }
