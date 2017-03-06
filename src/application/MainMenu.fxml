@@ -53,7 +53,7 @@
                               <Font size="20.0" />
                            </font>
                         </Button>
-                        <Button fx:id="shooter" mnemonicParsing="false" onAction="#startShooter" prefHeight="44.0" prefWidth="175.0" text="Shooter">
+                        <Button fx:id="shooter" mnemonicParsing="false" onAction="#startShooter" prefHeight="44.0" prefWidth="175.0" text="Neublasters">
                            <font>
                               <Font size="20.0" />
                            </font>

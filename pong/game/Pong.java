@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import models.Game;
 
@@ -148,7 +149,7 @@ public class Pong extends Game{
 	
 	public Scene createInfoScene() {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("PongHelp.fxml"));
+			AnchorPane root = FXMLLoader.load(getClass().getResource("PongHelp.fxml"));
 			Scene scene = new Scene(root);
 			return scene;
 		} catch (IOException e) {
