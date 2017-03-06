@@ -1,14 +1,17 @@
 package models;
 
-import javafx.scene.paint.Paint;
+import com.sun.org.glassfish.external.statistics.BoundaryStatistic;
+
+import interfaces.Collidable;
 import javafx.scene.shape.Rectangle;
 
-public class NeuBullet {
+public class NeuBullet implements Collidable{
 	private double x;
 	private double y;
 	private final double SPEED;
 	private final double width;
 	private final double height;
+	private Rectangle bounds;
 	
 	public double getWidth() {
 		return width;
@@ -32,6 +35,7 @@ public class NeuBullet {
 		this.SPEED = SPEED;
 		width = 5;
 		height = 3;
+		bounds = new Rectangle(x, y, width, height);
 	}
 	
 	public NeuBullet(double x, double y, double width, double height, double SPEED) {
@@ -40,10 +44,12 @@ public class NeuBullet {
 		this.SPEED = SPEED;
 		this.width = width;
 		this.height = height;
+		bounds = new Rectangle(x, y, width, height);
 	}
 	
 	public void move() {
 		x += SPEED;
+		bounds.setX(x);
 	}
 	
 	public void seek(NeuEnemy enemy) {
@@ -53,6 +59,7 @@ public class NeuBullet {
 		} else if(y < target) {
 			y += SPEED / 6;
 		}
+		bounds.setY(y);
 	}
 	
 	public void getTarget() {
@@ -69,6 +76,21 @@ public class NeuBullet {
 
 	public double getSPEED() {
 		return SPEED;
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return bounds;
+	}
+
+	@Override
+	public boolean collides(Collidable object) {
+		boolean collides = false;
+		Rectangle otherBounds = object.getBounds();
+		if(otherBounds.getBoundsInParent().intersects(bounds.getBoundsInParent())) {
+			collides = true;
+		}
+		return collides;
 	}
 	
 }
