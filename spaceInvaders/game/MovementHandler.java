@@ -196,7 +196,7 @@ public class MovementHandler implements Runnable {
 				killUFO(b.get(i));
 			}
 			
-			if (i < b.size() &&
+			if (i < b.size() && !b.get(i).isMovingUp() &&
 					b.get(i).getBullet().getBoundsInParent().intersects(p.getImg().getBoundsInParent())) {
 				loseLife(1);
 				SpaceInvaders.entities.getChildren().remove(b.get(i).getBullet());
@@ -242,8 +242,8 @@ public class MovementHandler implements Runnable {
 		SpaceInvaders.entities.getChildren().remove(b.getBullet());
 		SpaceInvaders.bullets.remove(b);
 		SpaceInvaders.ufo.playDeathAnimation();
-		SpaceInvaders.entities.getChildren().remove(SpaceInvaders.ufo.getImg());
-		SpaceInvaders.ufo = null;
+		//SpaceInvaders.entities.getChildren().remove(SpaceInvaders.ufo.getImg());
+		//SpaceInvaders.ufo = null;
 		mediaPlayer.stop();
 	}
 	
@@ -313,6 +313,13 @@ public class MovementHandler implements Runnable {
 		else if (SpaceInvaders.enemies.size()% 26 == 0) {
 			SpaceInvaders.player.setLives(SpaceInvaders.player.getLives() + 1);
 			SpaceInvaders.livesl.setText("LIVES: " + SpaceInvaders.player.getLives());
+			String musicFile = "spaceInvaders/audio/ExtraLife.mp3";
+
+			Media sound = new Media(new File(musicFile).toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.play();
+			
+			SpaceInvaders.player.playExtraLifeAnimation();
 		}
 		
 		summonUFO();

@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.Pong">
-   <top>
-      <Label text="Directions" BorderPane.alignment="CENTER">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.Pong">
+   <children>
+      <Button fx:id="titleButton" layoutX="235.0" layoutY="347.0" mnemonicParsing="false" onAction="#titleScreen" text="Return to Title Screen" />
+      <Label layoutX="196.0" layoutY="14.0" text="Directions">
          <font>
-            <Font size="36.0" />
-         </font>
-         <BorderPane.margin>
-            <Insets top="10.0" />
-         </BorderPane.margin>
-      </Label>
-   </top>
-   <center>
-      <Label alignment="TOP_LEFT" prefHeight="337.0" prefWidth="453.0" text="Label" BorderPane.alignment="CENTER">
-         <font>
-            <Font size="20.0" />
+            <Font size="47.0" />
          </font>
       </Label>
-   </center>
-   <bottom>
-      <Button mnemonicParsing="false" onAction="#titleScreen" prefHeight="36.0" prefWidth="100.0" text="Return to Menu" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets bottom="20.0" />
-         </BorderPane.margin>
-      </Button>
-   </bottom>
-</BorderPane>
+      <Label layoutX="83.0" layoutY="83.0" prefHeight="26.0" prefWidth="436.0" text="1 Player: Use W and S to move the paddle up and down">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="82.0" layoutY="127.0" prefHeight="26.0" prefWidth="436.0" text="2 Players: Left side will use W and S to move the paddle.">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="82.0" layoutY="153.0" prefHeight="26.0" prefWidth="436.0" text="               Right side will use the Up and Down arrow keys">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="159.0" layoutY="246.0" prefHeight="26.0" prefWidth="313.0" text="Press the ESCAPE key to pause the game.">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

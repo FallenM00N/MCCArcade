@@ -97,15 +97,15 @@ public class UFO {
 	
 	public void playDeathAnimation() {
 		Timeline timeline = new Timeline(new KeyFrame(
-		        Duration.millis(100),
+		        Duration.millis(300),
 		        ae -> timerTick()));
-		String musicFile = "spaceInvaders/audio/Boom.mp3";
+		String musicFile = "spaceInvaders/audio/UFOKill.mp3";
 
 		Media sound = new Media(new File(musicFile).toURI().toString());
 		MediaPlayer mediaPlayer = new MediaPlayer(sound);
 		mediaPlayer.play();
 		
-		Image i = new Image("file:spaceInvaders/images/Explode.png");
+		Image i = new Image("file:spaceInvaders/images/UFOExplode.png");
 		setImgSrc(i);
 		ImageView iv = new ImageView(i);
 		iv.setFitWidth(getWidth());
@@ -120,6 +120,6 @@ public class UFO {
 	
 	private void timerTick() {
 		SpaceInvaders.entities.getChildren().remove(this.getImg());
-		SpaceInvaders.enemies.remove(this);
+		SpaceInvaders.ufo = null;
 	}
 }
