@@ -120,7 +120,7 @@ public class SpaceInvaders extends Game {
 	private static void resumeGame(Text t) {
 		mh.resumeTimer();
 		kp.resumeTimer();
-		if (mh.chance == 0) {
+		if (mh.chance <= 0) {
 			mh.chance = 6;
 		}
 		mh.resetSound();
@@ -496,6 +496,11 @@ public class SpaceInvaders extends Game {
 		themIV.setFitWidth(35);
 		themIV.setFitHeight(35);
 		Text themInfo = new Text(": The enemy");
+		Image ufo = new Image("file:spaceInvaders/images/UFO.png");
+		ImageView ufoIV = new ImageView(ufo);
+		ufoIV.setFitWidth(40);
+		ufoIV.setFitHeight(25);
+		Text ufoInfo = new Text(": Bonus points, short power boost");
 		
 		Button title = new Button("Return to Title Screen");
 		title.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -506,10 +511,10 @@ public class SpaceInvaders extends Game {
 		});
 		
 		vbox1.setSpacing(10);
-		vbox2.setSpacing(21.5);
+		vbox2.setSpacing(22);
 		vbox1.setAlignment(Pos.TOP_RIGHT);
-		vbox1.getChildren().addAll(left, right, shoot, pause, youIV, themIV);
-		vbox2.getChildren().addAll(leftInfo, rightInfo, shootInfo, pauseInfo, youInfo, themInfo);
+		vbox1.getChildren().addAll(left, right, shoot, pause, youIV, themIV, ufoIV);
+		vbox2.getChildren().addAll(leftInfo, rightInfo, shootInfo, pauseInfo, youInfo, themInfo, ufoInfo);
 		vbox2.setStyle("-fx-color: #FFF;");
 		
 		hbox.getChildren().addAll(vbox1, vbox2);
@@ -529,7 +534,7 @@ public class SpaceInvaders extends Game {
 		
 		bp.setStyle("-fx-background-color: #666;");
 		
-		Scene s = new Scene(bp, 300, 350);
+		Scene s = new Scene(bp, 350, 350);
 		return s;
 	}
 	
