@@ -2,12 +2,23 @@ package models;
 
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
+
 public class SpaceShip {
 	private double x;
 	private double y;
 	private double speed;
 	private ArrayList<NeuBullet> bullets = new ArrayList<>();
+	private Image image = new Image("neuImages/neuBlasterNoThrust.png");
 	
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(String url) {
+		this.image = new Image("neuImages/" + url);
+	}
+
 	public SpaceShip(double x, double y, double speed) {
 		this.x = x;
 		this.y = y;

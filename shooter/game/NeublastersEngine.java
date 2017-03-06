@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -16,34 +17,99 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Screen;
+import models.Game;
+import models.NeuBullet;
+import models.NeuEnemy;
+import models.SpaceShip;
 
 public class NeublastersEngine {
 
 	private static Scene gameScene;
 	private static Canvas gameCanvas;
 	private static AnimationTimer timer;
+	private static SpaceShip player;
+	private static double baseSpeed = 3;
+	private static ArrayList<NeuEnemy> enemies = new ArrayList<>();
+	private static ArrayList<NeuBullet> playerBullets = new ArrayList<>();
 
 	public static void run() {
 		gameScene = createBlankScene();
-		Neublasters.showScene(gameScene, "Neublasters");
+		player = new SpaceShip(0, 0, baseSpeed);
+		Game.showScene(gameScene, "Neublasters");
 		createAnimationTimer();
 	}
 
 	private static void createAnimationTimer() {
 		timer = new AnimationTimer() {
 			ArrayList<String> pressedKeys = new ArrayList<>();
+			double time = 0;
+			double bulletCountdown = 0;
 
 			@Override
 			public void handle(long now) {
 				keyListen();
+				generateBullets();
 				handleCollisions();
+				generateEnemies();
+				updatePositions();
 				animateScene();
+				time++;
+			}
+
+			private void generateBullets() {
+				if (bulletCountdown > 0) {
+					bulletCountdown--;
+				}
+				if (pressedKeys.contains("fire") && bulletCountdown == 0) {
+					NeuBullet bullet = new NeuBullet(player.getX() + player.getImage().getWidth(), player.getY() + player.getImage().getHeight() / 2, player.getSpeed() * 2);
+					playerBullets.add(bullet);
+					bulletCountdown = 10;
+				}
+			}
+
+			private void generateEnemies() {
+				// TODO Auto-generated method stub
+				Random rand = new Random();
+				if (time % 100 == 0) {
+					enemies.add(new NeuEnemy(gameCanvas.getWidth() + 40, rand.nextDouble() * gameCanvas.getHeight(),
+							-baseSpeed));
+				}
+			}
+
+			private void updatePositions() {
+				if (pressedKeys.contains("up")) {
+					player.move(0, -baseSpeed);
+				}
+				if (pressedKeys.contains("down")) {
+					player.move(0, baseSpeed);
+				}
+				if (pressedKeys.contains("left")) {
+					player.move(-baseSpeed / 2, 0);
+				}
+				if (pressedKeys.contains("right")) {
+					player.move(baseSpeed, 0);
+					player.setImage("neuBlasterThrust.png");
+				} else {
+					player.setImage("neuBlasterNoThrust.png");
+				}
+				for (NeuEnemy enemy : enemies) {
+					enemy.moveStraight();
+				}
+				for (NeuBullet playerBullet : playerBullets) {
+					playerBullet.move();
+				}
 			}
 
 			private void animateScene() {
-				// TODO Auto-generated method stub
-				for (String s : pressedKeys) {
-					System.out.println(s);
+				gameCanvas.getGraphicsContext2D().clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
+				gameCanvas.getGraphicsContext2D().drawImage(player.getImage(), player.getX(), player.getY());
+				for (NeuEnemy enemy : enemies) {
+					gameCanvas.getGraphicsContext2D().drawImage(enemy.getImage(), enemy.getX(), enemy.getY());
+				}
+				for (NeuBullet bullet : playerBullets) {
+					gameCanvas.getGraphicsContext2D().setFill(Paint.valueOf("#fff"));
+					gameCanvas.getGraphicsContext2D().fillRect(bullet.getX(), bullet.getY(), bullet.getWidth(),
+							bullet.getHeight());
 				}
 			}
 
@@ -105,7 +171,6 @@ public class NeublastersEngine {
 
 			}
 		};
-		
 		timer.start();
 	}
 
