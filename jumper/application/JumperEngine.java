@@ -102,9 +102,9 @@ public class JumperEngine extends Jumper{
 		pickle = new ImageView();
 		pickle.setImage(image);
 		pickle.setTranslateX(600);
-		pickle.setTranslateY(300);
-		pickle.setFitHeight(110);
-		pickle.setFitWidth(110);
+		pickle.setTranslateY(305);
+		pickle.setFitHeight(105);
+		pickle.setFitWidth(100);
 		root.getChildren().add(pickle);
 	}
 	
