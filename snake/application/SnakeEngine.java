@@ -62,7 +62,7 @@ public class SnakeEngine extends Snake{
 		createBackground();
 		createSnake();
 		createFood();
-		KeyFrame frame = new KeyFrame(Duration.seconds(0.15), event -> {
+		KeyFrame frame = new KeyFrame(Duration.seconds(0.08), event -> {
 			if (!running){
 				return;				
 			}

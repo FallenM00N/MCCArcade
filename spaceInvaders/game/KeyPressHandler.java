@@ -147,7 +147,7 @@ public class KeyPressHandler implements Runnable {
 	}
 	
 	private void shoot() {
-		if (time - lastFire >= 800) {
+		if (time - lastFire >= SpaceInvaders.player.getFireSpeed()) {
 			Character p = SpaceInvaders.player;
 			Bullet b = new Bullet(p.getX() + p.getWidth() / 2 - 1.5, p.getY() - 12, true);
 			SpaceInvaders.bullets.add(b);
