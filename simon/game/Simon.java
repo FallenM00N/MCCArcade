@@ -360,6 +360,7 @@ public class Simon extends Game {
 				if (playerTurn && !paused) {
 					top.setFill(Paint.valueOf("rgba(255,0,60,1.0)"));
 					checkCorrect(CommandType.RED);
+					timeline.play();
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(top)));
 					timeline.play();
 					
@@ -375,6 +376,7 @@ public class Simon extends Game {
 			@Override
 			public void handle(MouseEvent event) {
 				if (playerTurn && !paused) {
+					timeline.play();
 					right.setFill(Paint.valueOf("rgba(0,100,255,1.0)"));
 					checkCorrect(CommandType.BLUE);
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(right)));
@@ -392,6 +394,7 @@ public class Simon extends Game {
 			@Override
 			public void handle(MouseEvent event) {
 				if (playerTurn && !paused) {
+					timeline.play();
 					bottom.setFill(Paint.valueOf("rgba(0,200,40,1.0)"));
 					checkCorrect(CommandType.GREEN);
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(bottom)));
@@ -409,6 +412,7 @@ public class Simon extends Game {
 			@Override
 			public void handle(MouseEvent event) {
 				if (playerTurn && !paused) {
+					timeline.play();
 					left.setFill(Paint.valueOf("rgba(220,220,0,1.0)"));
 					checkCorrect(CommandType.YELLOW);
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(left)));
@@ -568,8 +572,6 @@ public class Simon extends Game {
 	}
 
 	private void resetColors() {
-		title.setText("Your Turn");
-		playerTurn = true;
 		top.setFill(Paint.valueOf("rgba(255,0,60,.3)"));
 		right.setFill(Paint.valueOf("rgba(0,100,255,.3)"));
 		bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
@@ -629,6 +631,8 @@ public class Simon extends Game {
 				createCommands();
 			} else {
 				if (!playerTurn) {
+					title.setText("Your Turn");
+					playerTurn = true;
 					timeline.pause();
 					Timeline timeline = new Timeline(
 							new KeyFrame(Duration.millis((timeLimit * 1000) / 2), ae -> resetColors()));
