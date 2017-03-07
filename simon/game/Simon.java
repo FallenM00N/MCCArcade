@@ -102,7 +102,7 @@ public class Simon extends Game {
 		String s = "";
 		for (int i = 0; i < users.length; i++) {
 			if (users[i] != null) {
-				s += users[i].getInitials() + " -> " + users[i].getScore() + "\n";
+				s += users[i].getInitials() + " -> " + users[i].getScore().replaceAll("\\r", "") + "\n";
 			}
 		}
 		try {
@@ -131,8 +131,8 @@ public class Simon extends Game {
 		for (int i = 0; i < temp.length; i += 2) {
 			String[] userInfo = new String[2];
 			userInfo = temp[i].split(" -> ");
-			SimonUser u = new SimonUser(userInfo[0], userInfo[1]);
-			users[count++] = u;
+			SimonUser u = new SimonUser(userInfo[0], userInfo[1].replaceAll("\\r", ""));
+			users[count++] = u; 
 		}
 
 		return s;
@@ -453,12 +453,12 @@ public class Simon extends Game {
 
 		BorderPane.setMargin(gp, new Insets(20, 0, 0, 10));
 		BorderPane.setMargin(vbox, new Insets(20, 10, 0, 0));
-		BorderPane.setMargin(menu, new Insets(0, 0, 10, 0));
+		BorderPane.setMargin(menu, new Insets(-50, 0, 10, 0));
 
 		BorderPane.setAlignment(title, Pos.CENTER);
 		BorderPane.setAlignment(gp, Pos.CENTER_LEFT);
 		BorderPane.setAlignment(vbox, Pos.CENTER);
-		BorderPane.setAlignment(menu, Pos.CENTER);
+		BorderPane.setAlignment(menu, Pos.TOP_CENTER);
 
 		gameScene = new Scene(bp, 300, 300);
 	}
