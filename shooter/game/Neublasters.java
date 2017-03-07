@@ -44,8 +44,8 @@ public class Neublasters extends Game {
 	@FXML
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
+		showScene(NeublastersEngine.getGameScene(), "Neublasters");
+		NeublastersEngine.getTimer().start();
 	}
 
 	@FXML
@@ -75,6 +75,22 @@ public class Neublasters extends Game {
 
 	public void pauseScreen() {
 		showScene(pauseScene);
+	}
+
+	public static Scene getOverScene() {
+		return overScene;
+	}
+
+	public static void setOverScene(Scene overScene) {
+		Neublasters.overScene = overScene;
+	}
+
+	public static Scene getPauseScene() {
+		return pauseScene;
+	}
+
+	public static void setPauseScene(Scene pauseScene) {
+		Neublasters.pauseScene = pauseScene;
 	}
 
 	public Scene createScene(String url) {

@@ -1,7 +1,5 @@
 package models;
 
-import com.sun.org.glassfish.external.statistics.BoundaryStatistic;
-
 import interfaces.Collidable;
 import javafx.scene.shape.Rectangle;
 
@@ -33,8 +31,8 @@ public class NeuBullet implements Collidable{
 		this.x = x;
 		this.y = y;
 		this.SPEED = SPEED;
-		width = 5;
-		height = 3;
+		width = 9;
+		height = 5;
 		bounds = new Rectangle(x, y, width, height);
 	}
 	

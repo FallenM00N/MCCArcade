@@ -1,5 +1,8 @@
 package models;
 
+import java.util.Random;
+
+import game.NeublastersEngine;
 import interfaces.Collidable;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
@@ -12,12 +15,24 @@ public class NeuEnemy implements Collidable {
 	private Rectangle bounds;
 	private boolean isDestroyed;
 	private int destroyFrame = 30;
+	private int bulletCountDown;
+	private double points;
 
 	public NeuEnemy(double x, double y, double speed) {
 		this.x = x;
 		this.y = y;
 		this.speed = speed;
 		bounds = new Rectangle(x, y, image.getWidth(), image.getHeight());
+		Random rand = new Random();
+		bulletCountDown = rand.nextInt(110) + 10;
+	}
+
+	public int getBulletCountDown() {
+		return bulletCountDown;
+	}
+
+	public void setBulletCountDown(int bulletCountDown) {
+		this.bulletCountDown = bulletCountDown;
 	}
 
 	public Image getImage() {
@@ -81,14 +96,19 @@ public class NeuEnemy implements Collidable {
 	public Rectangle getBounds() {
 		return bounds;
 	}
-	
-	public void removeBounds() {
-		bounds.setX(-100);
-		bounds.setY(-100);
-	}
 
 	public void destroy() {
 		isDestroyed = true;
+		points = NeublastersEngine.addScore();
+
+	}
+
+	public double getPoints() {
+		return points;
+	}
+
+	public void setPoints(double points) {
+		this.points = points;
 	}
 
 	public boolean isDestroyed() {
@@ -109,6 +129,16 @@ public class NeuEnemy implements Collidable {
 
 	public void setBounds(Rectangle bounds) {
 		this.bounds = bounds;
+	}
+
+	public void fire() {
+		NeuBullet bullet = new NeuBullet(x + image.getWidth() - 10,
+		y + image.getHeight() / 2, speed * 4);
+		NeublastersEngine.getEnemyBullets().add(bullet);
+	}
+
+	public void tick() {
+		bulletCountDown--;
 	}
 	
 }

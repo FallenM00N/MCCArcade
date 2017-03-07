@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
@@ -31,8 +32,13 @@ public class NeublastersEngine {
 	private static double baseSpeed = 3;
 	private static ArrayList<NeuEnemy> enemies = new ArrayList<>();
 	private static ArrayList<NeuBullet> playerBullets = new ArrayList<>();
+	private static ArrayList<NeuBullet> enemyBullets = new ArrayList<>();
 	private static double time = 0;
 	private static double bulletCountdown = 0;
+	private static double score = (double) 0;
+	private static Label scoreBoard = new Label("Score: " + getScoreString());
+	private static double comboTimer = 0;
+	private static double comboCount = 0;
 
 	public static void run() {
 		gameScene = createBlankScene();
@@ -44,17 +50,31 @@ public class NeublastersEngine {
 	private static void createAnimationTimer() {
 		timer = new AnimationTimer() {
 			ArrayList<String> pressedKeys = new ArrayList<>();
-			int collisionTimer = 0;
+			boolean oddFrame;
 
 			@Override
 			public void handle(long now) {
 				keyListen();
-				generateBullets();
-				handleCollisions();
+				if (oddFrame)
+					generateBullets();
+				if (oddFrame)
+					handleCollisions();
 				generateEnemies();
 				updatePositions();
 				animateScene();
+				updateScore();
 				time++;
+				if(comboTimer > 0) {
+					comboTimer--;
+				}
+				oddFrame = !oddFrame;
+			}
+
+			private void updateScore() {
+				score += 2;
+				if (time % 5 == 0) {
+					scoreBoard.setText("Score: " + getScoreString());
+				}
 			}
 
 			private void generateBullets() {
@@ -63,9 +83,19 @@ public class NeublastersEngine {
 				}
 				if (bulletCountdown == 0 && pressedKeys.contains("fire")) {
 					NeuBullet bullet = new NeuBullet(player.getX() + player.getImage().getWidth() - 10,
-							player.getY() + player.getImage().getHeight() / 2, player.getSpeed() * 4);
+							player.getY() + player.getImage().getHeight() / 2 - 4, player.getSpeed() * 4);
 					playerBullets.add(bullet);
-					bulletCountdown = 10;
+					bulletCountdown = 5;
+				}
+				Random rand = new Random();
+				for (NeuEnemy enemy : enemies) {
+					if (!enemy.isDestroyed()) {
+						if (enemy.getBulletCountDown() < 0) {
+							enemy.fire();
+							enemy.setBulletCountDown(rand.nextInt(30) + 15);
+						}
+						enemy.tick();
+					}
 				}
 			}
 
@@ -110,6 +140,13 @@ public class NeublastersEngine {
 						i--;
 					}
 				}
+				for (int i = 0; i < enemyBullets.size(); i++) {
+					enemyBullets.get(i).move();
+					if (enemyBullets.get(i).getX() > gameCanvas.getWidth()) {
+						enemyBullets.remove(i);
+						i--;
+					}
+				}
 			}
 
 			private void animateScene() {
@@ -121,8 +158,20 @@ public class NeublastersEngine {
 						System.out.println(enemy.getDestroyFrame());
 						enemy.setDestroyFrame(enemy.getDestroyFrame() - 1);
 					}
+					if (enemy.getPoints() > 0) {
+						double yPos = enemy.getY() - 20;
+						if(yPos < 60) {
+							yPos = enemy.getY() + enemy.getImage().getHeight() + 20;
+						}
+						gameCanvas.getGraphicsContext2D().fillText(Double.toString(enemy.getPoints()), enemy.getX(), yPos);
+					}
 				}
 				for (NeuBullet bullet : playerBullets) {
+					gameCanvas.getGraphicsContext2D().setFill(Paint.valueOf("#fff"));
+					gameCanvas.getGraphicsContext2D().fillRect(bullet.getX(), bullet.getY(), bullet.getWidth(),
+							bullet.getHeight());
+				}
+				for (NeuBullet bullet : enemyBullets) {
 					gameCanvas.getGraphicsContext2D().setFill(Paint.valueOf("#fff"));
 					gameCanvas.getGraphicsContext2D().fillRect(bullet.getX(), bullet.getY(), bullet.getWidth(),
 							bullet.getHeight());
@@ -134,15 +183,17 @@ public class NeublastersEngine {
 					if (!enemies.get(i).isDestroyed() && enemies.get(i).collides(player)) {
 						enemies.get(i).destroy();
 					}
-						if (enemies.get(i).isDestroyed() && enemies.get(i).getDestroyFrame() <= 0) {
+					if (enemies.get(i).isDestroyed() && enemies.get(i).getDestroyFrame() <= 0) {
 						enemies.remove(i);
 						i--;
 					}
 				}
 				for (int i = 0; i < playerBullets.size(); i++) {
-					for(NeuEnemy enemy : enemies) {
-						if(enemy.collides(playerBullets.get(i))) {
-							enemy.destroy();
+					for (NeuEnemy enemy : enemies) {
+						if (enemy.collides(playerBullets.get(i))) {
+							if(!enemy.isDestroyed()) {
+								enemy.destroy();
+							}
 							playerBullets.remove(i);
 							i--;
 							break;
@@ -178,6 +229,9 @@ public class NeublastersEngine {
 						if (kc.equals(KeyCode.SHIFT) && !pressedKeys.contains("missile")) {
 							pressedKeys.add("missile");
 						}
+						if (kc.equals(KeyCode.P) || kc.equals(KeyCode.ESCAPE)) {
+							pause();
+						}
 					}
 				});
 
@@ -211,6 +265,11 @@ public class NeublastersEngine {
 		timer.start();
 	}
 
+	private static void pause() {
+		timer.stop();
+		Neublasters.showScene(Neublasters.getPauseScene(), "NeuBlasters - Paused");
+	}
+
 	private static Canvas createCanvas(double width, double height) {
 		Canvas canvas = new Canvas(width, height);
 		return canvas;
@@ -223,11 +282,47 @@ public class NeublastersEngine {
 		double height = bounds.getHeight() - 20;
 		Pane background = new Pane();
 		gameCanvas = createCanvas(width, height);
+		scoreBoard.setTextFill(Paint.valueOf("#fff"));
+		background.getChildren().add(scoreBoard);
 		background.getChildren().add(gameCanvas);
 		background.setBackground(
 				new Background(new BackgroundFill(Paint.valueOf("#000"), CornerRadii.EMPTY, Insets.EMPTY)));
 		Scene scene = new Scene(background, width, height);
 		return scene;
+	}
+
+	public static ArrayList<NeuBullet> getEnemyBullets() {
+		return enemyBullets;
+	}
+
+	public static AnimationTimer getTimer() {
+		return timer;
+	}
+
+	public static Scene getGameScene() {
+		return gameScene;
+	}
+
+	private static String getScoreString() {
+		StringBuilder sb = new StringBuilder(Double.toString(score));
+		sb.delete(sb.length() - 2, sb.length() - 1);
+		while (sb.length() < 10) {
+			sb.insert(0, 0);
+		}
+		return sb.toString();
+	}
+
+	public static double addScore() {
+		double scoreAdd = 1000;
+		if (comboTimer > 0) {
+			scoreAdd += (100 * comboCount);
+		} else {
+			comboCount = 0;
+		}
+		comboCount++;
+		comboTimer = 180;
+		score += scoreAdd;
+		return scoreAdd;
 	}
 
 }
