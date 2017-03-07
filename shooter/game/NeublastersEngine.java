@@ -17,6 +17,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import models.Game;
 import models.NeuBullet;
@@ -29,7 +30,7 @@ public class NeublastersEngine {
 	private static Canvas gameCanvas;
 	private static AnimationTimer timer;
 	private static SpaceShip player;
-	private static double baseSpeed = 3;
+	private static double baseSpeed = 4;
 	private static ArrayList<NeuEnemy> enemies = new ArrayList<>();
 	private static ArrayList<NeuBullet> playerBullets = new ArrayList<>();
 	private static ArrayList<NeuBullet> enemyBullets = new ArrayList<>();
@@ -163,7 +164,7 @@ public class NeublastersEngine {
 						if(yPos < 60) {
 							yPos = enemy.getY() + enemy.getImage().getHeight() + 20;
 						}
-						gameCanvas.getGraphicsContext2D().fillText(Double.toString(enemy.getPoints()), enemy.getX(), yPos);
+						gameCanvas.getGraphicsContext2D().fillText(Integer.toString((int)enemy.getPoints()), enemy.getX(), yPos);
 					}
 				}
 				for (NeuBullet bullet : playerBullets) {
@@ -176,6 +177,8 @@ public class NeublastersEngine {
 					gameCanvas.getGraphicsContext2D().fillRect(bullet.getX(), bullet.getY(), bullet.getWidth(),
 							bullet.getHeight());
 				}
+				gameCanvas.getGraphicsContext2D().fillText("Combo Timer: " + Integer.toString((int)comboTimer / 30), gameCanvas.getWidth() - 160, 20);
+				gameCanvas.getGraphicsContext2D().fillText("Combo: " + (int) comboCount, gameCanvas.getWidth() - 280, 20);
 			}
 
 			private void handleCollisions() {
@@ -282,7 +285,10 @@ public class NeublastersEngine {
 		double height = bounds.getHeight() - 20;
 		Pane background = new Pane();
 		gameCanvas = createCanvas(width, height);
+		gameCanvas.getGraphicsContext2D().setFont(new Font(18));
 		scoreBoard.setTextFill(Paint.valueOf("#fff"));
+		scoreBoard.setFont(new Font(18));
+		gameCanvas.getGraphicsContext2D().setFill(Paint.valueOf("#fff"));
 		background.getChildren().add(scoreBoard);
 		background.getChildren().add(gameCanvas);
 		background.setBackground(
