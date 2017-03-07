@@ -270,10 +270,12 @@ public class MovementHandler implements Runnable {
 	}
 	
 	private void collideBullets(Bullet b1, Bullet b2) {
-		SpaceInvaders.entities.getChildren().remove(b1.getBullet());
-		SpaceInvaders.entities.getChildren().remove(b2.getBullet());
-		SpaceInvaders.bullets.remove(b1);
-		SpaceInvaders.bullets.remove(b2);
+		if (b1.isMovingUp() != b2.isMovingUp()) {
+			SpaceInvaders.entities.getChildren().remove(b1.getBullet());
+			SpaceInvaders.entities.getChildren().remove(b2.getBullet());
+			SpaceInvaders.bullets.remove(b1);
+			SpaceInvaders.bullets.remove(b2);
+		}
 	}
 	
 	private void damageBarrier(Bullet b, Barrier a) {
