@@ -2,9 +2,12 @@ package models;
 
 import java.util.ArrayList;
 
+import game.Neublasters;
+import game.NeublastersEngine;
 import interfaces.Collidable;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Label;
 
 public class SpaceShip implements Collidable{
 	private double x;
@@ -14,7 +17,32 @@ public class SpaceShip implements Collidable{
 	private Image image = new Image("neuImages/neuBlasterNoThrust.png");
 	Rectangle bounds;
 	private double score = 0;
+	private int lives = 3;
 	
+	public double getScore() {
+		return score;
+	}
+
+	public void setScore(double score) {
+		this.score = score;
+	}
+
+	public int getLives() {
+		return lives;
+	}
+
+	public void setLives(int lives) {
+		this.lives = lives;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
+	public void setBounds(Rectangle bounds) {
+		this.bounds = bounds;
+	}
+
 	public Image getImage() {
 		return image;
 	}
@@ -84,6 +112,15 @@ public class SpaceShip implements Collidable{
 			collides = true;
 		}
 		return collides;
+	}
+
+	public void loseLife() {
+		lives--;
+		if(lives == 0) {
+			NeublastersEngine.getTimer().stop();
+			System.out.println(Neublasters.getOverScene().getRoot().getChildrenUnmodifiable());
+			Neublasters.showScene(Neublasters.getOverScene(), "Game Over");
+		}
 	}
 	
 }
