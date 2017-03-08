@@ -11,8 +11,20 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Jumper">
    <center>
-      <VBox alignment="TOP_CENTER" prefHeight="330.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="254.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
+            <Label>
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Label>
+            <Label fx:id="finalScoreLabel" text="Score">
+               <font>
+                  <Font size="32.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="-40.0" />
+               </VBox.margin></Label>
             <Button fx:id="restartButton" mnemonicParsing="false" onAction="#restartJumper" prefHeight="50.0" prefWidth="160.0" text="Play Again">
                <VBox.margin>
                   <Insets bottom="30.0" top="30.0" />
@@ -40,12 +52,12 @@
       </VBox>
    </center>
    <top>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="82.0" prefWidth="279.0" text="Game Over!" BorderPane.alignment="CENTER">
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="258.0" text="Game Over!" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
          <font>
-            <Font size="48.0" />
+            <Font size="39.0" />
          </font>
       </Label>
    </top>

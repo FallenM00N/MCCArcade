@@ -43,15 +43,17 @@ public class Character {
 	}
 	
 	public void playExtraLifeAnimation() {
-		img.getChildren().add(extraLife);
-		FadeTransition ft = new FadeTransition(Duration.millis(1500), extraLife);
-		ft.setFromValue(1.0);
-		ft.setToValue(0.0);
-		ft.play();
-		Timeline tline = new Timeline(new KeyFrame(
-		        Duration.millis(1500),
-		        ae -> remove()));
-		tline.play();
+		if (!img.getChildren().contains(extraLife)) {
+			img.getChildren().add(extraLife);
+			FadeTransition ft = new FadeTransition(Duration.millis(1500), extraLife);
+			ft.setFromValue(1.0);
+			ft.setToValue(0.0);
+			ft.play();
+			Timeline tline = new Timeline(new KeyFrame(
+			        Duration.millis(1500),
+			        ae -> remove()));
+			tline.play();
+		}
 	}
 	
 	private void remove() {

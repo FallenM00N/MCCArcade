@@ -102,7 +102,7 @@ public class Simon extends Game {
 		String s = "";
 		for (int i = 0; i < users.length; i++) {
 			if (users[i] != null) {
-				s += users[i].getInitials() + " -> " + users[i].getScore() + "\n";
+				s += users[i].getInitials() + " -> " + users[i].getScore().replaceAll("\\r", "") + "\n";
 			}
 		}
 		try {
@@ -131,8 +131,8 @@ public class Simon extends Game {
 		for (int i = 0; i < temp.length; i += 2) {
 			String[] userInfo = new String[2];
 			userInfo = temp[i].split(" -> ");
-			SimonUser u = new SimonUser(userInfo[0], userInfo[1]);
-			users[count++] = u;
+			SimonUser u = new SimonUser(userInfo[0], userInfo[1].replaceAll("\\r", ""));
+			users[count++] = u; 
 		}
 
 		return s;
@@ -360,6 +360,7 @@ public class Simon extends Game {
 				if (playerTurn && !paused) {
 					top.setFill(Paint.valueOf("rgba(255,0,60,1.0)"));
 					checkCorrect(CommandType.RED);
+					timeline.play();
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(top)));
 					timeline.play();
 					
@@ -375,6 +376,7 @@ public class Simon extends Game {
 			@Override
 			public void handle(MouseEvent event) {
 				if (playerTurn && !paused) {
+					timeline.play();
 					right.setFill(Paint.valueOf("rgba(0,100,255,1.0)"));
 					checkCorrect(CommandType.BLUE);
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(right)));
@@ -392,6 +394,7 @@ public class Simon extends Game {
 			@Override
 			public void handle(MouseEvent event) {
 				if (playerTurn && !paused) {
+					timeline.play();
 					bottom.setFill(Paint.valueOf("rgba(0,200,40,1.0)"));
 					checkCorrect(CommandType.GREEN);
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(bottom)));
@@ -409,6 +412,7 @@ public class Simon extends Game {
 			@Override
 			public void handle(MouseEvent event) {
 				if (playerTurn && !paused) {
+					timeline.play();
 					left.setFill(Paint.valueOf("rgba(220,220,0,1.0)"));
 					checkCorrect(CommandType.YELLOW);
 					Timeline timeline = new Timeline(new KeyFrame(Duration.millis(70), ae -> resetColor(left)));
@@ -449,12 +453,12 @@ public class Simon extends Game {
 
 		BorderPane.setMargin(gp, new Insets(20, 0, 0, 10));
 		BorderPane.setMargin(vbox, new Insets(20, 10, 0, 0));
-		BorderPane.setMargin(menu, new Insets(0, 0, 10, 0));
+		BorderPane.setMargin(menu, new Insets(-50, 0, 10, 0));
 
 		BorderPane.setAlignment(title, Pos.CENTER);
 		BorderPane.setAlignment(gp, Pos.CENTER_LEFT);
 		BorderPane.setAlignment(vbox, Pos.CENTER);
-		BorderPane.setAlignment(menu, Pos.CENTER);
+		BorderPane.setAlignment(menu, Pos.TOP_CENTER);
 
 		gameScene = new Scene(bp, 300, 300);
 	}
@@ -465,14 +469,22 @@ public class Simon extends Game {
 		VBox vbox1 = new VBox();
 		VBox vbox2 = new VBox();
 
-		Text t = new Text("Description");
-		t.setStyle("-fx-font: 20 Arial;");
+		Text t = new Text("Info / Controls");
+		t.setStyle("-fx-font: 22 Arial;");
 		Text simonTurn = new Text("\"Simon's Turn\"");
 		Text yourTurn = new Text("\"Your Turn\"");
 		Text over = new Text("\"Game Over\"");
+		Text easy = new Text("Easy Difficulty");
+		Text medium = new Text("Medium Difficulty");
+		Text hard = new Text("Hard Difficulty");
 		Text info1 = new Text(": Pay attention to pattern");
 		Text info2 = new Text(": Repeat the pattern");
 		Text info3 = new Text(": You lost, return to title screen");
+		Text info4 = new Text(": Adds one more command each round");
+		Text info5 = new Text(": Same as easy, but speeds up");
+		Text info6 = new Text(": Speeds up, and random each round");
+		vbox1.setStyle("-fx-font: 16 Arial;");
+		vbox2.setStyle("-fx-font: 16 Arial;");
 
 		Button tScreen = new Button("Return to Title Screen");
 		tScreen.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -486,12 +498,15 @@ public class Simon extends Game {
 
 		vbox1.setSpacing(10);
 		vbox2.setSpacing(10);
-		vbox1.getChildren().addAll(simonTurn, yourTurn, over);
-		vbox2.getChildren().addAll(info1, info2, info3);
+		vbox1.getChildren().addAll(simonTurn, yourTurn, over, easy, medium, hard);
+		vbox1.setAlignment(Pos.CENTER_RIGHT);
+		vbox2.getChildren().addAll(info1, info2, info3, info4, info5, info6);
+		vbox2.setAlignment(Pos.CENTER_LEFT);
 
 		hbox.getChildren().addAll(vbox1, vbox2);
 		HBox.setMargin(vbox1, new Insets(10, 0, 0, 30));
 		HBox.setMargin(vbox2, new Insets(10, 0, 0, 10));
+		hbox.setAlignment(Pos.CENTER);
 
 		bp.setTop(t);
 		bp.setCenter(hbox);
@@ -500,8 +515,9 @@ public class Simon extends Game {
 		BorderPane.setAlignment(hbox, Pos.CENTER);
 		BorderPane.setAlignment(tScreen, Pos.CENTER);
 		BorderPane.setMargin(tScreen, new Insets(0, 0, 10, 0));
+		BorderPane.setMargin(hbox, new Insets(-30, 0, 0, 0));
 
-		infoScene = new Scene(bp, 300, 300);
+		infoScene = new Scene(bp, 450, 300);
 	}
 
 	private void createDifficultyScene() {
@@ -560,6 +576,7 @@ public class Simon extends Game {
 		right.setFill(Paint.valueOf("rgba(0,100,255,.3)"));
 		bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
 		left.setFill(Paint.valueOf("rgba(220,220,0,.3)"));
+		timeline.play();
 	}
 
 	private void selectNextCommand() {
@@ -609,17 +626,19 @@ public class Simon extends Game {
 		mediaPlayer.play();
 
 		if (currentIndex == commands.size() - 1) {
-			playerTurn = !playerTurn;
 			currentIndex = 0;
-			if (!playerTurn) {
+			if (playerTurn) {
 				createCommands();
 			} else {
-				if (playerTurn) {
+				if (!playerTurn) {
 					title.setText("Your Turn");
+					playerTurn = true;
+					timeline.pause();
 					Timeline timeline = new Timeline(
 							new KeyFrame(Duration.millis((timeLimit * 1000) / 2), ae -> resetColors()));
 					timeline.play();
 				} else {
+					playerTurn = false;
 					title.setText("Simon's Turn");
 				}
 			}
