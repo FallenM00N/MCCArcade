@@ -44,9 +44,10 @@ public class NeublastersEngine {
 	private static Rectangle[] walls;
 	private static int spawnRate = 100;
 	private static int spawnTime = 0;
-	private static int spawnCount = 5;
 
 	public static void run() {
+		spawnRate = 100;
+		spawnTime = 0;
 		score = 0;
 		comboCount = 0;
 		comboTimer = 0;
@@ -54,7 +55,7 @@ public class NeublastersEngine {
 		playerBullets = new ArrayList<>();
 		enemyBullets = new ArrayList<>();
 		gameScene = createBlankScene();
-		player = new SpaceShip(0, 0, baseSpeed + 1);
+		player = new SpaceShip(0, 30, baseSpeed + 1);
 		Game.showScene(gameScene, "Neublasters");
 		createAnimationTimer();
 	}
@@ -69,8 +70,7 @@ public class NeublastersEngine {
 				keyListen();
 				if (oddFrame)
 					generateBullets();
-				if (oddFrame)
-					handleCollisions();
+				handleCollisions();
 				generateEnemies();
 				updatePositions();
 				animateScene();
@@ -113,16 +113,16 @@ public class NeublastersEngine {
 
 			private void generateEnemies() {
 				Random rand = new Random();
-				if (spawnTime == spawnRate) {
+				if (spawnTime >= spawnRate) {
 					enemies.add(new NeuEnemy(gameCanvas.getWidth() + 40,
-							rand.nextDouble() * gameCanvas.getHeight() - 60, -baseSpeed));
+							rand.nextDouble() * (gameCanvas.getHeight() - 90) + 30, -baseSpeed));
 					spawnTime = 0;
 				}
-				if(time % 240 == 0) {
-					spawnRate -= 10;
+				if (time % 240 == 0 && spawnTime > 10) {
+					spawnRate -= 9;
 				}
 				spawnTime++;
-				
+
 			}
 
 			private void updatePositions() {
@@ -362,9 +362,9 @@ public class NeublastersEngine {
 		scoreBoard.setTextFill(Paint.valueOf("#fff"));
 		scoreBoard.setFont(new Font(18));
 		gameCanvas.getGraphicsContext2D().setFill(Paint.valueOf("#fff"));
-		walls = new Rectangle[] { new Rectangle(0, 0, gameCanvas.getWidth(), 1),
+		walls = new Rectangle[] { new Rectangle(0, 30, gameCanvas.getWidth(), 1),
 				new Rectangle(0, 0, 1, gameCanvas.getHeight()),
-				new Rectangle(0, gameCanvas.getHeight(), gameCanvas.getWidth(), 1),
+				new Rectangle(0, gameCanvas.getHeight() - 15, gameCanvas.getWidth(), 1),
 				new Rectangle(gameCanvas.getWidth() / 2, 0, 0, gameCanvas.getHeight()) };
 		background.getChildren().add(scoreBoard);
 		background.getChildren().add(gameCanvas);

@@ -50,6 +50,7 @@ public class JumperEngine extends Jumper{
 	public static int speed = 12;
 	public static Cloud[] clouds;
 	public static int pickleSpawn;
+	public static int extraJump;
 	
 	public static void run(){
 		startGame();
@@ -137,9 +138,9 @@ public class JumperEngine extends Jumper{
 	}
 	
 	public static void jump(){ 
-		yJumpMotion = 260;//adjust jumpheight
+		yJumpMotion = 285;//adjust jumpheight
 		if(isRunning){
-			llama.setTranslateY((llama.getTranslateY() - yJumpMotion));
+			llama.setTranslateY((llama.getTranslateY() - yJumpMotion) + extraJump);
 			
 		}
 	}
@@ -177,10 +178,6 @@ public class JumperEngine extends Jumper{
 	
 	public static void detectCollision(){
 		if(pickle.getBoundsInParent().intersects(llama.getBoundsInParent())){
-			System.out.println("collision");
-//			String loseSound = "jumper\\models\\loseSound.mp3";
-//			sound = new AudioClip(new File(loseSound).toURI().toString());		
-//			//sound.play();
 
 			llama.setImage(image);
 			j.gameOver();
@@ -192,7 +189,7 @@ public class JumperEngine extends Jumper{
 	
 	public static void startGame(){
 		js.setScore(0);
-		speed = 12;
+		speed = 14;
 		isRunning = true;
 		createJumperContent();
 		createKeyListener();
@@ -224,7 +221,7 @@ public class JumperEngine extends Jumper{
 				//move rectangles to the left put code in here.
 				if(isRunning){
 					pickle.setTranslateX(pickle.getTranslateX() - speed);	
-					if(pickle.getTranslateX() <= 0){
+					if(pickle.getTranslateX() <= -110){
 						js.setScore(js.getScore() + 1);
 						t.setFill(Color.WHITE);
 						t.setFont(Font.font(java.awt.Font.SANS_SERIF, 90));
@@ -235,32 +232,31 @@ public class JumperEngine extends Jumper{
 						pickle.setTranslateX(670);
 
 						if(js.getScore() >= 10){
-							speed = 13;
+							speed = 15;
 							t.setFill(Color.RED);
-
 						}
 						if(js.getScore() >= 30){
-							speed = 14;
+							speed = 16;
 							t.setFill(Color.CORAL);
 						}
 						if(js.getScore() >= 40){
-							speed = 15;
+							speed = 17;
 							t.setFill(Color.YELLOW);
 						}
 						if(js.getScore() >= 50){
-							speed = 16;
+							speed = 18;
 							t.setFill(Color.LIMEGREEN);
 						}
 						if(js.getScore() >= 60){
-							speed = 17;
+							speed = 19;
 							t.setFill(Color.MEDIUMBLUE);
 						}
 						if(js.getScore() >= 70){
-							speed = 18;
+							speed = 20;
 							t.setFill(Color.DARKVIOLET);
 						}
 						if(js.getScore() >= 80){
-							speed = 19;
+							speed = 17;
 							t.setFill(Color.DARKTURQUOISE);
 						}
 						if(js.getScore() >= 100){
