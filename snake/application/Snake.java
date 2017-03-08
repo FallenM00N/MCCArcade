@@ -2,14 +2,19 @@ package application;
 
 import java.io.IOException;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import models.Game;
+import models.Score;
 
 public class Snake extends Game{
 	public static Scene titleScene;
@@ -17,6 +22,7 @@ public class Snake extends Game{
 	public static Scene infoScene;
 	public static Scene overScene;
 	public static Scene pauseScene;
+	public static Score s = new Score();
 	
 
 
@@ -105,6 +111,22 @@ public class Snake extends Game{
 		return null;
 	}
 	
+	public Node findNode(String id, ObservableList<Node> ol) {
+		Node n = null;
+		for (int i = 0; i < ol.size(); i++) {
+			n = ol.get(i);
+			if (n instanceof Pane) {
+				n = findNode("finalScoreLabel", ((Pane) n).getChildren());
+			} else if (n.getId() == null) {
+				continue;
+			}
+			if (n.getId().equals("finalScoreLabel")) {
+				return n;
+			}
+		}
+		return n;
+	}
+	
 	public void startGame(ActionEvent e) throws Exception {
 		SnakeEngine.run();
 	}
@@ -131,6 +153,8 @@ public class Snake extends Game{
 	@Override
 	public void gameOver() {
 		SnakeEngine.stopGame();
+		Label l = (Label) findNode("finalScoreLabel",overScene.getRoot().getChildrenUnmodifiable());
+		l.setText("SCORE: " + s.getScore());
 		showScene(overScene, "Snake - Game Over!");
 		
 	}
@@ -162,5 +186,6 @@ public class Snake extends Game{
 	private Button resumeButton;
 	@FXML
 	private Button restartButton;
-
+	@FXML
+	private Label finalScorelabel;
 }

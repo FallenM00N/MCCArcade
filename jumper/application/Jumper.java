@@ -2,14 +2,18 @@ package application;
 
 import java.io.IOException;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import models.Game;
+import models.JumperScore;
 
 public class Jumper extends Game {
 	public static Scene titleScene;
@@ -21,7 +25,7 @@ public class Jumper extends Game {
 	@Override
 	public void exit() {
 		System.exit(0);
-		
+
 	}
 
 	@FXML
@@ -33,20 +37,20 @@ public class Jumper extends Game {
 	@Override
 	public void titleScreen() {
 		showScene(titleScene, "Jumper");
-		
+
 	}
-	
+
 	@FXML
-	public void helpScreen(){
+	public void helpScreen() {
 		showScene(helpScene, "Jumper - Help");
 	}
-	
-	@FXML 
-	public void playJumper(ActionEvent e){
+
+	@FXML
+	public void playJumper(ActionEvent e) {
 		startGame(e);
 	}
-	
-	public void startGame(ActionEvent e){
+
+	public void startGame(ActionEvent e) {
 		JumperEngine.run();
 	}
 
@@ -61,11 +65,11 @@ public class Jumper extends Game {
 	}
 
 	private Scene createHelpScene() {
-		try{
+		try {
 			Pane root = FXMLLoader.load(getClass().getResource("JumperHelpScene.fxml"));
 			Scene scene = new Scene(root);
 			return scene;
-		} catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -73,30 +77,33 @@ public class Jumper extends Game {
 
 	@Override
 	public Scene createTitleScene() {
-		try{
+		try {
 			Pane root = FXMLLoader.load(getClass().getResource("JumperTitleScene.fxml"));
 			Scene scene = new Scene(root);
 			return scene;
-		} catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	public Scene createPauseScene() {
-		try{
+		try {
 			Pane root = FXMLLoader.load(getClass().getResource("JumperPauseScene.fxml"));
 			Scene scene = new Scene(root);
 			return scene;
-		} catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	public Scene createGameOverScene(){
+
+	@FXML
+	public Scene createGameOverScene() {
 		try {
 			BorderPane root = FXMLLoader.load(getClass().getResource("JumperGameOverScene.fxml"));
+
+
 			Scene scene = new Scene(root);
 			return scene;
 		} catch (IOException e) {
@@ -110,8 +117,28 @@ public class Jumper extends Game {
 	@Override
 	public void gameOver() {
 		JumperEngine.stopGame();
+		System.out.println(JumperScore.getScore());
+
+		Label l = (Label) findNode("finalScoreLabel", gameOverScene.getRoot().getChildrenUnmodifiable());
+		l.setText("SCORE: " + JumperScore.getScore());
 		showScene(gameOverScene, "Llama Run - Game Over!");
-		
+
+	}
+
+	public Node findNode(String id, ObservableList<Node> ol) {
+		Node n = null;
+		for (int i = 0; i < ol.size(); i++) {
+			n = ol.get(i);
+			if (n instanceof Pane) {
+				n = findNode("finalScoreLabel", ((Pane) n).getChildren());
+			} else if (n.getId() == null) {
+				continue;
+			}
+			if (n.getId().equals("finalScoreLabel")) {
+				return n;
+			}
+		}
+		return n;
 	}
 
 	@FXML
@@ -119,23 +146,25 @@ public class Jumper extends Game {
 	public void pause() {
 		showScene(pauseScene, "Llama Run - Paused");
 	}
+
 	@FXML
 	@Override
 	public void resume() {
 		JumperEngine.resumeJumper();
 	}
-	
-	public void restartGame(ActionEvent e) throws Exception{
+
+	public void restartGame(ActionEvent e) throws Exception {
 		JumperEngine.restartGame();
 	}
+
 	@FXML
-	public void restartJumper(ActionEvent e) throws Exception{
+	public void restartJumper(ActionEvent e) throws Exception {
 		restartGame(e);
 	}
-	
+
 	@FXML
 	private Button menuButton;
-	@FXML 
+	@FXML
 	private Button quitButton;
 	@FXML
 	private Button helpButton;
@@ -149,4 +178,6 @@ public class Jumper extends Game {
 	private Button resumeButton;
 	@FXML
 	private Button restartButton;
+	@FXML
+	private Label finalScoreLabel;
 }

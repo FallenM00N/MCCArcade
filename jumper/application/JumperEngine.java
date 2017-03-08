@@ -191,6 +191,7 @@ public class JumperEngine extends Jumper{
 	
 	
 	public static void startGame(){
+		js.setScore(0);
 		speed = 12;
 		isRunning = true;
 		createJumperContent();
@@ -281,7 +282,7 @@ public class JumperEngine extends Jumper{
 		timeline = new Timeline();
 		timer.stop();
 		isRunning = false;
-		js.setScore(0);
+//		js.setScore(0);
 	}
 	
 	public static void restartGame() throws Exception{

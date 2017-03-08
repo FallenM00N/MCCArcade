@@ -196,11 +196,11 @@ public class SnakeEngine extends Snake{
 		running = false;
 		timeline.stop();
 		timeline = new Timeline();
-		s.setScore(0);
 
 	}
 
 	public static void startGame() {
+		s.setScore(0);
 		running = true;
 		direction = Direction.RIGHT;
 		Rectangle head = new Rectangle(SQUARE_SIZE, SQUARE_SIZE);

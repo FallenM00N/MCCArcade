@@ -13,6 +13,10 @@
    <center>
       <VBox alignment="TOP_CENTER" prefHeight="330.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
+            <Label fx:id="finalScoreLabel" text="SCORE">
+               <font>
+                  <Font size="26.0" />
+               </font></Label>
             <Button fx:id="restartButton" mnemonicParsing="false" onAction="#restartSnake" prefHeight="50.0" prefWidth="160.0" text="Play Again">
                <VBox.margin>
                   <Insets bottom="30.0" top="30.0" />

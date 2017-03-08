@@ -17,6 +17,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import models.Game;
@@ -36,12 +37,22 @@ public class NeublastersEngine {
 	private static ArrayList<NeuBullet> enemyBullets = new ArrayList<>();
 	private static double time = 0;
 	private static double bulletCountdown = 0;
-	private static double score = (double) 0;
+	private static double score = 0;
 	private static Label scoreBoard = new Label("Score: " + getScoreString());
 	private static double comboTimer = 0;
 	private static double comboCount = 0;
+	private static Rectangle[] walls;
+	private static int spawnRate = 100;
+	private static int spawnTime = 0;
+	private static int spawnCount = 5;
 
 	public static void run() {
+		score = 0;
+		comboCount = 0;
+		comboTimer = 0;
+		enemies = new ArrayList<>();
+		playerBullets = new ArrayList<>();
+		enemyBullets = new ArrayList<>();
 		gameScene = createBlankScene();
 		player = new SpaceShip(0, 0, baseSpeed + 1);
 		Game.showScene(gameScene, "Neublasters");
@@ -65,7 +76,7 @@ public class NeublastersEngine {
 				animateScene();
 				updateScore();
 				time++;
-				if(comboTimer > 0) {
+				if (comboTimer > 0) {
 					comboTimer--;
 				}
 				oddFrame = !oddFrame;
@@ -101,25 +112,30 @@ public class NeublastersEngine {
 			}
 
 			private void generateEnemies() {
-				// TODO Auto-generated method stub
 				Random rand = new Random();
-				if (time % 100 == 0) {
+				if (spawnTime == spawnRate) {
 					enemies.add(new NeuEnemy(gameCanvas.getWidth() + 40,
 							rand.nextDouble() * gameCanvas.getHeight() - 60, -baseSpeed));
+					spawnTime = 0;
 				}
+				if(time % 240 == 0) {
+					spawnRate -= 10;
+				}
+				spawnTime++;
+				
 			}
 
 			private void updatePositions() {
-				if (pressedKeys.contains("up")) {
+				if (pressedKeys.contains("up") && !pressedKeys.contains("topWall")) {
 					player.move(0, -2.5);
 				}
-				if (pressedKeys.contains("down")) {
+				if (pressedKeys.contains("down") && !pressedKeys.contains("bottomWall")) {
 					player.move(0, 2.5);
 				}
-				if (pressedKeys.contains("left")) {
+				if (pressedKeys.contains("left") && !pressedKeys.contains("leftWall")) {
 					player.move(-1, 0);
 				}
-				if (pressedKeys.contains("right")) {
+				if (pressedKeys.contains("right") && !pressedKeys.contains("rightWall")) {
 					player.move(1.5, 0);
 					player.setImage("neuBlasterThrust.png");
 				} else {
@@ -153,6 +169,7 @@ public class NeublastersEngine {
 			private void animateScene() {
 				gameCanvas.getGraphicsContext2D().clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
 				gameCanvas.getGraphicsContext2D().drawImage(player.getImage(), player.getX(), player.getY());
+				gameCanvas.getGraphicsContext2D().fillText("Lives: " + player.getLives(), 170, 20);
 				for (NeuEnemy enemy : enemies) {
 					gameCanvas.getGraphicsContext2D().drawImage(enemy.getImage(), enemy.getX(), enemy.getY());
 					if (enemy.isDestroyed() && enemy.getDestroyFrame() > 0) {
@@ -161,10 +178,11 @@ public class NeublastersEngine {
 					}
 					if (enemy.getPoints() > 0) {
 						double yPos = enemy.getY() - 20;
-						if(yPos < 60) {
+						if (yPos < 60) {
 							yPos = enemy.getY() + enemy.getImage().getHeight() + 20;
 						}
-						gameCanvas.getGraphicsContext2D().fillText(Integer.toString((int)enemy.getPoints()), enemy.getX(), yPos);
+						gameCanvas.getGraphicsContext2D().fillText(Integer.toString((int) enemy.getPoints()),
+								enemy.getX(), yPos);
 					}
 				}
 				for (NeuBullet bullet : playerBullets) {
@@ -177,24 +195,79 @@ public class NeublastersEngine {
 					gameCanvas.getGraphicsContext2D().fillRect(bullet.getX(), bullet.getY(), bullet.getWidth(),
 							bullet.getHeight());
 				}
-				gameCanvas.getGraphicsContext2D().fillText("Combo Timer: " + Integer.toString((int)comboTimer / 30), gameCanvas.getWidth() - 160, 20);
-				gameCanvas.getGraphicsContext2D().fillText("Combo: " + (int) comboCount, gameCanvas.getWidth() - 280, 20);
+				gameCanvas.getGraphicsContext2D().fillText("Combo Timer: " + Integer.toString((int) comboTimer / 30),
+						gameCanvas.getWidth() - 160, 20);
+				gameCanvas.getGraphicsContext2D().fillText("Combo: " + (int) comboCount, gameCanvas.getWidth() - 280,
+						20);
 			}
 
 			private void handleCollisions() {
+				boolean touchingWall = false;
+				for (int i = 0; i < walls.length; i++) {
+					if (player.getBounds().intersects(walls[i].getBoundsInParent())) {
+						touchingWall = true;
+						switch (i) {
+						case 0:
+							if (!pressedKeys.contains("topWall"))
+								pressedKeys.add("topWall");
+							break;
+						case 1:
+							if (!pressedKeys.contains("leftWall"))
+								pressedKeys.add("leftWall");
+							break;
+						case 2:
+							if (!pressedKeys.contains("bottomWall"))
+								pressedKeys.add("bottomWall");
+							break;
+						case 3:
+							if (!pressedKeys.contains("rightWall"))
+								pressedKeys.add("rightWall");
+							break;
+						}
+					} else {
+						switch (i) {
+						case 0:
+							pressedKeys.remove("topWall");
+							break;
+						case 1:
+							pressedKeys.remove("leftWall");
+							break;
+						case 2:
+							pressedKeys.remove("bottomWall");
+							break;
+						case 3:
+							pressedKeys.remove("rightWall");
+							break;
+						}
+					}
+				}
+				if (!touchingWall) {
+					pressedKeys.remove("topWall");
+					pressedKeys.remove("leftWall");
+					pressedKeys.remove("bottomWall");
+					pressedKeys.remove("rightWall");
+				}
 				for (int i = 0; i < enemies.size(); i++) {
 					if (!enemies.get(i).isDestroyed() && enemies.get(i).collides(player)) {
 						enemies.get(i).destroy();
+						player.loseLife();
 					}
 					if (enemies.get(i).isDestroyed() && enemies.get(i).getDestroyFrame() <= 0) {
 						enemies.remove(i);
 						i--;
 					}
 				}
+				for (int i = 0; i < enemyBullets.size(); i++) {
+					if (enemyBullets.get(i).collides(player)) {
+						enemyBullets.remove(i);
+						i--;
+						player.loseLife();
+					}
+				}
 				for (int i = 0; i < playerBullets.size(); i++) {
 					for (NeuEnemy enemy : enemies) {
 						if (enemy.collides(playerBullets.get(i))) {
-							if(!enemy.isDestroyed()) {
+							if (!enemy.isDestroyed()) {
 								enemy.destroy();
 							}
 							playerBullets.remove(i);
@@ -289,8 +362,13 @@ public class NeublastersEngine {
 		scoreBoard.setTextFill(Paint.valueOf("#fff"));
 		scoreBoard.setFont(new Font(18));
 		gameCanvas.getGraphicsContext2D().setFill(Paint.valueOf("#fff"));
+		walls = new Rectangle[] { new Rectangle(0, 0, gameCanvas.getWidth(), 1),
+				new Rectangle(0, 0, 1, gameCanvas.getHeight()),
+				new Rectangle(0, gameCanvas.getHeight(), gameCanvas.getWidth(), 1),
+				new Rectangle(gameCanvas.getWidth() / 2, 0, 0, gameCanvas.getHeight()) };
 		background.getChildren().add(scoreBoard);
 		background.getChildren().add(gameCanvas);
+		background.getChildren().addAll(walls);
 		background.setBackground(
 				new Background(new BackgroundFill(Paint.valueOf("#000"), CornerRadii.EMPTY, Insets.EMPTY)));
 		Scene scene = new Scene(background, width, height);
