@@ -3,7 +3,7 @@ package models;
 public class JumperScore {
 	private static int score = 0;
 
-	public int getScore() {
+	public static int getScore() {
 		return score;
 	}
 
