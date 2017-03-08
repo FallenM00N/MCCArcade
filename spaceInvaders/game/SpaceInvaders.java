@@ -74,16 +74,16 @@ public class SpaceInvaders extends Game {
 	public static Label livesl;
 	private Timeline timeline;
 	private static User[] users = new User[] {
-			new User("BOB", "11"),
-			 new User("CUK", "10"),
-			 new User("DOG", "9"),
-			 new User("CAT", "8"),
-			 new User("RAT", "7"),
-			 new User("FAT", "6"),
-			 new User("GOT", "5"),
-			 new User("YOT", "4"),
-			 new User("HOT", "3"),
-			 new User("DOT", "1")
+			 new User("BOB", "0000000011"),
+			 new User("CUK", "0000000010"),
+			 new User("DOG", "0000000009"),
+			 new User("CAT", "0000000008"),
+			 new User("RAT", "0000000007"),
+			 new User("FAT", "0000000006"),
+			 new User("GOT", "0000000005"),
+			 new User("YOT", "0000000004"),
+			 new User("HOT", "0000000003"),
+			 new User("DOT", "0000000001")
 	};
 	private static User user = new User();
 	
@@ -201,7 +201,7 @@ public class SpaceInvaders extends Game {
 		String s = "";
 		for (int i = 0; i < users.length; i++) {
 			if (users[i] != null) {
-				s += users[i].getInitials() + " -> " + users[i].getScore() + "\n";
+				s += users[i].getInitials() + " -> " + users[i].getScore().replaceAll("\\r", "") + "\n";
 			}
 		}
 		try {
@@ -230,7 +230,7 @@ public class SpaceInvaders extends Game {
 		for (int i = 0; i < temp.length; i += 2) {
 			String[] userInfo = new String[2];
 			userInfo = temp[i].split(" -> ");
-			User u = new User(userInfo[0], userInfo[1]);
+			User u = new User(userInfo[0], userInfo[1].replaceAll("\\r", ""));
 			users[count++] = u;
 		}
 		
