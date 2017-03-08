@@ -131,7 +131,6 @@ public class Simon extends Game {
 		for (int i = 0; i < temp.length; i += 2) {
 			String[] userInfo = new String[2];
 			userInfo = temp[i].split(" -> ");
-			System.out.println(userInfo[0] + ", " + userInfo[1]);
 			SimonUser u = new SimonUser(userInfo[0], userInfo[1].replaceAll("\\r", ""));
 			users[count++] = u; 
 		}
