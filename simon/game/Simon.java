@@ -654,6 +654,7 @@ public class Simon extends Game {
 	}
 
 	private void startGame() {
+		gameOver = false;
 		timeLimit = 2;
 		round = 0;
 		time = 0;
