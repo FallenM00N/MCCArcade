@@ -151,7 +151,7 @@ public class JumperEngine extends Jumper{
 				
 				if(!isJumping){
 					jump();
-					System.out.println("Jump");
+					//System.out.println("Jump");
 					//donothing
 					String jumpSound = "jumper\\models\\jumpSound.mp3";
 					sound = new AudioClip(new File(jumpSound).toURI().toString());		

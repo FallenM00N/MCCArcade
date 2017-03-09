@@ -117,7 +117,7 @@ public class Jumper extends Game {
 	@Override
 	public void gameOver() {
 		JumperEngine.stopGame();
-		System.out.println(JumperScore.getScore());
+		//System.out.println(JumperScore.getScore());
 
 		Label l = (Label) findNode("finalScoreLabel", gameOverScene.getRoot().getChildrenUnmodifiable());
 		l.setText("SCORE: " + JumperScore.getScore());
