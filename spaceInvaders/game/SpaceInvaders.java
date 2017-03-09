@@ -213,7 +213,7 @@ public class SpaceInvaders extends Game {
 	
 	private static String loadHighScores() {
 		String s = null;
-		File f = new File("spaceInvaders/highScores.txt");
+		File f = new File("spaceInvaders/invadersHighScores.txt");
 		try {
 			if (f.exists()) {
 				s = ProgramUtil.readFile("spaceInvaders/invadersHighScores.txt");
