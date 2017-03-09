@@ -73,10 +73,10 @@ public class Simon extends Game {
 	private static Text roundVal;
 	private static Text pause;
 	private Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), ae -> timerTick()));
-	private static SimonUser[] users = new SimonUser[] { new SimonUser("BOB", "1"), new SimonUser("BOB", "1"),
-			new SimonUser("BOB", "1"), new SimonUser("BOB", "1"), new SimonUser("BOB", "1"), new SimonUser("BOB", "1"),
-			new SimonUser("BOB", "1"), new SimonUser("BOB", "1"), new SimonUser("BOB", "1"),
-			new SimonUser("BOB", "1") };
+	private static SimonUser[] users = new SimonUser[] { new SimonUser("BOB", "00001"), new SimonUser("BOB", "00001"),
+			new SimonUser("BOB", "00001"), new SimonUser("BOB", "00001"), new SimonUser("BOB", "00001"), new SimonUser("BOB", "00001"),
+			new SimonUser("BOB", "00001"), new SimonUser("BOB", "00001"), new SimonUser("BOB", "00001"),
+			new SimonUser("BOB", "00001") };
 	private static SimonUser user = new SimonUser();
 
 	private void timerTick() {
@@ -581,7 +581,7 @@ public class Simon extends Game {
 
 	private void selectNextCommand() {
 		String musicFile = "";
-		if (commands.get(currentIndex).equals(CommandType.RED)) {
+		if (commands.get(currentIndex).equals(CommandType.RED) && !gameOver) {
 			musicFile = "simon/audio/SimonRed.mp3";
 
 			Media sound = new Media(new File(musicFile).toURI().toString());
@@ -591,7 +591,7 @@ public class Simon extends Game {
 			right.setFill(Paint.valueOf("rgba(0,100,255,.3)"));
 			bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
 			left.setFill(Paint.valueOf("rgba(220,220,0,.3)"));
-		} else if (commands.get(currentIndex).equals(CommandType.BLUE)) {
+		} else if (commands.get(currentIndex).equals(CommandType.BLUE) && !gameOver) {
 			musicFile = "simon/audio/SimonBlue.mp3";
 
 			
@@ -599,7 +599,7 @@ public class Simon extends Game {
 			right.setFill(Paint.valueOf("rgba(0,100,255,1.0)"));
 			bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
 			left.setFill(Paint.valueOf("rgba(220,220,0,.3)"));
-		} else if (commands.get(currentIndex).equals(CommandType.GREEN)) {
+		} else if (commands.get(currentIndex).equals(CommandType.GREEN) && !gameOver) {
 			musicFile = "simon/audio/SimonGreen.mp3";
 
 			Media sound = new Media(new File(musicFile).toURI().toString());
@@ -610,6 +610,7 @@ public class Simon extends Game {
 			bottom.setFill(Paint.valueOf("rgba(0,200,40,1.0)"));
 			left.setFill(Paint.valueOf("rgba(220,220,0,.3)"));
 		} else {
+			if (!gameOver) {
 			musicFile = "simon/audio/SimonYellow.mp3";
 
 			Media sound = new Media(new File(musicFile).toURI().toString());
@@ -619,12 +620,16 @@ public class Simon extends Game {
 			right.setFill(Paint.valueOf("rgba(0,100,255,.3)"));
 			bottom.setFill(Paint.valueOf("rgba(0,200,40,.3)"));
 			left.setFill(Paint.valueOf("rgba(220,220,0,1.0)"));
+			}
 		}
 		
-		Media sound = new Media(new File(musicFile).toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(sound);
-		mediaPlayer.play();
+		if (!gameOver) {
+			Media sound = new Media(new File(musicFile).toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.play();
+		}
 
+		if (!gameOver) {
 		if (currentIndex == commands.size() - 1) {
 			currentIndex = 0;
 			if (playerTurn) {
@@ -644,6 +649,7 @@ public class Simon extends Game {
 			}
 		} else {
 			currentIndex++;
+		}
 		}
 	}
 

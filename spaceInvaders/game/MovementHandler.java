@@ -72,7 +72,7 @@ public class MovementHandler implements Runnable {
 	private void moveUfo() {
 		UFO ufo = SpaceInvaders.ufo;
 		if (SpaceInvaders.ufo != null) {
-			ufo.setX(ufo.getX() - .06);
+			ufo.setX(ufo.getX() - .075);
 			if (ufo.getX() + ufo.getWidth() <= 0) {
 				SpaceInvaders.entities.getChildren().remove(ufo);
 				ufo = null;
@@ -205,7 +205,7 @@ public class MovementHandler implements Runnable {
 				b.remove(i);
 			}
 			
-			if (i < b.size() && b.get(i).getY() < -410) {
+			if (i < b.size() && b.get(i).getBullet().getBoundsInParent().getMaxY() < -410) {
 				SpaceInvaders.entities.getChildren().remove(b.get(i).getBullet());
 				b.remove(i);
 			}

@@ -1,5 +1,6 @@
 package models;
 
+import game.SpaceInvaders;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
@@ -17,7 +18,18 @@ public class Bullet {
 		setY(y);
 		this.movingUp = movingUp;
 		
-		bullet = new Rectangle(this.width, this.height, Paint.valueOf("#EE0"));
+		if (isMovingUp()) {
+			if (SpaceInvaders.player.getFireSpeed() < 500) {
+				bullet = new Rectangle(this.width, this.height, Paint.valueOf("#B04"));
+			}
+			else {
+				bullet = new Rectangle(this.width, this.height, Paint.valueOf("#0B4"));
+			}
+		}
+		else {
+			bullet = new Rectangle(this.width, this.height, Paint.valueOf("#BBB"));
+		}
+		
 		bullet.setX(this.x);
 		bullet.setY(this.y);
 	}
