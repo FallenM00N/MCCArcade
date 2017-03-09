@@ -196,7 +196,7 @@ public class SpaceInvaders extends Game {
 	}
 	
 	private static void saveHighScores() {
-		File f = new File("spaceInvaders/highScores.txt");
+		File f = new File("spaceInvaders/invadersHighScores.txt");
 		
 		String s = "";
 		for (int i = 0; i < users.length; i++) {
@@ -213,10 +213,10 @@ public class SpaceInvaders extends Game {
 	
 	private static String loadHighScores() {
 		String s = null;
-		File f = new File("spaceInvaders/highScores.txt");
+		File f = new File("spaceInvaders/invadersHighScores.txt");
 		try {
 			if (f.exists()) {
-				s = ProgramUtil.readFile("spaceInvaders/highScores.txt");
+				s = ProgramUtil.readFile("spaceInvaders/invadersHighScores.txt");
 			}
 		} catch (NoSuchFileException e1) {
 			
