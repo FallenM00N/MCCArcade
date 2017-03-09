@@ -50,7 +50,6 @@ public class JumperEngine extends Jumper{
 	public static int speed = 12;
 	public static Cloud[] clouds;
 	public static int pickleSpawn;
-	public static int extraJump;
 	
 	public static void run(){
 		startGame();
@@ -140,7 +139,7 @@ public class JumperEngine extends Jumper{
 	public static void jump(){ 
 		yJumpMotion = 285;//adjust jumpheight
 		if(isRunning){
-			llama.setTranslateY((llama.getTranslateY() - yJumpMotion) + extraJump);
+			llama.setTranslateY((llama.getTranslateY() - yJumpMotion));
 			
 		}
 	}
@@ -178,7 +177,7 @@ public class JumperEngine extends Jumper{
 	
 	public static void detectCollision(){
 		if(pickle.getBoundsInParent().intersects(llama.getBoundsInParent())){
-
+			
 			llama.setImage(image);
 			j.gameOver();
 				
