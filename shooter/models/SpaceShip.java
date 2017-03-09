@@ -8,6 +8,7 @@ import interfaces.Collidable;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 
 public class SpaceShip implements Collidable{
 	private double x;
@@ -118,7 +119,7 @@ public class SpaceShip implements Collidable{
 		lives--;
 		if(lives == 0) {
 			NeublastersEngine.getTimer().stop();
-			System.out.println(Neublasters.getOverScene().getRoot().getChildrenUnmodifiable());
+			Neublasters.l.setText("Score: " + (int)NeublastersEngine.getScore());
 			Neublasters.showScene(Neublasters.getOverScene(), "Game Over");
 		}
 	}
