@@ -130,7 +130,7 @@ public class Jumper extends Game {
 		for (int i = 0; i < ol.size(); i++) {
 			n = ol.get(i);
 			if (n instanceof Pane) {
-				n = findNode("finalScoreLabel", ((Pane) n).getChildren());
+				n = findNode("scoreLabel", ((Pane) n).getChildren());
 			} else if (n.getId() == null) {
 				continue;
 			}

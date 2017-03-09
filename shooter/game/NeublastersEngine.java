@@ -3,6 +3,11 @@ package game;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
+import application.Main;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -84,9 +89,7 @@ public class NeublastersEngine {
 
 			private void updateScore() {
 				score += 2;
-				if (time % 5 == 0) {
 					scoreBoard.setText("Score: " + getScoreString());
-				}
 			}
 
 			private void generateBullets() {
@@ -97,6 +100,7 @@ public class NeublastersEngine {
 					NeuBullet bullet = new NeuBullet(player.getX() + player.getImage().getWidth() - 10,
 							player.getY() + player.getImage().getHeight() / 2 - 4, player.getSpeed() * 4);
 					playerBullets.add(bullet);
+					playSound("shot");
 					bulletCountdown = 5;
 				}
 				Random rand = new Random();
@@ -142,7 +146,7 @@ public class NeublastersEngine {
 					player.setImage("neuBlasterNoThrust.png");
 				}
 				for (int i = 0; i < enemies.size(); i++) {
-					if (enemies.get(i).getDestroyFrame() > 15) {
+					if (enemies.get(i).getDestroyFrame() < 15) {
 						enemies.get(i).moveStraight();
 						if (enemies.get(i).getX() < 0 - enemies.get(i).getImage().getWidth() - 5) {
 							enemies.remove(i);
@@ -171,11 +175,11 @@ public class NeublastersEngine {
 				gameCanvas.getGraphicsContext2D().drawImage(player.getImage(), player.getX(), player.getY());
 				gameCanvas.getGraphicsContext2D().fillText("Lives: " + player.getLives(), 170, 20);
 				for (NeuEnemy enemy : enemies) {
-					gameCanvas.getGraphicsContext2D().drawImage(enemy.getImage(), enemy.getX(), enemy.getY());
-					if (enemy.isDestroyed() && enemy.getDestroyFrame() > 0) {
-						System.out.println(enemy.getDestroyFrame());
-						enemy.setDestroyFrame(enemy.getDestroyFrame() - 1);
+					if (enemy.isDestroyed() && enemy.getDestroyFrame() < 30) {
+						enemy.setExplosionFrame();
+						enemy.setDestroyFrame(enemy.getDestroyFrame() + 1);
 					}
+					gameCanvas.getGraphicsContext2D().drawImage(enemy.getImage(), enemy.getX(), enemy.getY());
 					if (enemy.getPoints() > 0) {
 						double yPos = enemy.getY() - 20;
 						if (yPos < 60) {
@@ -252,7 +256,7 @@ public class NeublastersEngine {
 						enemies.get(i).destroy();
 						player.loseLife();
 					}
-					if (enemies.get(i).isDestroyed() && enemies.get(i).getDestroyFrame() <= 0) {
+					if (enemies.get(i).isDestroyed() && enemies.get(i).getDestroyFrame() >= 30) {
 						enemies.remove(i);
 						i--;
 					}
@@ -269,6 +273,7 @@ public class NeublastersEngine {
 						if (enemy.collides(playerBullets.get(i))) {
 							if (!enemy.isDestroyed()) {
 								enemy.destroy();
+								playSound("explosion");
 							}
 							playerBullets.remove(i);
 							i--;
@@ -389,7 +394,7 @@ public class NeublastersEngine {
 
 	private static String getScoreString() {
 		StringBuilder sb = new StringBuilder(Double.toString(score));
-		sb.delete(sb.length() - 2, sb.length() - 1);
+		sb.delete(sb.length() - 2, sb.length());
 		while (sb.length() < 10) {
 			sb.insert(0, 0);
 		}
@@ -408,5 +413,26 @@ public class NeublastersEngine {
 		score += scoreAdd;
 		return scoreAdd;
 	}
+
+	public static double getScore() {
+		// TODO Auto-generated method stub
+		return score;
+	}
+	
+	public static synchronized void playSound(String file) {
+		  new Thread(new Runnable() {
+		    public void run() {
+		      try {
+		        Clip clip = AudioSystem.getClip();
+		        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+		        Main.class.getResourceAsStream("/sounds/" + file + ".wav"));
+		        clip.open(inputStream);
+		        clip.start(); 
+		      } catch (Exception e) {
+		        System.err.println(e.getMessage());
+		      }
+		    }
+		  }).start();
+		}
 
 }

@@ -14,7 +14,7 @@ public class NeuEnemy implements Collidable {
 	private Image image = new Image("neuImages/enemy1Thrust.png");
 	private Rectangle bounds;
 	private boolean isDestroyed;
-	private int destroyFrame = 30;
+	private int destroyFrame = 0;
 	private int bulletCountDown;
 	private double points;
 
@@ -139,6 +139,10 @@ public class NeuEnemy implements Collidable {
 
 	public void tick() {
 		bulletCountDown--;
+	}
+	public void setExplosionFrame() {
+		int i = (destroyFrame + 3) / 3;
+		image = new Image("neuImages/enemy1explosion" + i + ".png");
 	}
 	
 }

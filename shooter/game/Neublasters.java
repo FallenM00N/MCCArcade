@@ -1,13 +1,17 @@
 package game;
 
 import application.MainMenu;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import models.Game;
 
 public class Neublasters extends Game {
@@ -26,13 +30,14 @@ public class Neublasters extends Game {
 	private Button quitButton;
 	@FXML
 	private Label title;
-
+	public static Label l;
 	@Override
 	public void play() {
 		titleScreen = createScene("NeublastersTitleScreen.fxml");
 		infoScene = createScene("NeublastersHelp.fxml");
 		overScene = createScene("NeublastersOver.fxml");
 		pauseScene = createScene("NeublastersPause.fxml");
+		l = (Label) findNode("finalScoreLabel", overScene.getRoot().getChildrenUnmodifiable());
 		showScene(titleScreen, "Neublasters");
 	}
 
@@ -102,6 +107,22 @@ public class Neublasters extends Game {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public Node findNode(String id, ObservableList<Node> ol) {
+		Node n = null;
+		for (int i = 0; i < ol.size(); i++) {
+			n = ol.get(i);
+			if (n instanceof Pane) {
+				n = findNode("scoreLabel", ((Pane) n).getChildren());
+			} else if (n.getId() == null) {
+				continue;
+			}
+			if (n.getId().equals("scoreLabel")) {
+				return n;
+			}
+		}
+		return n;
 	}
 
 	@Override
