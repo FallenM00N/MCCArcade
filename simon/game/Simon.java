@@ -273,6 +273,7 @@ public class Simon extends Game {
 		title.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				timeline.stop();
 				showScene(titleScene);
 			}
 		});
@@ -280,6 +281,7 @@ public class Simon extends Game {
 		menu.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
+				timeline.stop();
 				showScene(MainMenu.getMenuScene());
 			}
 		});
