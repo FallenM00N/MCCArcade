@@ -171,6 +171,7 @@ public class NeublastersEngine {
 			}
 
 			private void animateScene() {
+				//TODO sounds when player is hit
 				gameCanvas.getGraphicsContext2D().clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
 				gameCanvas.getGraphicsContext2D().drawImage(player.getImage(), player.getX(), player.getY());
 				gameCanvas.getGraphicsContext2D().fillText("Lives: " + player.getLives(), 170, 20);
@@ -255,6 +256,7 @@ public class NeublastersEngine {
 					if (!enemies.get(i).isDestroyed() && enemies.get(i).collides(player)) {
 						enemies.get(i).destroy();
 						player.loseLife();
+						playSound("hit");
 					}
 					if (enemies.get(i).isDestroyed() && enemies.get(i).getDestroyFrame() >= 30) {
 						enemies.remove(i);
@@ -266,6 +268,7 @@ public class NeublastersEngine {
 						enemyBullets.remove(i);
 						i--;
 						player.loseLife();
+						playSound("hit");
 					}
 				}
 				for (int i = 0; i < playerBullets.size(); i++) {
