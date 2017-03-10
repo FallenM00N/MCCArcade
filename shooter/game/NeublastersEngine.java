@@ -428,7 +428,7 @@ public class NeublastersEngine {
 		      try {
 		        Clip clip = AudioSystem.getClip();
 		        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-		        Main.class.getResourceAsStream("/sounds/" + file + ".wav"));
+		        Main.class.getResource("/neuSounds/" + file + ".wav"));
 		        clip.open(inputStream);
 		        clip.start(); 
 		      } catch (Exception e) {

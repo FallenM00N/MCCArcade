@@ -169,7 +169,7 @@ public class Ball {
 		      try {
 		        Clip clip = AudioSystem.getClip();
 		        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-		        Main.class.getResourceAsStream("/sounds/sound" + file + ".wav"));
+		        Main.class.getResource("/pongSounds/sound" + file + ".wav"));
 		        clip.open(inputStream);
 		        clip.start(); 
 		      } catch (Exception e) {
